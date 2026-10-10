@@ -14,3 +14,5 @@ Original local SVG materials combine botanical line work, antique paper, pixel b
 
 ## GitHub Pages
 The GitHub Actions workflow deploys a static export from `main`. In repository Settings → Pages, select **GitHub Actions** as the source, then rerun the workflow if needed. The site is served at https://xuz8999-bit.github.io/AAAA/ after a successful deployment. To build locally: `BUILD_TARGET=pages npm run build`. Assets and editor artwork include the `/AAAA` base path. Ordinary `npm run build` still builds for Node hosting. Browser archives are specific to each origin, so memories saved on another host do not transfer automatically.
+
+The current visual theme is an ivory botanical scrapbook with bundled Caveat and Ma Shan Zheng handwriting fonts, licensed under the included SIL Open Font License files. The editor defaults to Botanical Archive; existing memories keep their saved styles.
