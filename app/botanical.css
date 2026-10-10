@@ -1423,3 +1423,149 @@ body {
   color: #5d779a;
   border-color: #a0b4cd;
 }
+.animal-visitors {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 55px;
+  margin: 10px 45px 35px;
+  padding: 20px 0;
+  border-top: 1px dashed #aebbd055;
+  color: #8b9db4;
+}
+.animal-visitors > div > span {
+  font: 25px "Caveat";
+  color: #7b91af;
+}
+.animal-visitors p {
+  font: 13px "Ma Shan Zheng";
+  margin: 9px 0 0;
+  color: #98a7ba;
+}
+.animal-visitor-buttons {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+.archive-animal {
+  position: relative;
+  width: 62px;
+  height: 75px;
+  background: none;
+  border: 0;
+  rotate: -4deg;
+  transition: transform 0.35s;
+}
+.archive-animal svg {
+  width: 100%;
+  height: 100%;
+  filter: saturate(0.5);
+  opacity: 0.9;
+}
+.archive-animal:hover,
+.archive-animal:focus-visible {
+  transform: translateY(-5px) rotate(5deg);
+}
+.archive-animal > span {
+  position: absolute;
+  right: -5px;
+  top: 5px;
+  font: 20px "Caveat";
+  color: #a1b0c4;
+}
+.archive-animal.butterfly {
+  animation: visitor-flutter 7s ease-in-out infinite;
+}
+@keyframes visitor-flutter {
+  50% {
+    transform: translateY(-5px) rotate(3deg);
+  }
+}
+@media (max-width: 600px) {
+  .animal-visitors {
+    display: block;
+    margin: 5px 25px 25px;
+    text-align: center;
+    padding: 20px 0;
+  }
+  .animal-visitors > div > span {
+    font-size: 24px;
+  }
+  .animal-visitor-buttons {
+    justify-content: center;
+    gap: 15px;
+    margin-top: 18px;
+  }
+  .archive-animal {
+    width: 53px;
+    height: 62px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .archive-animal.butterfly {
+    animation: none;
+  }
+  .archive-animal {
+    transition: none;
+  }
+}
+
+/* Photographic scraps, printed like a well-loved magazine. */
+.animal-visitors {
+  flex-direction: column;
+  gap: 16px;
+  border-top: none;
+}
+.animal-visitors > div:first-child {
+  text-align: center;
+}
+.animal-visitor-buttons {
+  gap: 18px;
+  align-items: flex-end;
+}
+.archive-animal {
+  width: 190px;
+  height: 215px;
+  padding: 0;
+  cursor: pointer;
+}
+.archive-animal:nth-child(2) {
+  rotate: 3deg;
+}
+.archive-animal:nth-child(3) {
+  rotate: -2deg;
+}
+.archive-animal .animal-print {
+  display: block;
+  position: static;
+  width: 100%;
+  height: 190px;
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  filter: saturate(0.38) contrast(0.9);
+}
+.archive-animal .animal-note {
+  position: static;
+  display: block;
+  font: 19px "Caveat";
+  color: #7b8390;
+}
+.archive-animal:focus-visible {
+  outline: 1px dashed #8296af;
+  outline-offset: 6px;
+}
+@media (max-width: 600px) {
+  .animal-visitor-buttons {
+    gap: 6px;
+  }
+  .archive-animal {
+    width: 96px;
+    height: 125px;
+  }
+  .archive-animal .animal-print {
+    height: 96px;
+  }
+  .archive-animal .animal-note {
+    font-size: 13px;
+  }
+}

@@ -22,6 +22,7 @@ import {
   Check,
   Trash2,
 } from "lucide-react";
+import AnimalVisitors from "../components/AnimalVisitors";
 import BotanicalArchive from "../components/BotanicalArchive";
 import { botanicalCategories, botanicalCategory } from "../lib/botanical";
 import { LittlePlant } from "../components/GardenScene";
@@ -84,6 +85,16 @@ const moods: {
   },
 ];
 const animalStories: { [key: string]: { title: string; story: string } } = {
+  cat: {
+    title: "花猫替你留着的位置",
+    story:
+      "窗边总有一小块阳光。花猫把它留给你，也留给那些没有说完的话。等你回来，我们再慢慢讲。",
+  },
+  whitecat: {
+    title: "白猫的午后",
+    story:
+      "今天什么也不用赶。听一首喜欢的歌，看一张旧照片，或者只是坐一会儿。那些安静的日子，也值得被记住。",
+  },
   bird: {
     title: "小鸟寄来的信",
     story:
@@ -659,6 +670,7 @@ export default function Home() {
                     SELECT A FRAGMENT TO OPEN.
                   </small>
                 </div>
+                <AnimalVisitors onAnimal={setAnimal} />
                 <div className="garden-caption">
                   <span className="tiny-flower">✦</span>
                   <span>
