@@ -189,7 +189,13 @@ export default function GardenScene({
                 rx={41 + (i % 5) * 5}
                 ry={32 + (i % 4) * 4}
                 fill={colors[i % 4]}
-                opacity={0.2 + (i % 3) * 0.05}
+                opacity={
+                  season === "winter"
+                    ? 0.035
+                    : season === "autumn"
+                      ? 0.13
+                      : 0.2 + (i % 3) * 0.05
+                }
                 transform={`rotate(${(i % 3) * 15 - 15} ${x} ${y})`}
               />
             );
@@ -230,6 +236,15 @@ export default function GardenScene({
             return (
               <g
                 key={i}
+                opacity={
+                  season === "winter"
+                    ? i % 12 === 0
+                      ? 0.35
+                      : 0
+                    : season === "autumn" && i % 3 === 0
+                      ? 0
+                      : 1
+                }
                 transform={`translate(${x} ${y}) rotate(${(i * 53) % 360})`}
               >
                 <path
@@ -250,6 +265,41 @@ export default function GardenScene({
             );
           })}
         </g>
+        {season === "winter" && (
+          <g
+            className="winter-snow"
+            fill="#f6f0df"
+            stroke="#b3b2a2"
+            strokeWidth=".4"
+          >
+            <path
+              d="M427 291Q549 314 584 379M616 116Q625 185 602 256M710 281Q741 238 748 180"
+              fill="none"
+              stroke="#eee8d7"
+              strokeWidth="6"
+            />
+            {Array.from({ length: 36 }, (_, i) => (
+              <circle
+                key={i}
+                cx={375 + ((i * 67) % 470)}
+                cy={70 + ((i * 43) % 455)}
+                r={2 + (i % 3)}
+                opacity=".85"
+              />
+            ))}
+          </g>
+        )}
+        {season === "autumn" && (
+          <g className="fallen-leaves" fill="#b49066" opacity=".7">
+            {Array.from({ length: 24 }, (_, i) => (
+              <path
+                key={i}
+                d="M0 0Q-15 -12 -7 -22Q8 -14 0 0Z"
+                transform={`translate(${370 + ((i * 47) % 450)} ${550 + ((i * 13) % 37)}) rotate(${i * 37})`}
+              />
+            ))}
+          </g>
+        )}
         {season === "spring" && (
           <g fill="#d4b7a6" opacity=".75">
             {Array.from({ length: 24 }, (_, i) => (

@@ -32,6 +32,8 @@ import {
   loadMemories,
   storeMemories,
   loadCollection,
+  loadGardenYears,
+  storeGardenYears,
   storeCollection,
   type Keepsake,
 } from "../lib/storage";
@@ -162,7 +164,9 @@ export default function Home() {
   const [view, setView] = useState<View>("garden"),
     [memories, setMemories] = useState<Memory[]>([]),
     [collection, setCollection] = useState<Keepsake[]>([]),
-    [year, setYear] = useState(2026),
+    [year, setYear] = useState(new Date().getFullYear()),
+    [addedYears, setAddedYears] = useState<number[]>([]),
+    [newYear, setNewYear] = useState(String(new Date().getFullYear() + 1)),
     [season, setSeason] = useState<Season>("spring"),
     [weather, setWeather] = useState("sun"),
     [selected, setSelected] = useState<Memory>(),
@@ -191,8 +195,9 @@ export default function Home() {
   const audio = useRef<HTMLAudioElement>(null),
     growthTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
-    Promise.all([loadMemories(), loadCollection()])
-      .then(([m, c]) => {
+    Promise.all([loadMemories(), loadCollection(), loadGardenYears()])
+      .then(([m, c, y]) => {
+        setAddedYears(y);
         setMemories(m);
         setCollection(c);
         const profile = c.find((k) => k.id === "garden-about");
@@ -255,7 +260,16 @@ export default function Home() {
     return () => clearTimeout(t);
   }, [message]);
   const years = Array.from(
-    new Set([2016, 2018, 2022, 2024, 2026, year, ...memories.map(yearOf)]),
+    new Set([
+      2016,
+      2018,
+      2022,
+      2024,
+      2026,
+      year,
+      ...addedYears,
+      ...memories.map(yearOf),
+    ]),
   ).sort((a, b) => a - b);
   const currentMemories = memories.filter((m) => yearOf(m) === year);
   const yearIndex = years.indexOf(year);
@@ -269,16 +283,31 @@ export default function Home() {
   };
   const changeYear = (y: number, open = false) => {
     setYear(y);
-    setSeason(
-      (["spring", "summer", "autumn", "winter"] as Season[])[
-        Math.max(0, years.indexOf(y)) % 4
-      ],
-    );
     const newest = memories.find((m) => yearOf(m) === y);
     setWeather(moods.find((m) => m.id === newest?.mood)?.weather || "sun");
     if (open) {
       setSelected(undefined);
       go("room");
+    }
+  };
+  const addYear = async () => {
+    const value = Number(newYear);
+    if (!/^\d{4}$/.test(newYear) || value < 1000 || value > 9999) {
+      setMessage("请输入四位年份，例如 2027。");
+      return;
+    }
+    if (!storageReady) return;
+    try {
+      const next = Array.from(new Set([...addedYears, value])).sort(
+        (a, b) => a - b,
+      );
+      await storeGardenYears(next);
+      setAddedYears(next);
+      changeYear(value);
+      setNewYear(String(Math.min(9999, value + 1)));
+      setMessage(`${value} 年的新一页，已经留好了。`);
+    } catch {
+      setMessage("年份暂时没能保存，请再试一次。");
     }
   };
   const startPlant = () => {
@@ -649,6 +678,53 @@ export default function Home() {
                         ))}
                       </select>
                     </div>
+                    <form
+                      className="add-garden-year"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        void addYear();
+                      }}
+                    >
+                      <input
+                        aria-label="新增记忆年份"
+                        type="number"
+                        min="1000"
+                        max="9999"
+                        step="1"
+                        value={newYear}
+                        onChange={(e) => setNewYear(e.target.value)}
+                      />
+                      <button disabled={!storageReady} type="submit">
+                        ＋ 增加年份
+                      </button>
+                      <small>未来，也可以留下一页。</small>
+                    </form>
+                    <input
+                      className="season-slider"
+                      aria-label="滑动选择春夏秋冬"
+                      aria-valuetext={
+                        {
+                          spring: "春",
+                          summer: "夏",
+                          autumn: "秋",
+                          winter: "冬",
+                        }[season]
+                      }
+                      type="range"
+                      min="0"
+                      max="3"
+                      step="1"
+                      value={["spring", "summer", "autumn", "winter"].indexOf(
+                        season,
+                      )}
+                      onChange={(e) =>
+                        setSeason(
+                          (
+                            ["spring", "summer", "autumn", "winter"] as Season[]
+                          )[Number(e.target.value)],
+                        )
+                      }
+                    />
                     <div className="season-picker" aria-label="选择花园季节">
                       {(
                         ["spring", "summer", "autumn", "winter"] as Season[]
@@ -1013,8 +1089,8 @@ export default function Home() {
                           <input
                             aria-label="记忆日期"
                             type="date"
-                            min="1900-01-01"
-                            max="2100-12-31"
+                            min="1000-01-01"
+                            max="9999-12-31"
                             value={form.date}
                             onChange={(e) =>
                               setForm((f) => ({ ...f, date: e.target.value }))
@@ -1144,10 +1220,10 @@ export default function Home() {
                           onClick={() => {
                             if (
                               !form.date ||
-                              form.date < "1900-01-01" ||
-                              form.date > "2100-12-31"
+                              form.date < "1000-01-01" ||
+                              form.date > "9999-12-31"
                             ) {
-                              setMessage("请选择 1900 至 2100 年之间的日期。");
+                              setMessage("请选择 1000 至 9999 年之间的日期。");
                               return;
                             }
                             setStep(3);

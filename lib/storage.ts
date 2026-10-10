@@ -87,3 +87,43 @@ export async function storeCollection(collection: Keepsake[]): Promise<void> {
     };
   });
 }
+
+export async function loadGardenYears(): Promise<number[]> {
+  const db = await database();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("archive", "readonly");
+    const request = tx.objectStore("archive").get("garden-years");
+    request.onsuccess = () =>
+      resolve(
+        Array.isArray(request.result)
+          ? request.result.filter(
+              (y: unknown) =>
+                typeof y === "number" &&
+                Number.isInteger(y) &&
+                y >= 1000 &&
+                y <= 9999,
+            )
+          : [],
+      );
+    tx.oncomplete = () => db.close();
+    tx.onerror = () => {
+      db.close();
+      reject(tx.error);
+    };
+  });
+}
+export async function storeGardenYears(years: number[]): Promise<void> {
+  const db = await database();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("archive", "readwrite");
+    tx.objectStore("archive").put(years, "garden-years");
+    tx.oncomplete = () => {
+      db.close();
+      resolve();
+    };
+    tx.onerror = tx.onabort = () => {
+      db.close();
+      reject(tx.error);
+    };
+  });
+}
