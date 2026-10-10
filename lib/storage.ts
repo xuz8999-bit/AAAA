@@ -88,11 +88,11 @@ export async function storeCollection(collection: Keepsake[]): Promise<void> {
   });
 }
 
-export async function loadGardenYears(): Promise<number[]> {
+export async function loadGardenYears(key = "garden-years"): Promise<number[]> {
   const db = await database();
   return new Promise((resolve, reject) => {
     const tx = db.transaction("archive", "readonly");
-    const request = tx.objectStore("archive").get("garden-years");
+    const request = tx.objectStore("archive").get(key);
     request.onsuccess = () =>
       resolve(
         Array.isArray(request.result)
@@ -112,11 +112,15 @@ export async function loadGardenYears(): Promise<number[]> {
     };
   });
 }
-export async function storeGardenYears(years: number[]): Promise<void> {
+export async function storeGardenYears(
+  years: number[],
+  removed?: number[],
+): Promise<void> {
   const db = await database();
   return new Promise((resolve, reject) => {
     const tx = db.transaction("archive", "readwrite");
     tx.objectStore("archive").put(years, "garden-years");
+    if (removed) tx.objectStore("archive").put(removed, "removed-years");
     tx.oncomplete = () => {
       db.close();
       resolve();

@@ -166,6 +166,7 @@ export default function Home() {
     [collection, setCollection] = useState<Keepsake[]>([]),
     [year, setYear] = useState(new Date().getFullYear()),
     [addedYears, setAddedYears] = useState<number[]>([]),
+    [removedYears, setRemovedYears] = useState<number[]>([]),
     [newYear, setNewYear] = useState(String(new Date().getFullYear() + 1)),
     [season, setSeason] = useState<Season>("spring"),
     [weather, setWeather] = useState("sun"),
@@ -195,8 +196,33 @@ export default function Home() {
   const audio = useRef<HTMLAudioElement>(null),
     growthTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
-    Promise.all([loadMemories(), loadCollection(), loadGardenYears()])
-      .then(([m, c, y]) => {
+    Promise.all([
+      loadMemories(),
+      loadCollection(),
+      loadGardenYears(),
+      loadGardenYears("removed-years"),
+    ])
+      .then(([m, c, y, removed]) => {
+        setRemovedYears(removed);
+        const available = [
+          ...new Set([
+            2016,
+            2018,
+            2022,
+            2024,
+            2026,
+            new Date().getFullYear(),
+            ...y,
+            ...m.map(yearOf),
+          ]),
+        ]
+          .filter(
+            (v) =>
+              !removed.includes(v) || m.some((memory) => yearOf(memory) === v),
+          )
+          .sort((a, b) => a - b);
+        if (removed.includes(new Date().getFullYear()))
+          setYear(available[available.length - 1] || new Date().getFullYear());
         setAddedYears(y);
         setMemories(m);
         setCollection(c);
@@ -270,7 +296,11 @@ export default function Home() {
       ...addedYears,
       ...memories.map(yearOf),
     ]),
-  ).sort((a, b) => a - b);
+  )
+    .filter(
+      (y) => !removedYears.includes(y) || memories.some((m) => yearOf(m) === y),
+    )
+    .sort((a, b) => a - b);
   const currentMemories = memories.filter((m) => yearOf(m) === year);
   const yearIndex = years.indexOf(year);
   const treeYears = years.slice(
@@ -301,13 +331,44 @@ export default function Home() {
       const next = Array.from(new Set([...addedYears, value])).sort(
         (a, b) => a - b,
       );
-      await storeGardenYears(next);
+      const restored = removedYears.filter((y) => y !== value);
+      await storeGardenYears(next, restored);
+      setRemovedYears(restored);
       setAddedYears(next);
       changeYear(value);
       setNewYear(String(Math.min(9999, value + 1)));
       setMessage(`${value} 年的新一页，已经留好了。`);
     } catch {
       setMessage("年份暂时没能保存，请再试一次。");
+    }
+  };
+  const removeYear = async () => {
+    if (!storageReady) return;
+    if (currentMemories.length) {
+      setMessage("这一年还有记忆。请先在故事页移走这些记忆，再删除年份。");
+      return;
+    }
+    if (years.length <= 1) {
+      setMessage("请至少保留一个年份；可以先增加另一个年份。");
+      return;
+    }
+    if (
+      !confirm(
+        `删除 ${year} 年这张空白页吗？以后可以通过「增加年份」重新加入。`,
+      )
+    )
+      return;
+    const deleted = year;
+    try {
+      const next = addedYears.filter((y) => y !== deleted);
+      const removed = [...new Set([...removedYears, deleted])];
+      await storeGardenYears(next, removed);
+      setAddedYears(next);
+      setRemovedYears(removed);
+      changeYear(years.filter((y) => y !== deleted).at(-1)!);
+      setMessage(`${deleted} 年的空白页已移除。`);
+    } catch {
+      setMessage("年份暂时没能删除，请再试一次。");
     }
   };
   const startPlant = () => {
@@ -678,6 +739,13 @@ export default function Home() {
                         ))}
                       </select>
                     </div>
+                    <button
+                      className="remove-garden-year"
+                      disabled={!storageReady}
+                      onClick={() => void removeYear()}
+                    >
+                      移除 {year} 年 <Trash2 size={12} />
+                    </button>
                     <form
                       className="add-garden-year"
                       onSubmit={(e) => {

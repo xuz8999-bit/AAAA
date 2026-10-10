@@ -1259,3 +1259,11 @@
   filter: saturate(0.65) sepia(0.15) contrast(1.12);
   opacity: 0.95;
 }
+.remove-garden-year {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  color: #8a7962;
+  font: 14px "Ma Shan Zheng";
+}
