@@ -22,11 +22,9 @@ import {
   Check,
   Trash2,
 } from "lucide-react";
-import PrintedDog from "../components/PrintedDog";
-import GardenScene, {
-  LittlePlant,
-  type Season,
-} from "../components/GardenScene";
+import BotanicalArchive from "../components/BotanicalArchive";
+import { botanicalCategories, botanicalCategory } from "../lib/botanical";
+import { LittlePlant } from "../components/GardenScene";
 import { asset } from "../lib/assets";
 import {
   loadMemories,
@@ -85,12 +83,6 @@ const moods: {
     weather: "stars",
   },
 ];
-const seasonNames = {
-  spring: "春天 · 有些故事正在发芽",
-  summer: "夏天 · 阳光落在旧日子里",
-  autumn: "秋天 · 收藏金色的回声",
-  winter: "冬天 · 时间也会温柔地停留",
-};
 const animalStories: { [key: string]: { title: string; story: string } } = {
   bird: {
     title: "小鸟寄来的信",
@@ -110,7 +102,7 @@ const animalStories: { [key: string]: { title: string; story: string } } = {
   dog: {
     title: "一直等你的小狗",
     story:
-      "每一次回到花园，小狗都像第一次见到你那样高兴。有些爱，从来不问你离开了多久。",
+      "每一次回到档案，小狗都像第一次见到你那样高兴。有些爱，从来不问你离开了多久。",
   },
 };
 const blank = {
@@ -122,6 +114,7 @@ const blank = {
   kind: "flower" as "flower" | "tree" | "star",
   photos: [] as string[],
   song: undefined as Memory["song"],
+  botanicalCategory: "remember",
 };
 async function readPhoto(file: File): Promise<string> {
   if (!file.type.startsWith("image/")) throw new Error("请选择图片文件。");
@@ -162,13 +155,13 @@ function kindOf(m: Memory) {
 }
 export default function Home() {
   const [view, setView] = useState<View>("garden"),
+    [archiveCategory, setArchiveCategory] = useState(""),
     [memories, setMemories] = useState<Memory[]>([]),
     [collection, setCollection] = useState<Keepsake[]>([]),
     [year, setYear] = useState(new Date().getFullYear()),
     [addedYears, setAddedYears] = useState<number[]>([]),
     [removedYears, setRemovedYears] = useState<number[]>([]),
     [newYear, setNewYear] = useState(String(new Date().getFullYear() + 1)),
-    [season, setSeason] = useState<Season>("spring"),
     [weather, setWeather] = useState("sun"),
     [selected, setSelected] = useState<Memory>(),
     [animal, setAnimal] = useState(""),
@@ -301,17 +294,19 @@ export default function Home() {
       (y) => !removedYears.includes(y) || memories.some((m) => yearOf(m) === y),
     )
     .sort((a, b) => a - b);
-  const currentMemories = memories.filter((m) => yearOf(m) === year);
-  const yearIndex = years.indexOf(year);
-  const treeYears = years.slice(
-    Math.max(0, Math.min(yearIndex - 3, years.length - 7)),
-    Math.max(7, yearIndex + 4),
+  const currentMemories = memories.filter((m) =>
+    archiveCategory
+      ? botanicalCategory(m) === archiveCategory
+      : yearOf(m) === year,
   );
+  const yearIndex = years.indexOf(year);
   const go = (v: View) => {
+    if (["garden", "places", "timeline"].includes(v)) setArchiveCategory("");
     setView(v);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const changeYear = (y: number, open = false) => {
+    setArchiveCategory("");
     setYear(y);
     const newest = memories.find((m) => yearOf(m) === y);
     setWeather(moods.find((m) => m.id === newest?.mood)?.weather || "sun");
@@ -344,7 +339,7 @@ export default function Home() {
   };
   const removeYear = async () => {
     if (!storageReady) return;
-    if (currentMemories.length) {
+    if (memories.some((m) => yearOf(m) === year)) {
       setMessage("这一年还有记忆。请先在故事页移走这些记忆，再删除年份。");
       return;
     }
@@ -374,6 +369,7 @@ export default function Home() {
   const startPlant = () => {
     setForm({
       ...blank,
+      botanicalCategory: archiveCategory || "remember",
       date: year === new Date().getFullYear() ? blank.date : `${year}-06-01`,
       photos: [],
     });
@@ -411,6 +407,7 @@ export default function Home() {
         date: form.date,
         location: form.location,
         mood: form.mood,
+        botanicalCategory: form.botanicalCategory,
         plantKind: form.kind,
         song: form.song,
         style: "Botanical Archive",
@@ -547,7 +544,7 @@ export default function Home() {
         >
           <span>✦</span>
           <span>
-            拾光剪贴簿<small>a few things about me.</small>
+            MEMORY GARDEN<small>digital botanical archive / vol. 02</small>
           </span>
         </button>
         <nav aria-label="主要导航">
@@ -570,7 +567,7 @@ export default function Home() {
           ))}
           <button className="nav-plant" onClick={startPlant}>
             <Plus size={13} />
-            种下记忆
+            留下记忆
           </button>
         </nav>
       </header>
@@ -589,15 +586,17 @@ export default function Home() {
                 <section className="printed-poster">
                   <div className="poster-copy">
                     <span className="poster-prelude">
-                      a little time capsule:
+                      FIELD NOTES / FORGOTTEN & PRESERVED
                     </span>
                     <h1>
-                      MEMORIES<span>拾光剪贴簿</span>
+                      MEMORY
+                      <br />
+                      GARDEN<span>digital botanical archive</span>
                     </h1>
                     <p>
-                      路过一些风景，
+                      把遗忘的片刻，
                       <br />
-                      也把一些风景，留在了心里。
+                      保存成蓝色的植物标本。
                     </p>
                     <button onClick={startPlant} className="poster-oval">
                       留下一段记忆 <ArrowRight size={18} />
@@ -612,7 +611,7 @@ export default function Home() {
                       制作复古拼贴 · 相机冲印 ↗
                     </button>
                     <span className="poster-edition">
-                      PERSONAL JOURNAL / VOL. 01
+                      ISSUE 002 · BLUE SPECIMENS · PRIVATE ARCHIVE
                     </span>
                   </div>
                   <div className="poster-collage">
@@ -620,215 +619,156 @@ export default function Home() {
                       <img src={asset("/sky.jpg")} alt="收藏的一片山林风景" />
                       <span>somewhere I felt alive.</span>
                     </div>
-                    <PrintedDog
-                      className="print-dog dog-a"
-                      kind="corgi"
-                      label="复古印刷小狗剪贴"
+                    <img
+                      className="hero-silver-flower"
+                      src={asset("/prints/blue-lilies.png")}
+                      alt="银白与冰蓝交叠的梦境花瓣"
                     />
-                    <PrintedDog
-                      className="print-dog dog-b"
-                      kind="shepherd"
-                      label="牧羊犬剪贴"
-                    />
-                    <PrintedDog
-                      className="print-dog dog-c"
-                      kind="samoyed"
-                      label="白色小狗剪贴"
-                    />
+                    <span className="blue-registration">＋</span>
+                    <span className="poster-scan-line" />
                     <span className="poster-scribble">
-                      it's nice out there.
+                      some things never really leave.
                     </span>
                     <span className="poster-doodle">✦</span>
                   </div>
                 </section>
               )}
               <div className="places-heading">
-                <span>01 / THE PLACES I KEEP</span>
-                <h2>去过的地方，留下的故事。</h2>
-                <p>点击年份，翻开那一年的记忆。</p>
+                <span>01 / THE BOTANICAL INDEX</span>
+                <h2>Fragments that still bloom.</h2>
+                <p>选择一种情绪，进入记忆标本。</p>
               </div>
               <section className="garden-world" aria-label="互动记忆花园">
-                <GardenScene
-                  season={season}
-                  weather={weather}
-                  years={treeYears}
-                  selectedYear={year}
-                  onYear={(y) => changeYear(y, true)}
-                  plants={currentMemories.map((m) => ({
-                    id: m.id,
-                    title: m.title,
-                    kind: kindOf(m),
-                  }))}
-                  onPlant={(id) => {
-                    const m = memories.find((x) => x.id === id);
-                    if (m) openMemory(m);
+                <BotanicalArchive
+                  memories={memories}
+                  onCategory={(id) => {
+                    setArchiveCategory(id);
+                    setSelected(undefined);
+                    go("room");
                   }}
-                  onAnimal={setAnimal}
                 />
                 <div className="garden-marginalia">
                   <span>
-                    the tree remembers
+                    the archive remembers
                     <br />
                     what the world forgets.
                   </span>
                   <small>
-                    点一点年份的果实，重访那一年的故事。
+                    蓝色标本，封存那些仍有回声的片刻。
                     <br />
-                    小动物也藏着悄悄话。
+                    SELECT A FRAGMENT TO OPEN.
                   </small>
                 </div>
                 <div className="garden-caption">
                   <span className="tiny-flower">✦</span>
                   <span>
                     {loading
-                      ? "正在翻开你的故事书…"
+                      ? "正在读取私人档案…"
                       : currentMemories.length
-                        ? `${year} 年，${currentMemories.length} 段记忆正在生长。`
-                        : "这里有空白的泥土，等你种下第一段记忆。"}
+                        ? `${memories.length} 件记忆标本 / 私人收藏`
+                        : "空白档案，等待第一个视觉碎片。"}
                   </span>
                   <button onClick={startPlant}>
-                    Plant a memory <ArrowRight size={15} />
+                    Preserve a fragment <ArrowRight size={15} />
                   </button>
                 </div>
               </section>
-              <section className="time-and-seed">
-                <div className="time-device">
-                  <div className="pocket-watch" aria-hidden="true">
-                    <div className="watch-loop" />
-                    <div className="watch-face">
-                      <span>Ⅻ</span>
-                      <i />
-                      <b>{year}</b>
-                      <small>memory time</small>
-                    </div>
-                  </div>
-                  <div className="time-copy">
-                    <span className="chapter-label">THE LITTLE TIMEKEEPER</span>
-                    <h2>慢一点，再回头看看。</h2>
-                    <p>{seasonNames[season]}</p>
-                    <div className="year-control">
-                      <button
-                        aria-label="上一个年份"
-                        disabled={yearIndex === 0}
-                        onClick={() => changeYear(years[yearIndex - 1])}
-                      >
-                        <ChevronLeft size={17} />
-                      </button>
-                      <input
-                        aria-label="转动时光，选择年份"
-                        type="range"
-                        min={0}
-                        max={years.length - 1}
-                        value={yearIndex}
-                        onChange={(e) => changeYear(years[+e.target.value])}
-                      />
-                      <button
-                        aria-label="下一个年份"
-                        disabled={yearIndex === years.length - 1}
-                        onClick={() => changeYear(years[yearIndex + 1])}
-                      >
-                        <ChevronRight size={17} />
-                      </button>
-                      <select
-                        aria-label="选择记忆年份"
-                        value={year}
-                        onChange={(e) => changeYear(+e.target.value)}
-                      >
-                        {years.map((y) => (
-                          <option key={y}>{y}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <button
-                      className="remove-garden-year"
-                      disabled={!storageReady}
-                      onClick={() => void removeYear()}
-                    >
-                      移除 {year} 年 <Trash2 size={12} />
-                    </button>
-                    <form
-                      className="add-garden-year"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        void addYear();
-                      }}
-                    >
-                      <input
-                        aria-label="新增记忆年份"
-                        type="number"
-                        min="1000"
-                        max="9999"
-                        step="1"
-                        value={newYear}
-                        onChange={(e) => setNewYear(e.target.value)}
-                      />
-                      <button disabled={!storageReady} type="submit">
-                        ＋ 增加年份
-                      </button>
-                      <small>未来，也可以留下一页。</small>
-                    </form>
-                    <input
-                      className="season-slider"
-                      aria-label="滑动选择春夏秋冬"
-                      aria-valuetext={
-                        {
-                          spring: "春",
-                          summer: "夏",
-                          autumn: "秋",
-                          winter: "冬",
-                        }[season]
-                      }
-                      type="range"
-                      min="0"
-                      max="3"
-                      step="1"
-                      value={["spring", "summer", "autumn", "winter"].indexOf(
-                        season,
-                      )}
-                      onChange={(e) =>
-                        setSeason(
-                          (
-                            ["spring", "summer", "autumn", "winter"] as Season[]
-                          )[Number(e.target.value)],
-                        )
-                      }
-                    />
-                    <div className="season-picker" aria-label="选择花园季节">
-                      {(
-                        ["spring", "summer", "autumn", "winter"] as Season[]
-                      ).map((s, i) => (
+              {view === "places" && (
+                <section className="time-and-seed">
+                  <div className="time-device">
+                    <div className="time-copy">
+                      <span className="chapter-label">
+                        THE LITTLE TIMEKEEPER
+                      </span>
+                      <h2>DATE INDEX / 时间索引</h2>
+                      <p>按日期保存，按情绪重新发现。</p>
+                      <div className="year-control">
                         <button
-                          key={s}
-                          aria-pressed={season === s}
-                          onClick={() => setSeason(s)}
+                          aria-label="上一个年份"
+                          disabled={yearIndex === 0}
+                          onClick={() => changeYear(years[yearIndex - 1])}
                         >
-                          {["春", "夏", "秋", "冬"][i]}
+                          <ChevronLeft size={17} />
                         </button>
-                      ))}
+                        <input
+                          aria-label="转动时光，选择年份"
+                          type="range"
+                          min={0}
+                          max={years.length - 1}
+                          value={yearIndex}
+                          onChange={(e) => changeYear(years[+e.target.value])}
+                        />
+                        <button
+                          aria-label="下一个年份"
+                          disabled={yearIndex === years.length - 1}
+                          onClick={() => changeYear(years[yearIndex + 1])}
+                        >
+                          <ChevronRight size={17} />
+                        </button>
+                        <select
+                          aria-label="选择记忆年份"
+                          value={year}
+                          onChange={(e) => changeYear(+e.target.value)}
+                        >
+                          {years.map((y) => (
+                            <option key={y}>{y}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <button
+                        className="remove-garden-year"
+                        disabled={!storageReady}
+                        onClick={() => void removeYear()}
+                      >
+                        移除 {year} 年 <Trash2 size={12} />
+                      </button>
+                      <form
+                        className="add-garden-year"
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          void addYear();
+                        }}
+                      >
+                        <input
+                          aria-label="新增记忆年份"
+                          type="number"
+                          min="1000"
+                          max="9999"
+                          step="1"
+                          value={newYear}
+                          onChange={(e) => setNewYear(e.target.value)}
+                        />
+                        <button disabled={!storageReady} type="submit">
+                          ＋ 增加年份
+                        </button>
+                        <small>未来，也可以留下一页。</small>
+                      </form>
                     </div>
                   </div>
-                </div>
-                <div className="seed-invitation">
-                  <span className="invitation-star">✧</span>
-                  <span className="chapter-label">
-                    ONE PHOTO. ONE FEELING. ONE LITTLE SEED.
-                  </span>
-                  <h2>
-                    有些日子，
-                    <br />
-                    值得开成一朵花。
-                  </h2>
-                  <p>
-                    一张照片，一句话，一种心情。
-                    <br />
-                    让它在这本故事书里，慢慢长大。
-                  </p>
-                  <button className="garden-button" onClick={startPlant}>
-                    {memories.length ? "再种下一段记忆" : "种下我的第一段记忆"}{" "}
-                    <Plus size={15} />
-                  </button>
-                </div>
-              </section>
+                  <div className="seed-invitation">
+                    <span className="invitation-star">✧</span>
+                    <span className="chapter-label">
+                      ONE IMAGE. ONE FEELING. ONE FRAGMENT.
+                    </span>
+                    <h2>
+                      有些日子，
+                      <br />
+                      值得开成一朵花。
+                    </h2>
+                    <p>
+                      一张照片，一句话，一种心情。
+                      <br />
+                      保存为一件私人的视觉标本。
+                    </p>
+                    <button className="garden-button" onClick={startPlant}>
+                      {memories.length
+                        ? "再留下一段记忆"
+                        : "保存我的第一段记忆"}{" "}
+                      <Plus size={15} />
+                    </button>
+                  </div>
+                </section>
+              )}
               <div className="garden-closing">
                 “ What is essential is invisible to the eye. ”
                 <span>把重要的事，留在心里，也留在这里。</span>
@@ -880,10 +820,10 @@ export default function Home() {
                 }}
               >
                 <ArrowLeft size={15} />
-                {selected ? "回到这一年的花园" : "回到花园"}
+                {selected ? "回到记忆索引" : "回到档案"}
               </button>
               <span className="chapter-label">
-                CHAPTER {year} · A WORLD OF ITS OWN
+                ARCHIVE / {archiveCategory || year} · PERSONAL SPECIMENS
               </span>
               {selected ? (
                 <>
@@ -988,17 +928,29 @@ export default function Home() {
               ) : (
                 <>
                   <h1>
-                    {year}
-                    <em>，那时候的我们。</em>
+                    {archiveCategory
+                      ? botanicalCategories.find(
+                          (c) => c.id === archiveCategory,
+                        )?.title
+                      : year}
+                    <em>
+                      {archiveCategory
+                        ? " / visual fragments"
+                        : " / preserved moments"}
+                    </em>
                   </h1>
                   <p className="page-subtitle">
-                    这一年，有哪些片刻还在心里发光？
+                    照片、文字与声音，保存为仍有回声的片刻。
                   </p>
                   {currentMemories.length ? (
                     <div className="memory-meadow">
                       {currentMemories.map((m) => (
                         <button key={m.id} onClick={() => openMemory(m)}>
-                          <LittlePlant kind={kindOf(m)} />
+                          <img
+                            className="memory-specimen-cover"
+                            src={asset(m.cover || "/prints/blue-lilies.png")}
+                            alt={m.title}
+                          />
                           <h3>{m.title}</h3>
                           <span>{m.date}</span>
                           <p>
@@ -1015,11 +967,13 @@ export default function Home() {
                   ) : (
                     <div className="empty-year">
                       <LittlePlant />
-                      <h2>这一页，等待一颗种子。</h2>
+                      <h2>NO SPECIMENS YET.</h2>
                       <p>
-                        你还没有在 {year} 年种下记忆。
+                        {archiveCategory
+                          ? "这个分类还没有记忆标本。"
+                          : `你还没有在 ${year} 年留下记忆。`}
                         <br />
-                        旧日子里的一个小片刻，也可以从今天开始生长。
+                        将照片、文字和声音收录在这一页。
                       </p>
                     </div>
                   )}
@@ -1038,13 +992,13 @@ export default function Home() {
                 disabled={growing}
               >
                 <ArrowLeft size={15} />
-                回到花园
+                回到档案
               </button>
               <span className="chapter-label">
-                A SMALL CEREMONY · PLANT A MEMORY
+                NEW SPECIMEN · PERSONAL ARCHIVE
               </span>
               <h1>
-                Let a little <em>memory grow.</em>
+                Preserve a <em>fragment.</em>
               </h1>
               <p className="page-subtitle">
                 不必是惊天动地的大事。让你心动的小片刻，就很好。
@@ -1058,13 +1012,13 @@ export default function Home() {
                   >
                     <LittlePlant kind={form.kind} />
                   </motion.div>
-                  <h2>从一颗种子，到一段故事。</h2>
-                  <p>你的记忆，正在花园里扎根。</p>
+                  <h2>正在保存你的记忆标本。</h2>
+                  <p>你的记忆，正在归入私人档案。</p>
                 </div>
               ) : (
                 <div className="plant-form">
                   <div className="plant-progress">
-                    {["拾起片刻", "留住心情", "种进花园"].map((s, i) => (
+                    {["收集碎片", "标注情绪", "归入档案"].map((s, i) => (
                       <span key={s} className={step >= i + 1 ? "active" : ""}>
                         <b>{i + 1}</b>
                         {s}
@@ -1096,6 +1050,25 @@ export default function Home() {
                             setForm((f) => ({ ...f, story: e.target.value }))
                           }
                         />
+                      </label>
+                      <label className="form-label">
+                        情绪档案分类
+                        <select
+                          aria-label="记忆档案分类"
+                          value={form.botanicalCategory}
+                          onChange={(e) =>
+                            setForm((f) => ({
+                              ...f,
+                              botanicalCategory: e.target.value,
+                            }))
+                          }
+                        >
+                          {botanicalCategories.map((c) => (
+                            <option value={c.id} key={c.id}>
+                              {c.title} / {c.note}
+                            </option>
+                          ))}
+                        </select>
                       </label>
                       <label className="photo-seed-upload">
                         <ImagePlus size={23} />
@@ -1146,7 +1119,7 @@ export default function Home() {
                           setStep(2);
                         }}
                       >
-                        把这份心情留下 <ArrowRight size={15} />
+                        标注这份情绪 <ArrowRight size={15} />
                       </button>
                     </>
                   ) : step === 2 ? (
@@ -1297,7 +1270,7 @@ export default function Home() {
                             setStep(3);
                           }}
                         >
-                          看看这颗种子 <ArrowRight size={15} />
+                          预览记忆标本 <ArrowRight size={15} />
                         </button>
                       </div>
                     </>
@@ -1328,7 +1301,7 @@ export default function Home() {
                           disabled={!storageReady}
                           onClick={() => void plant()}
                         >
-                          种下这段记忆 <Leaf size={16} />
+                          保存这段记忆 <Leaf size={16} />
                         </button>
                       </div>
                     </>
@@ -1502,7 +1475,10 @@ export default function Home() {
               </h1>
               <div className="about-spread">
                 <div className="about-print">
-                  <PrintedDog kind="samoyed" label="一张复古印刷小狗剪贴" />
+                  <img
+                    src={asset("/prints/blue-lilies.png")}
+                    alt="私人档案中的银蓝花瓣"
+                  />
                   <span>still figuring it all out.</span>
                 </div>
                 <div className="about-writing">
@@ -1571,7 +1547,7 @@ export default function Home() {
         </motion.div>
       </AnimatePresence>
       <footer className="book-footer">
-        <span>❧ 拾光剪贴簿</span>
+        <span>MEMORY GARDEN / PRIVATE PRESS</span>
         <p>
           Some things are too small to explain.
           <br />

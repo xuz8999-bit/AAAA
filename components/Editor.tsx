@@ -39,6 +39,7 @@ export type Memory = {
   cover: string;
   createdAt: string;
   category?: string;
+  botanicalCategory?: string;
   complexity?: string;
   printFinish?: PrintFinish;
   story?: string;
@@ -113,7 +114,9 @@ export default function Editor({
     [category, setCategory] = useState(memory?.category || "RANDOM FRAGMENTS"),
     [message, setMessage] = useState(""),
     [scale, setScale] = useState(0.8),
-    [finish, setFinish] = useState<PrintFinish>(memory?.printFinish || "film"),
+    [finish, setFinish] = useState<PrintFinish>(
+      memory?.printFinish || "blueprint",
+    ),
     [printed, setPrinted] = useState(""),
     [developing, setDeveloping] = useState(false);
   const stage = useRef<Konva.Stage>(null),

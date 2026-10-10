@@ -1,9 +1,19 @@
-export type PrintFinish = "film" | "halftone" | "ccd" | "original";
+export type PrintFinish =
+  | "blueprint"
+  | "film"
+  | "halftone"
+  | "ccd"
+  | "original";
 export const printFinishes: {
   id: PrintFinish;
   name: string;
   filter: string;
 }[] = [
+  {
+    id: "blueprint",
+    name: "蓝色网点印刷",
+    filter: "grayscale(1) sepia(.4) hue-rotate(175deg) contrast(1.4)",
+  },
   {
     id: "film",
     name: "褪色胶片",
@@ -45,15 +55,26 @@ export function developPrint(
   const data = ctx.getImageData(0, 0, output.width, output.height);
   let seed = 17;
   for (let i = 0; i < data.data.length; i += 4) {
+    if (finish === "blueprint") {
+      const luminance =
+        (data.data[i] * 0.2126 +
+          data.data[i + 1] * 0.7152 +
+          data.data[i + 2] * 0.0722) /
+        255;
+      const tone = Math.round(luminance * 6) / 6;
+      data.data[i] = 7 + tone * 216;
+      data.data[i + 1] = 16 + tone * 215;
+      data.data[i + 2] = 42 + tone * 203;
+    }
     seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
     const grain = (seed / 4294967296 - 0.5) * (finish === "ccd" ? 13 : 19);
     for (let channel = 0; channel < 3; channel++)
       data.data[i + channel] += grain;
   }
   ctx.putImageData(data, 0, 0);
-  if (finish === "halftone") {
+  if (finish === "halftone" || finish === "blueprint") {
     const gap = Math.max(4, output.width / 300);
-    ctx.fillStyle = "#463c2b";
+    ctx.fillStyle = finish === "blueprint" ? "#070c22" : "#463c2b";
     for (let y = gap / 2; y < output.height; y += gap) {
       for (let x = gap / 2; x < output.width; x += gap) {
         const i = (Math.floor(y) * output.width + Math.floor(x)) * 4;

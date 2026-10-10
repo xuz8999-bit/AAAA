@@ -1,0 +1,945 @@
+:root {
+  --garden-paper: #070c22;
+  --garden-ink: #e2e6ef;
+  --garden-muted: #8892b3;
+  --garden-green: #8d9eff;
+  --garden-border: #48517a;
+}
+body {
+  background: #070c22;
+}
+.storybook,
+.storybook.weather-rain,
+.storybook.weather-stars {
+  background: #070c22;
+  color: #e2e6ef;
+}
+.paper-texture {
+  opacity: 0.12;
+  mix-blend-mode: screen;
+  animation: press-grain 1.2s steps(3) infinite;
+}
+@keyframes press-grain {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(-2px, 1px);
+  }
+  60% {
+    transform: translate(1px, -2px);
+  }
+}
+.book-header {
+  border-color: #515a863d;
+  height: 95px;
+}
+.garden-brand {
+  font: 20px Anton;
+  color: #e3e8ff;
+  letter-spacing: 1px;
+}
+.garden-brand > span:first-child {
+  color: #5867f6;
+}
+.garden-brand small {
+  font: 8px monospace;
+  color: #858cad;
+  letter-spacing: 1px;
+}
+.book-header nav {
+  font:
+    13px Arial,
+    sans-serif;
+  color: #a1a8be;
+}
+.book-header nav button[aria-current="page"] {
+  color: #e7edff;
+}
+.book-header nav button[aria-current="page"]:after {
+  background: #6577ff;
+}
+.book-header nav .nav-plant {
+  background: #293cef;
+  border: 1px solid #7784ff;
+  color: #f1f3ff;
+  border-radius: 0;
+}
+.printed-poster {
+  max-width: 1250px;
+  margin: 35px auto 0;
+  min-height: 660px;
+  grid-template-columns: 1.1fr 1fr;
+  padding: 20px 35px 0;
+  gap: 0;
+}
+.poster-copy {
+  padding-top: 55px;
+}
+.poster-prelude {
+  font: 9px monospace;
+  color: #979fc7;
+  letter-spacing: 2px;
+  transform: none;
+}
+.poster-copy h1 {
+  font: clamp(90px, 10vw, 150px) / 0.93 Anton;
+  letter-spacing: -3px;
+  color: #e7eaf1;
+  text-shadow: 3px 0 #334bff99;
+  transform: rotate(-3deg);
+  margin: 24px 0 26px;
+  mask-image: none;
+}
+.poster-copy h1 span {
+  font: 10px monospace;
+  color: #8f9cd9;
+  letter-spacing: 4px;
+  margin: 24px 0 0;
+}
+.poster-copy p {
+  font: 16px/1.8 "Ma Shan Zheng";
+  color: #abb5d0;
+}
+.poster-oval {
+  border-radius: 0;
+  border: 1px solid #6878c8;
+  background: #131c48;
+  color: #ccd5ff;
+  box-shadow: 4px 4px 0 #2337bc;
+  font: 17px "Ma Shan Zheng";
+  padding: 13px 22px;
+  rotate: -2deg;
+}
+.poster-print-link {
+  color: #aebbee;
+  font: 16px "Ma Shan Zheng";
+  margin-top: 22px;
+}
+.poster-edition {
+  font: 8px monospace;
+  color: #626f9e;
+  margin-top: 28px;
+}
+.poster-collage {
+  min-height: 640px;
+  isolation: isolate;
+}
+.print-landscape {
+  width: 87%;
+  height: 325px;
+  left: -7%;
+  top: 68px;
+  rotate: 5deg;
+}
+.print-landscape img {
+  filter: grayscale(1) contrast(1.9);
+  mix-blend-mode: normal;
+  opacity: 0.9;
+}
+.print-landscape::after {
+  background-image: radial-gradient(#060a20aa 0.9px, transparent 1.2px);
+  background-size: 4px 4px;
+  opacity: 0.8;
+}
+.print-landscape span {
+  color: #9eabd0;
+  font: 23px "Caveat";
+}
+.hero-silver-flower {
+  position: absolute;
+  width: 68%;
+  height: 430px;
+  object-fit: cover;
+  right: -2%;
+  top: 155px;
+  rotate: -9deg;
+  mix-blend-mode: screen;
+  filter: contrast(1.25) saturate(1.3);
+  box-shadow: -12px 12px 0 #2536aa44;
+  animation: specimen-drift 14s ease-in-out infinite;
+}
+@keyframes specimen-drift {
+  50% {
+    transform: translateY(-9px) rotate(2deg);
+  }
+}
+.blue-registration {
+  position: absolute;
+  top: 15px;
+  right: 20%;
+  font: 130px/1 monospace;
+  color: #284dff;
+  z-index: -1;
+}
+.poster-scribble {
+  font: 27px "Caveat";
+  color: #bac8fb;
+  border: 0;
+  left: 1%;
+  bottom: 10px;
+  padding: 0;
+  rotate: -6deg;
+  white-space: normal;
+}
+.poster-doodle {
+  color: #5a68e4;
+  left: -2%;
+  top: 460px;
+}
+.poster-scan-line {
+  position: absolute;
+  top: 65px;
+  left: -8%;
+  width: 95%;
+  height: 1px;
+  background: #a3b4ff;
+  opacity: 0.5;
+  pointer-events: none;
+  animation: archive-scan 9s linear infinite;
+}
+@keyframes archive-scan {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.6;
+  }
+  80% {
+    transform: translateY(450px);
+    opacity: 0.2;
+  }
+}
+.places-heading {
+  max-width: 1180px;
+  margin: 30px auto 0;
+  border-color: #3b4976;
+  padding-top: 24px;
+}
+.places-heading > span {
+  color: #7786b7;
+}
+.places-heading h2 {
+  color: #c5d0f2;
+  font: 32px "Caveat";
+}
+.places-heading p {
+  color: #7c8ab5;
+}
+.garden-world {
+  margin-top: 22px;
+  max-width: 1250px;
+}
+.garden-marginalia {
+  display: none;
+}
+.botanical-index {
+  position: relative;
+  height: 790px;
+  margin: 0 40px;
+}
+.specimen-paper {
+  width: 48%;
+  height: 690px;
+  position: absolute;
+  left: 27%;
+  top: 35px;
+  background: #d6dbea;
+  rotate: -4deg;
+  clip-path: polygon(0 1%, 98% 0, 100% 98%, 1% 100%);
+}
+.specimen-paper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(#1b254733 0.55px, transparent 0.9px);
+  background-size: 3px 3px;
+}
+.specimen-paper svg {
+  width: 100%;
+  height: 94%;
+}
+.specimen-number,
+.specimen-caption {
+  position: absolute;
+  left: 18px;
+  font: 8px monospace;
+  letter-spacing: 2px;
+  color: #263459;
+}
+.specimen-number {
+  top: 17px;
+}
+.specimen-caption {
+  bottom: 17px;
+}
+.index-flower {
+  position: absolute;
+  width: 26%;
+  height: 315px;
+  object-fit: cover;
+  top: 405px;
+  left: 4%;
+  rotate: 9deg;
+  filter: saturate(1.4);
+  mix-blend-mode: screen;
+}
+.specimen-tags {
+  position: absolute;
+  inset: 0;
+}
+.specimen-tag {
+  position: absolute;
+  text-align: left;
+  width: 260px;
+  padding: 16px 18px 14px;
+  background: #182b7d;
+  color: #e4ebff;
+  border: 1px solid #7185c888;
+  border-radius: 0;
+  box-shadow: 4px 5px 0 #18234366;
+  transition:
+    transform 0.35s,
+    background 0.3s;
+}
+.specimen-tag:hover {
+  transform: translate(-3px, -5px);
+  background: #293f9d;
+}
+.specimen-tag small {
+  display: flex;
+  justify-content: space-between;
+  font: 8px monospace;
+  letter-spacing: 1.5px;
+  color: #a3b4eb;
+}
+.specimen-tag strong {
+  display: block;
+  font: 25px/1.3 Anton;
+  letter-spacing: 0.3px;
+  margin: 14px 0 8px;
+}
+.specimen-tag em {
+  font: 13px "Ma Shan Zheng";
+  color: #a7b9ee;
+}
+.tag-0 {
+  left: 1%;
+  top: 35px;
+  rotate: -5deg;
+}
+.tag-1 {
+  right: 0;
+  top: 105px;
+  rotate: 4deg;
+}
+.tag-2 {
+  left: 8%;
+  top: 240px;
+  rotate: 3deg;
+}
+.tag-3 {
+  right: 5%;
+  top: 345px;
+  rotate: -4deg;
+}
+.tag-4 {
+  left: 25%;
+  top: 560px;
+  rotate: -3deg;
+}
+.tag-5 {
+  right: 1%;
+  top: 620px;
+  rotate: 5deg;
+}
+.garden-caption {
+  color: #9daccb;
+  font: 12px monospace;
+}
+.garden-caption button {
+  color: #8ca1eb;
+}
+.garden-closing {
+  color: #889ac4;
+  font: 25px "Caveat";
+  margin: 45px 0;
+}
+.garden-closing > span {
+  color: #6579a7;
+}
+.book-footer {
+  border-color: #35416a;
+  color: #8190bc;
+}
+.book-footer > span:first-child {
+  font: 13px Anton;
+  color: #a6b4de;
+}
+.book-footer p {
+  color: #8998b8;
+}
+.storybook .inside-page h1 {
+  color: #d8e0f9;
+  font:
+    56px/1.25 Anton,
+    "Ma Shan Zheng";
+}
+.inside-page h1 em {
+  color: #7c8cc8;
+  font: 25px "Caveat";
+}
+.chapter-label,
+.page-subtitle {
+  color: #8494bf;
+}
+.storybook button:hover {
+  color: #d5e0ff;
+}
+.garden-button {
+  color: #c3d0ff;
+  background: #142150;
+  border-color: #55689d;
+  border-radius: 0;
+  box-shadow: 3px 3px 0 #273f7c;
+}
+.garden-button:hover {
+  background: #25367b;
+  color: #edf2ff;
+}
+.time-and-seed {
+  border-color: #33456d;
+}
+.time-copy h2,
+.seed-invitation h2 {
+  color: #a4b7e5;
+}
+.time-copy p,
+.seed-invitation p {
+  color: #7288b3;
+}
+.pocket-watch {
+  filter: hue-rotate(150deg) saturate(0.3);
+}
+.time-branch {
+  border-color: #3b4d77;
+}
+.branch-year {
+  color: #b3c8f5;
+}
+.branch-story {
+  color: #7187b3;
+}
+.plant-form,
+.secret-story {
+  background: #0d1634;
+  border: 1px solid #364970;
+  box-shadow: none;
+  border-radius: 0;
+}
+.form-label {
+  color: #96abd7;
+}
+.form-label input,
+.form-label textarea,
+.form-label select {
+  background: #101c3d;
+  color: #d0ddfa;
+  border-color: #40557e;
+}
+.form-label input::placeholder,
+.form-label textarea::placeholder {
+  color: #7083aa;
+}
+.mood-choices button,
+.plant-kind-choices button {
+  color: #8396bd;
+}
+.mood-choices button[aria-pressed="true"],
+.plant-kind-choices button[aria-pressed="true"] {
+  color: #d4e2ff;
+  background: #1c2d65;
+  border-color: #6d83be;
+}
+.photo-seed-upload,
+.music-seed-upload {
+  color: #9db3db;
+  border-color: #4a6191;
+}
+.private-note {
+  color: #748ab0;
+}
+.garden-toast {
+  background: #15224bee;
+  color: #c2d3fb;
+  border-color: #5b71a9;
+  border-radius: 0;
+}
+.secret-story h2,
+.secret-story p {
+  color: #b1c3e9;
+}
+.memory-meadow {
+  display: block;
+}
+.memory-meadow > button {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 10px 25px;
+  width: 100%;
+  text-align: left;
+  border-bottom: 1px solid #35476c;
+  padding: 25px 0;
+  background: none;
+  rotate: 0deg;
+}
+.memory-specimen-cover {
+  grid-row: span 5;
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.5);
+}
+.memory-meadow h3 {
+  color: #bacbed;
+  font:
+    25px "Caveat",
+    "Ma Shan Zheng";
+}
+.memory-meadow p,
+.memory-meadow span {
+  color: #869bc1;
+}
+.story-writing > p {
+  color: #b4c6e5;
+}
+.story-photographs figure {
+  background: #bac7dc;
+  border-radius: 0;
+  box-shadow: 5px 6px 0 #294373;
+}
+.story-photographs img {
+  filter: grayscale(0.7) saturate(0.6) contrast(1.1);
+}
+.keepsake-shelf {
+  display: block;
+}
+.keepsake {
+  display: inline-block;
+  width: calc(50% - 35px);
+  margin: 20px 15px;
+  padding: 20px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #40547e;
+  box-shadow: none;
+  border-radius: 0;
+  vertical-align: top;
+}
+.keepsake img {
+  filter: grayscale(0.8) contrast(1.3);
+}
+.keepsake h3 {
+  color: #b7cdf0;
+}
+.keepsake p {
+  color: #879dc3;
+}
+.music-page-tabs {
+  color: #778eba;
+  border-color: #3e5480;
+}
+.music-page-tabs button[aria-pressed="true"] {
+  color: #d1e0ff;
+  border-color: #7e98df;
+}
+.memory-song-list h3 {
+  color: #b9cef4;
+}
+.memory-song-list article button {
+  color: #8ba4ce;
+}
+.about-print img {
+  filter: none;
+  mix-blend-mode: screen;
+  clip-path: none;
+}
+.about-print span,
+.about-writing > p {
+  color: #a8c0e6;
+}
+.about-handwriting {
+  color: #869feb;
+}
+.about-writing .about-footnote {
+  color: #7d94bd;
+}
+.empty-year svg,
+.empty-keepsake svg,
+.seed-preview > svg,
+.growth-ceremony svg {
+  display: none;
+}
+.empty-year h2,
+.empty-keepsake h2,
+.seed-preview h2 {
+  color: #aac0e8;
+}
+.empty-year p,
+.empty-keepsake p,
+.seed-preview p {
+  color: #7c96c0;
+}
+.add-garden-year {
+  color: #8aa2cd;
+}
+.add-garden-year input {
+  background: #152349;
+  color: #b8c9ee;
+  border-color: #5572a2;
+}
+.remove-garden-year {
+  color: #93a9cd;
+}
+.season-slider {
+  accent-color: #647af3;
+}
+.season-picker {
+  color: #7890ba;
+}
+.season-picker button[aria-pressed="true"] {
+  color: #bdd4ff;
+}
+.storybook .editor-shell {
+  background: #0b1430;
+  color: #bbc9e8;
+}
+.editor-tools,
+.canvas-status,
+.editor-heading {
+  background: #111e3d;
+  color: #b2c5e9;
+  border-color: #3a517a;
+}
+.editor-heading input {
+  color: #d3dfff;
+}
+.editor-tools select,
+.editor-tools input {
+  background: #182848;
+  color: #c3d2ee;
+}
+.canvas-scroll {
+  background: #182343;
+}
+.print-booth {
+  background: #08132bf7;
+}
+.print-booth h2,
+.print-booth > p {
+  color: #bbcdf1;
+}
+.print-close {
+  color: #bbcbea;
+}
+.print-download {
+  background: #25366d;
+  color: #c5d7fa;
+  border-color: #708ec6;
+  border-radius: 0;
+}
+.print-help {
+  color: #91a7cc;
+}
+@media (max-width: 1000px) {
+  .printed-poster {
+    margin: 20px 25px 0;
+    min-height: 590px;
+  }
+  .poster-copy h1 {
+    font-size: 105px;
+  }
+  .hero-silver-flower {
+    height: 360px;
+  }
+  .poster-collage {
+    min-height: 550px;
+  }
+  .print-landscape {
+    height: 260px;
+  }
+  .specimen-tag {
+    width: 225px;
+  }
+  .specimen-tag strong {
+    font-size: 21px;
+  }
+  .places-heading {
+    margin-left: 35px;
+    margin-right: 35px;
+  }
+}
+@media (max-width: 600px) {
+  .book-header {
+    height: 154px;
+    padding: 22px 24px;
+  }
+  .garden-brand {
+    font-size: 23px;
+  }
+  .garden-brand small {
+    font-size: 7px;
+  }
+  .book-header nav {
+    font-size: 12px;
+    gap: 15px;
+  }
+  .book-header nav .nav-plant {
+    font-size: 11px;
+  }
+  .printed-poster {
+    margin: 20px 24px 0;
+    display: block;
+    min-height: 0;
+    padding: 0;
+  }
+  .poster-copy {
+    padding-top: 20px;
+  }
+  .poster-prelude {
+    font-size: 7px;
+    letter-spacing: 1.5px;
+  }
+  .poster-copy h1 {
+    font-size: clamp(78px, 23vw, 125px);
+    line-height: 0.96;
+    margin-top: 18px;
+  }
+  .poster-copy h1 span {
+    font-size: 8px;
+    letter-spacing: 2px;
+    margin-top: 20px;
+  }
+  .poster-copy p {
+    position: static;
+    max-width: none;
+    font-size: 16px;
+    margin: 20px 0;
+  }
+  .poster-oval {
+    font-size: 15px;
+    margin-top: 0;
+  }
+  .poster-edition {
+    font-size: 6px;
+  }
+  .poster-collage {
+    height: 400px;
+    min-height: 400px;
+    margin-top: 28px;
+  }
+  .print-landscape {
+    top: 0;
+    left: 1%;
+    height: 205px;
+    width: 80%;
+  }
+  .hero-silver-flower {
+    top: 70px;
+    right: 0;
+    width: 61%;
+    height: 285px;
+  }
+  .poster-scribble {
+    bottom: 6px;
+    left: 0;
+    font-size: 25px;
+  }
+  .blue-registration {
+    font-size: 85px;
+    top: -25px;
+    right: 10%;
+  }
+  .poster-doodle {
+    top: 230px;
+    font-size: 43px;
+  }
+  .places-heading {
+    margin: 35px 24px 0;
+  }
+  .places-heading h2 {
+    font-size: 29px;
+  }
+  .botanical-index {
+    height: 970px;
+    margin: 0 24px;
+  }
+  .specimen-paper {
+    left: 8%;
+    width: 83%;
+    height: 630px;
+    top: 80px;
+    opacity: 0.8;
+  }
+  .specimen-tag {
+    width: 210px;
+    padding: 12px 15px;
+  }
+  .specimen-tag strong {
+    font-size: 20px;
+    margin: 10px 0;
+  }
+  .specimen-tag small {
+    font-size: 7px;
+  }
+  .tag-0 {
+    left: 0;
+    top: 0;
+  }
+  .tag-1 {
+    right: 0;
+    top: 155px;
+  }
+  .tag-2 {
+    left: 0;
+    top: 315px;
+  }
+  .tag-3 {
+    right: 0;
+    top: 475px;
+  }
+  .tag-4 {
+    left: 0;
+    top: 635px;
+  }
+  .tag-5 {
+    right: 0;
+    top: 795px;
+  }
+  .index-flower {
+    top: 545px;
+    left: -5%;
+    width: 60%;
+    height: 250px;
+  }
+  .garden-caption {
+    margin: 0 24px;
+    font-size: 10px;
+    flex-wrap: wrap;
+  }
+  .storybook .inside-page h1 {
+    font-size: 37px;
+  }
+  .memory-meadow > button {
+    grid-template-columns: 95px 1fr;
+    gap: 6px 16px;
+  }
+  .memory-specimen-cover {
+    width: 95px;
+    height: 140px;
+  }
+  .keepsake {
+    width: 100%;
+    margin: 15px 0;
+    rotate: 0deg !important;
+  }
+  .garden-closing {
+    font-size: 22px;
+    margin: 35px 24px;
+  }
+  .poster-scan-line {
+    top: 0;
+    left: 0;
+  }
+  .book-footer {
+    padding: 25px 24px;
+  }
+  .book-footer > span:first-child {
+    font-size: 11px;
+  }
+  .about-spread {
+    margin-top: 40px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .paper-texture,
+  .hero-silver-flower,
+  .poster-scan-line {
+    animation: none;
+  }
+  .specimen-tag {
+    transition: none;
+  }
+}
+.hero-silver-flower {
+  object-fit: cover;
+  filter: saturate(0.85) contrast(1.13);
+  width: 77%;
+  height: 460px;
+  right: -4%;
+  top: 135px;
+}
+.poster-collage::before {
+  content: "";
+  position: absolute;
+  width: 95px;
+  height: 75px;
+  top: 15px;
+  right: 8%;
+  background: repeating-conic-gradient(#607bff 0% 25%, transparent 0% 50%)
+    0/30px 30px;
+  rotate: 4deg;
+}
+.print-landscape img {
+  filter: grayscale(1) contrast(2.5);
+}
+.poster-copy h1 {
+  background-image: radial-gradient(#070c2266 0.65px, transparent 0.9px);
+  background-size: 3px 3px;
+  background-clip: text;
+}
+.plant-kind-choices,
+.story-no-photo > svg {
+  display: none;
+}
+.growth-ceremony {
+  border-top: 1px solid #5374bd;
+  background: linear-gradient(180deg, #547bff22, transparent);
+}
+@media (max-width: 600px) {
+  .hero-silver-flower {
+    width: 70%;
+    height: 290px;
+    top: 70px;
+    right: -2%;
+  }
+  .poster-collage::before {
+    top: -20px;
+    right: 7%;
+    width: 65px;
+    height: 50px;
+    background-size: 20px 20px;
+  }
+}
+.tag-2,
+.tag-5 {
+  background: #cbd4ed;
+  color: #182552;
+  border-color: #f2f5ff55;
+  box-shadow: 5px 4px 0 #2c44b866;
+}
+.tag-2 small,
+.tag-5 small,
+.tag-2 em,
+.tag-5 em {
+  color: #465584;
+}
+.tag-2:hover,
+.tag-5:hover {
+  background: #e2e7f6;
+  color: #142052 !important;
+}
