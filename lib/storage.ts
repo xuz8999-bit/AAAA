@@ -131,3 +131,38 @@ export async function storeGardenYears(
     };
   });
 }
+
+export type CustomArt = {
+  name: string;
+  src: string;
+  width: number;
+  height: number;
+};
+export async function loadCustomArt(): Promise<CustomArt[]> {
+  const db = await database();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("archive", "readonly");
+    const r = tx.objectStore("archive").get("custom-art");
+    r.onsuccess = () => resolve(r.result || []);
+    tx.oncomplete = () => db.close();
+    tx.onerror = () => {
+      db.close();
+      reject(tx.error);
+    };
+  });
+}
+export async function storeCustomArt(materials: CustomArt[]): Promise<void> {
+  const db = await database();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("archive", "readwrite");
+    tx.objectStore("archive").put(materials, "custom-art");
+    tx.oncomplete = () => {
+      db.close();
+      resolve();
+    };
+    tx.onabort = tx.onerror = () => {
+      db.close();
+      reject(tx.error);
+    };
+  });
+}

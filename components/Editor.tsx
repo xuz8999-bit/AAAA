@@ -9,6 +9,8 @@ import {
   Rect,
 } from "react-konva";
 import Konva from "konva";
+import SubjectCutout from "./SubjectCutout";
+import { loadCustomArt, storeCustomArt, type CustomArt } from "../lib/storage";
 import { motion } from "framer-motion";
 import { developPrint, printFinishes, type PrintFinish } from "../lib/print";
 import { asset } from "../lib/assets";
@@ -17,6 +19,8 @@ export type Piece = {
   id: string;
   type: "image" | "text";
   src?: string;
+  originalSrc?: string;
+  originalHeight?: number;
   text?: string;
   x: number;
   y: number;
@@ -115,10 +119,14 @@ export default function Editor({
     [message, setMessage] = useState(""),
     [scale, setScale] = useState(0.8),
     [finish, setFinish] = useState<PrintFinish>(
-      memory?.printFinish || "blueprint",
+      memory?.printFinish || "original",
     ),
     [printed, setPrinted] = useState(""),
-    [developing, setDeveloping] = useState(false);
+    [developing, setDeveloping] = useState(false),
+    [customArt, setCustomArt] = useState<CustomArt[]>([]),
+    [artReady, setArtReady] = useState(false),
+    [cutout, setCutout] = useState<Piece>(),
+    [addingArt, setAddingArt] = useState(false);
   const stage = useRef<Konva.Stage>(null),
     transformer = useRef<Konva.Transformer>(null),
     container = useRef<HTMLDivElement>(null);
@@ -127,7 +135,7 @@ export default function Editor({
       setScale(
         Math.min(
           0.9,
-          Math.max(0.25, (container.current?.clientWidth || 800) / 1000),
+          Math.max(0.25, ((container.current?.clientWidth || 800) - 80) / 1000),
         ),
       );
     resize();
@@ -200,6 +208,59 @@ export default function Editor({
         },
       ]);
       setSelected(id);
+    }
+  };
+  useEffect(() => {
+    loadCustomArt()
+      .then((items) => {
+        setCustomArt(items);
+        setArtReady(true);
+      })
+      .catch(() => setMessage("自己的素材库暂时无法读取，请刷新后再试。"));
+  }, []);
+  const uploadArt = async (files: FileList | null) => {
+    if (!files || !artReady) return;
+    setAddingArt(true);
+    try {
+      const items: CustomArt[] = [];
+      for (const f of Array.from(files)) {
+        if (!f.type.startsWith("image/")) continue;
+        const src = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result));
+          reader.onerror = reject;
+          reader.readAsDataURL(f);
+        });
+        const image = new Image();
+        await new Promise<void>((resolve, reject) => {
+          image.onload = () => resolve();
+          image.onerror = reject;
+          image.src = src;
+        });
+        const canvas = document.createElement("canvas");
+        const ratio = Math.min(1, 1400 / image.width, 1400 / image.height);
+        canvas.width = Math.round(image.width * ratio);
+        canvas.height = Math.round(image.height * ratio);
+        canvas
+          .getContext("2d")!
+          .drawImage(image, 0, 0, canvas.width, canvas.height);
+        items.push({
+          name: f.name.replace(/\.[^.]+$/, ""),
+          src: canvas.toDataURL("image/png"),
+          width: 220,
+          height: (220 * image.height) / image.width,
+        });
+      }
+      const next = [...customArt, ...items].filter(
+        (m, i, a) => a.findIndex((x) => x.src === m.src) === i,
+      );
+      await storeCustomArt(next);
+      setCustomArt(next);
+      setMessage("自己的艺术素材已加入，可点击放进画布。");
+    } catch {
+      setMessage("素材暂时没能保存，请尝试较小的图片。");
+    } finally {
+      setAddingArt(false);
     }
   };
   const addArt = (material: (typeof artMaterials)[number]) => {
@@ -434,8 +495,22 @@ export default function Editor({
             ))}
           </div>
           <span className="eyebrow">ART MATERIALS / 艺术素材</span>
+          <label className="upload">
+            ＋ 添加自己的艺术素材
+            <input
+              aria-label="添加自己的艺术素材"
+              type="file"
+              multiple
+              accept="image/*"
+              disabled={!artReady || addingArt}
+              onChange={(e) => {
+                void uploadArt(e.target.files);
+                e.target.value = "";
+              }}
+            />
+          </label>
           <div className="art-materials">
-            {artMaterials.map((m) => (
+            {[...artMaterials, ...customArt].map((m) => (
               <button
                 title={m.name}
                 aria-label={m.name}
@@ -515,6 +590,28 @@ export default function Editor({
           {active && (
             <>
               <span className="eyebrow">SELECTED FRAGMENT</span>
+              {active.type === "image" && (
+                <div className="subject-tools">
+                  <button onClick={() => setCutout(active)}>
+                    ✂ 圈选主体 / 抠图
+                  </button>
+                  {active.originalSrc && (
+                    <button
+                      onClick={() =>
+                        update({
+                          ...active,
+                          src: active.originalSrc,
+                          height: active.originalHeight || active.height,
+                          originalSrc: undefined,
+                          originalHeight: undefined,
+                        })
+                      }
+                    >
+                      恢复原图
+                    </button>
+                  )}
+                </div>
+              )}
               {active.type === "text" && (
                 <>
                   <textarea
@@ -637,7 +734,7 @@ export default function Editor({
                   height={750}
                   fill={
                     style === "Botanical Archive"
-                      ? "#d4cfbb"
+                      ? "#f1eadb"
                       : style === "Film Memory"
                         ? "#262626"
                         : "#0b1723"
@@ -798,6 +895,23 @@ export default function Editor({
             下载冲印照片 ↓
           </a>
         </div>
+      )}
+      {cutout && (
+        <SubjectCutout
+          src={cutout.src!}
+          onClose={() => setCutout(undefined)}
+          onApply={(src, ratio) => {
+            update({
+              ...cutout,
+              originalSrc: cutout.originalSrc || cutout.src,
+              originalHeight: cutout.originalHeight || cutout.height,
+              src,
+              height: cutout.width * ratio,
+            });
+            setCutout(undefined);
+            setMessage("主体已变成透明剪贴，可以拖动、旋转和叠放。");
+          }}
+        />
       )}
     </div>
   );

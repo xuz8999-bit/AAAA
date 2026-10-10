@@ -943,3 +943,152 @@ body {
   background: #e2e7f6;
   color: #142052 !important;
 }
+/* A quieter, centered paper worktable; the blue archive remains outside. */
+.storybook .editor-shell {
+  background: #e8e4d9;
+  color: #645f53;
+}
+.storybook .editor-heading,
+.storybook .editor-tools,
+.storybook .canvas-status {
+  background: #e1ded2;
+  color: #706d60;
+  border-color: #c4c1b2;
+}
+.storybook .editor-heading input {
+  color: #666c62;
+}
+.storybook .editor-tools select,
+.storybook .editor-tools input,
+.storybook .editor-tools textarea {
+  background: #f0ecdf;
+  color: #73796b;
+  border-color: #c8c8b5;
+}
+.storybook .editor-tools .eyebrow,
+.storybook .print-help {
+  color: #8d917f;
+}
+.storybook .canvas-area {
+  min-width: 0;
+  background: #ece8dd;
+}
+.storybook .canvas-scroll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 600px;
+  padding: 35px;
+  overflow: auto;
+  background: #e7e3d8;
+}
+.storybook .canvas-scroll > .konvajs-content {
+  flex-shrink: 0;
+  margin: auto;
+  box-shadow: 0 7px 25px #65645122;
+}
+.storybook .canvas-hint {
+  color: #999b84;
+}
+.storybook .empty-canvas {
+  color: #929985;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 75%;
+  pointer-events: none;
+  text-align: center;
+}
+.storybook .editor-heading button,
+.storybook .editor-tools button {
+  color: #838d73;
+  border-color: #bcc4ac;
+}
+.storybook .editor-heading button.primary {
+  background: #d0d9c0;
+  color: #718563;
+}
+.subject-tools {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 15px;
+}
+.cutout-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: #15203cbb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.cutout-modal {
+  position: relative;
+  background: #ece8dd;
+  color: #687662;
+  padding: 30px;
+  max-width: 1000px;
+  width: 100%;
+  max-height: 95vh;
+  overflow: auto;
+}
+.cutout-modal h2 {
+  font: 29px "Ma Shan Zheng";
+  margin: 10px 0 15px;
+}
+.cutout-modal p {
+  font: 15px/1.6 "Ma Shan Zheng";
+  color: #939b83;
+  margin: 15px 0;
+}
+.cutout-modal canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 60vh;
+  width: auto;
+  height: auto;
+  margin: 20px auto;
+  cursor: crosshair;
+  touch-action: none;
+  background: repeating-conic-gradient(#d8d8cc 0% 25%, #eeeee5 0% 50%) 0/20px
+    20px;
+}
+.cutout-close {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+}
+.cutout-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font: 16px "Ma Shan Zheng";
+}
+.cutout-actions button {
+  padding: 9px 14px;
+  border: 1px solid #b6c2aa;
+  background: #dfe6d4;
+  color: #81956f;
+}
+@media (max-width: 600px) {
+  .storybook .canvas-scroll {
+    padding: 20px 12px;
+    min-height: 340px;
+  }
+  .cutout-modal {
+    padding: 22px 15px;
+  }
+  .cutout-actions {
+    gap: 8px;
+    font-size: 13px;
+  }
+  .cutout-modal h2 {
+    font-size: 25px;
+  }
+  .storybook .editor-heading {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+}
