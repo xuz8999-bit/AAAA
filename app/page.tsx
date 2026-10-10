@@ -22,8 +22,6 @@ import {
   Check,
   Trash2,
 } from "lucide-react";
-import PixelTrail from "../components/PixelTrail";
-import MemoryDesktop from "../components/MemoryDesktop";
 import BotanicalArchive from "../components/BotanicalArchive";
 import { botanicalCategories, botanicalCategory } from "../lib/botanical";
 import { LittlePlant } from "../components/GardenScene";
@@ -40,9 +38,6 @@ import {
 import type { Memory } from "../components/Editor";
 const Editor = dynamic(() => import("../components/Editor"), { ssr: false });
 type View =
-  | "desktop"
-  | "photos"
-  | "diary"
   | "garden"
   | "places"
   | "timeline"
@@ -119,7 +114,7 @@ const blank = {
   kind: "flower" as "flower" | "tree" | "star",
   photos: [] as string[],
   song: undefined as Memory["song"],
-  botanicalCategory: "moments",
+  botanicalCategory: "remember",
 };
 async function readPhoto(file: File): Promise<string> {
   if (!file.type.startsWith("image/")) throw new Error("请选择图片文件。");
@@ -159,11 +154,8 @@ function kindOf(m: Memory) {
   );
 }
 export default function Home() {
-  const [view, setView] = useState<View>("desktop"),
+  const [view, setView] = useState<View>("garden"),
     [archiveCategory, setArchiveCategory] = useState(""),
-    [diaryTitle, setDiaryTitle] = useState(""),
-    [diaryText, setDiaryText] = useState(""),
-    [viewerPhoto, setViewerPhoto] = useState(""),
     [memories, setMemories] = useState<Memory[]>([]),
     [collection, setCollection] = useState<Keepsake[]>([]),
     [year, setYear] = useState(new Date().getFullYear()),
@@ -245,7 +237,7 @@ export default function Home() {
     setPlaying(false);
   }, [selected?.id, view]);
   useEffect(() => {
-    if (!animal && !collectionForm && !viewerPhoto) return;
+    if (!animal && !collectionForm) return;
     const previous = document.activeElement as HTMLElement | null;
     const modal = document.querySelector<HTMLElement>('[role="dialog"]');
     const focusable = () =>
@@ -257,7 +249,6 @@ export default function Home() {
     const timer = setTimeout(() => focusable()[0]?.focus(), 80);
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setViewerPhoto("");
         setAnimal("");
         setCollectionForm(false);
       }
@@ -280,7 +271,7 @@ export default function Home() {
       document.removeEventListener("keydown", onKey);
       previous?.focus();
     };
-  }, [animal, collectionForm, viewerPhoto]);
+  }, [animal, collectionForm]);
 
   useEffect(() => {
     if (!message) return;
@@ -378,7 +369,7 @@ export default function Home() {
   const startPlant = () => {
     setForm({
       ...blank,
-      botanicalCategory: archiveCategory || "moments",
+      botanicalCategory: archiveCategory || "remember",
       date: year === new Date().getFullYear() ? blank.date : `${year}-06-01`,
       photos: [],
     });
@@ -515,7 +506,6 @@ export default function Home() {
   return (
     <main className={"storybook weather-" + weather}>
       <div className="paper-texture" />
-      {view === "desktop" && <PixelTrail />}
       <svg className="print-filters" aria-hidden="true">
         <defs>
           <pattern
@@ -549,22 +539,19 @@ export default function Home() {
       <header className="book-header">
         <button
           className="garden-brand"
-          onClick={() => go("desktop")}
-          aria-label="返回记忆桌面"
+          onClick={() => go("garden")}
+          aria-label="返回记忆花园"
         >
           <span>✦</span>
           <span>
-            MEMORY GARDEN<small>a personal time capsule / since 1998</small>
+            MEMORY GARDEN<small>digital botanical archive / vol. 02</small>
           </span>
         </button>
         <nav aria-label="主要导航">
           {(
             [
-              { v: "desktop", label: "桌面" },
-              { v: "garden", label: "记忆花园" },
-              { v: "photos", label: "照片" },
-              { v: "diary", label: "日记" },
-
+              { v: "garden", label: "首页" },
+              { v: "places", label: "去过的地方" },
               { v: "timeline", label: "我的故事" },
               { v: "collection", label: "喜欢的事物" },
               { v: "about", label: "关于我" },
@@ -580,7 +567,7 @@ export default function Home() {
           ))}
           <button className="nav-plant" onClick={startPlant}>
             <Plus size={13} />
-            Plant a Memory
+            留下记忆
           </button>
         </nav>
       </header>
@@ -588,186 +575,71 @@ export default function Home() {
         <motion.div
           key={view}
           className="book-page"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 4 }}
+          initial={{ opacity: 0, rotateY: -4, x: 12 }}
+          animate={{ opacity: 1, rotateY: 0, x: 0 }}
+          exit={{ opacity: 0, rotateY: 4, x: -12 }}
           transition={{ duration: 0.4 }}
         >
-          {view === "desktop" && (
-            <MemoryDesktop
-              count={memories.length}
-              onOpen={(v) => (v === "plant" ? startPlant() : go(v as View))}
-            />
-          )}
-          {view === "photos" && (
-            <section className="inside-page photo-archive-page">
-              <div className="retro-titlebar">
-                <span>▧ Photo Archive / image_viewer.exe</span>
-                <button onClick={() => go("desktop")} aria-label="关闭照片档案">
-                  ×
-                </button>
-              </div>
-              <span className="chapter-label">
-                PHOTO ARCHIVE / SCANNED MOMENTS
-              </span>
-              <h1>
-                照片档案 <em> / contact sheets</em>
-              </h1>
-              <p className="page-subtitle">
-                像翻看旧硬盘里，一张张忘记命名的照片。
-              </p>
-              <button className="garden-button" onClick={startPlant}>
-                上传照片，留下一段记忆 ↗
-              </button>
-              <div className="photo-contact-sheet">
-                {memories.flatMap((m) =>
-                  m.pieces
-                    .filter((p) => p.type === "image" && !p.decorative)
-                    .map((p, i) => (
-                      <button
-                        key={m.id + p.id}
-                        onClick={() => setViewerPhoto(asset(p.src!))}
-                      >
-                        <img
-                          src={asset(p.src!)}
-                          alt={`${m.title} / ${i + 1}`}
-                        />
-                        <span>
-                          {m.date} / {m.title}
-                        </span>
-                        <small>IMG_{String(i + 1).padStart(3, "0")}.JPG</small>
-                      </button>
-                    )),
-                )}
-              </div>
-              {!memories.some((m) =>
-                m.pieces.some((p) => p.type === "image" && !p.decorative),
-              ) && (
-                <p className="archive-empty">
-                  这个文件夹还没有照片。先放进一段记忆吧。
-                </p>
-              )}
-            </section>
-          )}
-          {view === "diary" && (
-            <section className="inside-page diary-page">
-              <div className="retro-titlebar">
-                <span>▤ Diary.exe / private pages</span>
-                <button onClick={() => go("desktop")} aria-label="关闭日记">
-                  ×
-                </button>
-              </div>
-              <span className="chapter-label">
-                PERSONAL NOTES / FOR YOUR EYES ONLY
-              </span>
-              <h1>
-                写给自己的小事 <em> / diary.exe</em>
-              </h1>
-              <div className="diary-spread">
-                <form
-                  className="diary-paper"
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    if (!diaryText.trim()) return;
-                    try {
-                      if (!storageReady) throw Error();
-                      const next = [
-                        {
-                          id: crypto.randomUUID(),
-                          title: diaryTitle.trim() || "未命名的一页",
-                          kind: "日记",
-                          note: diaryText.trim(),
-                        },
-                        ...collection,
-                      ];
-                      await storeCollection(next);
-                      setCollection(next);
-                      setDiaryTitle("");
-                      setDiaryText("");
-                      setMessage("这一页日记，已收进私人档案。");
-                    } catch {
-                      setMessage("日记暂时没能保存，请再试一次。");
-                    }
-                  }}
-                >
-                  <label className="form-label">
-                    这一页的名字
-                    <input
-                      aria-label="日记标题"
-                      value={diaryTitle}
-                      onChange={(e) => setDiaryTitle(e.target.value)}
-                    />
-                  </label>
-                  <label className="form-label">
-                    今天想留下什么
-                    <textarea
-                      aria-label="日记内容"
-                      value={diaryText}
-                      onChange={(e) => setDiaryText(e.target.value)}
-                    />
-                  </label>
-                  <button
-                    className="garden-button"
-                    disabled={!storageReady || !diaryText.trim()}
-                  >
-                    保存这一页 ↗
-                  </button>
-                </form>
-                <div className="diary-pages">
-                  {collection
-                    .filter((k) => k.kind === "日记")
-                    .map((k, i) => (
-                      <article className="diary-paper" key={k.id}>
-                        <small>
-                          PRIVATE PAGE / {String(i + 1).padStart(2, "0")}
-                        </small>
-                        <h2>{k.title}</h2>
-                        <p>{k.note}</p>
-                        <button
-                          aria-label={`删除日记：${k.title}`}
-                          onClick={async () => {
-                            if (!confirm("移走这页日记吗？")) return;
-                            try {
-                              const next = collection.filter(
-                                (x) => x.id !== k.id,
-                              );
-                              await storeCollection(next);
-                              setCollection(next);
-                            } catch {
-                              setMessage("日记暂时无法删除。");
-                            }
-                          }}
-                        >
-                          移走这一页 ×
-                        </button>
-                      </article>
-                    ))}
-                  {!collection.some((k) => k.kind === "日记") && (
-                    <p className="archive-empty">
-                      空白的纸，等你写下第一句话。
-                    </p>
-                  )}
-                </div>
-              </div>
-            </section>
-          )}
           {(view === "garden" || view === "places") && (
             <>
+              {view === "garden" && (
+                <section className="printed-poster">
+                  <div className="poster-copy">
+                    <span className="poster-prelude">
+                      FIELD NOTES / FORGOTTEN & PRESERVED
+                    </span>
+                    <h1>
+                      MEMORY
+                      <br />
+                      GARDEN<span>digital botanical archive</span>
+                    </h1>
+                    <p>
+                      把遗忘的片刻，
+                      <br />
+                      保存成蓝色的植物标本。
+                    </p>
+                    <button onClick={startPlant} className="poster-oval">
+                      留下一段记忆 <ArrowRight size={18} />
+                    </button>
+                    <button
+                      className="poster-print-link"
+                      onClick={() => {
+                        setSelected(undefined);
+                        go("editor");
+                      }}
+                    >
+                      制作复古拼贴 · 相机冲印 ↗
+                    </button>
+                    <span className="poster-edition">
+                      ISSUE 002 · BLUE SPECIMENS · PRIVATE ARCHIVE
+                    </span>
+                  </div>
+                  <div className="poster-collage">
+                    <div className="print-landscape">
+                      <img src={asset("/sky.jpg")} alt="收藏的一片山林风景" />
+                      <span>somewhere I felt alive.</span>
+                    </div>
+                    <img
+                      className="hero-silver-flower"
+                      src={asset("/prints/blue-lilies.png")}
+                      alt="银白与冰蓝交叠的梦境花瓣"
+                    />
+                    <span className="blue-registration">＋</span>
+                    <span className="poster-scan-line" />
+                    <span className="poster-scribble">
+                      some things never really leave.
+                    </span>
+                    <span className="poster-doodle">✦</span>
+                  </div>
+                </section>
+              )}
               <div className="places-heading">
-                <button
-                  className="garden-window-close"
-                  aria-label="关闭记忆花园"
-                  onClick={() => go("desktop")}
-                >
-                  ×
-                </button>
-                <span>MEMORY GARDEN.EXE / BOTANICAL INDEX</span>
-                <h2>A garden of little memories.</h2>
+                <span>01 / THE BOTANICAL INDEX</span>
+                <h2>Fragments that still bloom.</h2>
                 <p>选择一种情绪，进入记忆标本。</p>
               </div>
               <section className="garden-world" aria-label="互动记忆花园">
                 <BotanicalArchive
-                  onMemory={openMemory}
                   memories={memories}
                   onCategory={(id) => {
                     setArchiveCategory(id);
@@ -788,21 +660,13 @@ export default function Home() {
                   </small>
                 </div>
                 <div className="garden-caption">
-                  <button
-                    onClick={() => {
-                      setSelected(undefined);
-                      go("editor");
-                    }}
-                  >
-                    制作复古拼贴 · 相机冲印 ↗
-                  </button>
                   <span className="tiny-flower">✦</span>
                   <span>
                     {loading
                       ? "正在读取私人档案…"
                       : currentMemories.length
                         ? `${memories.length} 件记忆标本 / 私人收藏`
-                        : "记忆花园，等待你留下第一个片刻。"}
+                        : "空白档案，等待第一个视觉碎片。"}
                   </span>
                   <button onClick={startPlant}>
                     Preserve a fragment <ArrowRight size={15} />
@@ -914,17 +778,12 @@ export default function Home() {
           {view === "timeline" && (
             <section className="inside-page timeline-page">
               <span className="chapter-label">
-                LITTLE STORIES / PERSONAL CHAPTERS
+                CHAPTER TWO · THE TREE OF TIME
               </span>
               <h1>
                 我的故事 <em> / MY STORY</em>
               </h1>
-              <p className="page-subtitle">
-                沿着档案里的字迹，回到那些曾经的自己。
-              </p>
-              <button className="garden-button" onClick={() => go("places")}>
-                管理日期索引 ↗
-              </button>
+              <p className="page-subtitle">沿着枝叶，回到那些曾经的自己。</p>
               <div className="time-tree-list">
                 {years.map((y, i) => (
                   <motion.button
@@ -1518,7 +1377,6 @@ export default function Home() {
               {collection.filter(
                 (k) =>
                   k.id !== "garden-about" &&
-                  k.kind !== "日记" &&
                   (collectionScope === "全部" || k.kind === "音乐"),
               ).length ? (
                 <div className="keepsake-shelf">
@@ -1526,7 +1384,6 @@ export default function Home() {
                     .filter(
                       (k) =>
                         k.id !== "garden-about" &&
-                        k.kind !== "日记" &&
                         (collectionScope === "全部" || k.kind === "音乐"),
                     )
                     .map((k, i) => (
@@ -1856,32 +1713,6 @@ export default function Home() {
             >
               收进小木盒 <Check size={15} />
             </button>
-          </div>
-        </div>
-      )}
-      {viewerPhoto && (
-        <div
-          className="photo-viewer-backdrop"
-          role="dialog"
-          aria-modal="true"
-          aria-label="旧照片查看器"
-          onClick={() => setViewerPhoto("")}
-        >
-          <div
-            className="old-photo-viewer"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="retro-titlebar">
-              <span>▧ image_viewer.exe</span>
-              <button
-                autoFocus
-                aria-label="关闭照片查看器"
-                onClick={() => setViewerPhoto("")}
-              >
-                ×
-              </button>
-            </div>
-            <img src={viewerPhoto} alt="展开的记忆照片" />
           </div>
         </div>
       )}
