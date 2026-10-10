@@ -11,3 +11,6 @@ Memory data is saved in browser IndexedDB; diary text uses localStorage. No acco
 
 ## Art direction
 Original local SVG materials combine botanical line work, antique paper, pixel butterflies, silver-blue lilies and archive stamps. Choose Simple, Mixed or Layered composition density. Auto arrangement preserves photo proportions, keeps manually added decorative materials and fits photo grids within the board. Art materials and composition density persist with saved memories and are included in PNG exports.
+
+## GitHub Pages
+The GitHub Actions workflow deploys a static export from `main`. In repository Settings → Pages, select **GitHub Actions** as the source, then rerun the workflow if needed. The site is served at https://xuz8999-bit.github.io/AAAA/ after a successful deployment. To build locally: `BUILD_TARGET=pages npm run build`. Assets and editor artwork include the `/AAAA` base path. Ordinary `npm run build` still builds for Node hosting. Browser archives are specific to each origin, so memories saved on another host do not transfer automatically.
