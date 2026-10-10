@@ -1,18 +1,25 @@
-# Fragments of Me
-A personal memory desktop built with Next.js, React, TypeScript, Tailwind, Framer Motion and Konva.
+# Memory Garden
+An interactive, personal storybook built with Next.js, React, TypeScript, Tailwind CSS, Framer Motion and Konva. The garden is an original ink-and-watercolor SVG illustration on aged paper, with bundled Caveat and Ma Shan Zheng handwriting fonts (SIL Open Font License files included).
 
-## Development
-Node.js 22 or later. Run `npm ci`, then `npm run dev`. Run `npm run build` and `npm run typecheck` to validate. Production: `npm run build && npm start`.
+## Develop and build
+Node.js 22 or later:
 
-## Features
-Retro desktop, memory archive and search, editable diary, local audio playback, photo upload, canvas drag/resize/rotate and layering, text and decorative elements, four board backgrounds, automatic arrangement, local memory persistence and high-resolution PNG export.
+```sh
+npm ci
+npm run dev
+```
 
-Memory data is saved in browser IndexedDB; diary text uses localStorage. No account, backend or cross-device sync is included. Export PNG backups before clearing browser data. Uploaded images are resized to 1600px to reduce storage usage. Music is session-local. Sample photographs are bundled locally from the Tailwind Next.js Starter Blog sample collection (Unsplash imagery). Uploaded photos also work offline. Templates use deterministic arrangement rather than an AI service. Canvas is a finite 1000×750 board with zoom and scrolling.
+Validate with `npm run typecheck` and `npm run build`. Production Node hosting: `npm run build`, then `npm start`.
 
-## Art direction
-Original local SVG materials combine botanical line work, antique paper, pixel butterflies, silver-blue lilies and archive stamps. Choose Simple, Mixed or Layered composition density. Auto arrangement preserves photo proportions, keeps manually added decorative materials and fits photo grids within the board. Art materials and composition density persist with saved memories and are included in PNG exports.
+## Explore
+- **Garden:** click year fruits to open a memory room, or planted flowers, trees and stars to reopen individual stories. The pocket watch changes the year and season. Seasons also have manual controls. Click the bird, rabbit, butterfly or dog to discover a short hidden story.
+- **Timeline:** explore every year with stored memories, including years restored from the original scrapbook.
+- **Plant a memory:** add a title, story and up to eight images, then choose a date, place, mood, plant and optional audio file. Joy and growth bring sunshine, nostalgia brings rain, and special memories bring stars. Saving plays a seed-growth animation.
+- **Memory room:** read stories and photographs, listen to attached audio, or use the optional collage editor to arrange materials and export a 2000×1500 PNG. Existing scrapbook boards remain editable; saving preserves garden metadata and audio.
+- **Collection:** save books, songs, movies, pictures and small keepsakes, with a note and optional image.
+
+## Personal data
+Memory and collection data are stored in browser IndexedDB, using the original `fragments-of-me` database so existing boards are retained. There is no account, server, cloud sync or external AI service. Memory images are resized to 1400px during planting. Audio files are stored locally and limited to 10 MB. Browser storage availability and quota still apply. Clearing browser data removes the garden; export precious memories as PNG backups. Data on different domains or browsers does not transfer automatically. The homepage shows up to nine plants for the selected year; all memories remain available in that year's room and the timeline. Empty historic years are blank chapters, not fabricated personal stories.
 
 ## GitHub Pages
-The GitHub Actions workflow deploys a static export from `main`. In repository Settings → Pages, select **GitHub Actions** as the source, then rerun the workflow if needed. The site is served at https://xuz8999-bit.github.io/AAAA/ after a successful deployment. To build locally: `BUILD_TARGET=pages npm run build`. Assets and editor artwork include the `/AAAA` base path. Ordinary `npm run build` still builds for Node hosting. Browser archives are specific to each origin, so memories saved on another host do not transfer automatically.
-
-The current visual theme is an ivory botanical scrapbook with bundled Caveat and Ma Shan Zheng handwriting fonts, licensed under the included SIL Open Font License files. The editor defaults to Botanical Archive; existing memories keep their saved styles.
+`.github/workflows/pages.yml` deploys the static export from `main`. Select **GitHub Actions** in repository Settings → Pages. Locally, `BUILD_TARGET=pages npm run build` exports to `out/` with `/AAAA` as the base path. After deployment, the website is served at https://xuz8999-bit.github.io/AAAA/. Ordinary `npm run build` continues to support Node hosting.

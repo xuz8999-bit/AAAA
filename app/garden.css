@@ -1,0 +1,2166 @@
+:root {
+  --garden-paper: #f6f2e7;
+  --garden-ink: #626953;
+  --garden-muted: #a19c85;
+  --garden-green: #8c9a76;
+  --garden-border: #d9d6c2;
+}
+.storybook {
+  overflow: hidden;
+  background: var(--garden-paper);
+  color: var(--garden-ink);
+  padding: 0;
+  min-height: 100vh;
+  transition: background 1.2s;
+}
+.paper-texture {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' opacity='.18' filter='url(%23grain)'/%3E%3C/svg%3E");
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+}
+.storybook.weather-rain {
+  background: #f0f0e8;
+}
+.storybook.weather-stars {
+  background: #eeeae4;
+}
+.book-header {
+  height: 110px;
+  max-width: 1360px;
+  margin: auto;
+  padding: 0 55px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+}
+.garden-brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font:
+    36px "Caveat",
+    cursive;
+  color: #727d61;
+  text-align: left;
+}
+.garden-brand > span:first-child {
+  font-size: 38px;
+  font-family: Georgia;
+  color: #99a183;
+  transform: rotate(-8deg);
+}
+.garden-brand small {
+  display: block;
+  font: 13px "Caveat";
+  color: #b1ac94;
+  letter-spacing: 0.5px;
+  margin-top: -4px;
+}
+.book-header nav {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+  font:
+    17px "Ma Shan Zheng",
+    serif;
+  color: #a3a18b;
+}
+.book-header nav button {
+  position: relative;
+}
+.book-header nav button[aria-current="page"] {
+  color: #6f7e5d;
+}
+.book-header nav button[aria-current="page"]:after {
+  content: "";
+  position: absolute;
+  width: 17px;
+  left: calc(50% - 8px);
+  bottom: -10px;
+  height: 1px;
+  background: #abb194;
+  transform: rotate(-4deg);
+}
+.book-header nav button:hover {
+  color: #697851;
+}
+.book-header nav .nav-plant {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  padding: 10px 15px;
+  border: 1px solid #b4bea070;
+  border-radius: 42% 43% 47% 47%/12% 14% 13% 11%;
+  color: #859270;
+  transform: rotate(-2deg);
+}
+.book-page {
+  transform-origin: left center;
+  position: relative;
+  perspective: 1600px;
+}
+.garden-intro {
+  text-align: center;
+  padding: 26px 20px 0;
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+.chapter-label {
+  display: block;
+  font: 8px/1.7 monospace;
+  letter-spacing: 2.7px;
+  color: #a6a38d;
+}
+.garden-intro h1 {
+  font:
+    80px/0.99 "Caveat",
+    cursive;
+  letter-spacing: -1.5px;
+  color: #677157;
+  margin: 21px 0 14px;
+}
+.garden-intro h1 em {
+  font-family: "Caveat";
+  color: #879674;
+  font-weight: 400;
+}
+.garden-intro h1 em:after {
+  display: none;
+}
+.ink-star {
+  font: 38px Georgia;
+  color: #b4b79c;
+  display: inline-block;
+  margin-left: 15px;
+  vertical-align: top;
+  transform: rotate(12deg);
+}
+.garden-intro p {
+  font:
+    18px "Ma Shan Zheng",
+    serif;
+  color: #93977e;
+  letter-spacing: 1px;
+  line-height: 1.9;
+  margin: 0 0 6px;
+}
+.intro-handwriting {
+  font: 17px "Caveat";
+  color: #b2aa90;
+}
+.garden-world {
+  max-width: 1300px;
+  margin: -28px auto 0;
+  position: relative;
+}
+.garden-scene {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1200/650;
+  isolation: isolate;
+  transition: filter 1.2s;
+}
+.garden-landscape {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.tree-crown ellipse,
+.tree-leaves path {
+  transition: fill 1.5s;
+}
+.tree-leaves {
+  transform-origin: 50% 60%;
+  animation: leaf-sway 8s ease-in-out infinite;
+}
+.garden-years {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.year-fruit {
+  pointer-events: auto;
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  background: #ece0a4d9;
+  border: 1px solid #b6a77888;
+  border-radius: 48% 54% 48% 51%;
+  font: 23px "Caveat";
+  color: #8d805c;
+  box-shadow: 2px 4px 8px #76674311;
+  transform: translate(-50%, -50%);
+}
+.year-fruit:nth-child(2n) {
+  background: #d4b79ad6;
+  border-color: #b4a08596;
+  color: #8d7761;
+}
+.year-fruit:nth-child(3n) {
+  background: #d5d8b6e0;
+  color: #8e9270;
+  border-color: #a8b390;
+}
+.year-fruit.selected {
+  outline: 1px dashed #8f9d79;
+  outline-offset: 5px;
+}
+.year-fruit:hover {
+  box-shadow: 2px 6px 14px #76674329;
+  color: #66593d;
+}
+.fruit-stem {
+  position: absolute;
+  width: 1px;
+  height: 18px;
+  top: -17px;
+  left: 25px;
+  transform: rotate(10deg);
+  background: #9da887;
+}
+.fruit-stem:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 12px;
+  height: 6px;
+  border: 1px solid #a7b28a;
+  transform: rotate(-26deg);
+  border-radius: 0 100% 0 100%;
+  background: #bbc5a488;
+}
+.planted-memory {
+  position: absolute;
+  width: 57px;
+  height: 85px;
+  transform-origin: 50% 100%;
+  z-index: 4;
+  transition: filter 0.3s;
+}
+.planted-memory svg {
+  width: 100%;
+  height: 100%;
+}
+.planted-memory:hover {
+  filter: brightness(0.9);
+}
+.planted-memory span {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #f6f2e7ee;
+  white-space: nowrap;
+  max-width: 180px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: 3px 9px;
+  font: 12px "Ma Shan Zheng";
+  color: #97937b;
+  opacity: 0;
+  transition: 0.3s;
+}
+.planted-memory:hover span,
+.planted-memory:focus-visible span {
+  opacity: 1;
+}
+.garden-animal {
+  position: absolute;
+  transition: filter 0.3s;
+  z-index: 5;
+}
+.garden-animal:hover {
+  filter: contrast(1.2);
+  color: #7a7f64;
+}
+.garden-animal svg {
+  width: 100%;
+  height: 100%;
+}
+.garden-animal.bird {
+  width: 65px;
+  height: 46px;
+  left: 67%;
+  top: 20%;
+  transform: rotate(-9deg);
+}
+.bird span {
+  position: absolute;
+  right: -16px;
+  top: -8px;
+  color: #a7ac8a;
+  font: 27px "Caveat";
+  animation: birdsong 3s infinite;
+}
+.garden-animal.rabbit {
+  width: 67px;
+  height: 81px;
+  left: 78%;
+  top: 69%;
+}
+.garden-animal.butterfly {
+  width: 62px;
+  height: 49px;
+  left: 21%;
+  top: 46%;
+  filter: none;
+  opacity: 1 !important;
+  animation: butterfly-drift 8s ease-in-out infinite;
+}
+.garden-animal.dog {
+  width: 69px;
+  height: 70px;
+  left: 14%;
+  top: 72%;
+  transform: rotate(-5deg);
+}
+.garden-marginalia {
+  position: absolute;
+  left: 9%;
+  top: 27%;
+  pointer-events: none;
+  transform: rotate(-6deg);
+}
+.garden-marginalia > span {
+  font: 23px/1.15 "Caveat";
+  color: #a4a38b;
+}
+.garden-marginalia small {
+  display: block;
+  font: 10px/1.9 serif;
+  color: #b4ad98;
+  transform: rotate(6deg);
+  margin-top: 23px;
+  max-width: 174px;
+  letter-spacing: 1px;
+}
+.garden-caption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: -32px 55px 0;
+  padding-bottom: 32px;
+  position: relative;
+  z-index: 8;
+  font: 13px "Ma Shan Zheng";
+  color: #a9a58c;
+  letter-spacing: 0.5px;
+}
+.tiny-flower {
+  color: #a2ae8e;
+  font-size: 18px;
+}
+.garden-caption button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: 22px;
+  font: 20px "Caveat";
+  color: #879773;
+  border-bottom: 1px solid #b5bc9b55;
+  padding-bottom: 2px;
+}
+.time-and-seed {
+  max-width: 1170px;
+  margin: 10px auto 0;
+  border-top: 1px solid #d4d4bd88;
+  border-bottom: 1px solid #d4d4bd88;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  padding: 38px 0 42px;
+  gap: 75px;
+  position: relative;
+}
+.time-device {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.pocket-watch {
+  position: relative;
+  width: 118px;
+  height: 144px;
+  flex-shrink: 0;
+  transform: rotate(-9deg);
+}
+.watch-loop {
+  width: 27px;
+  height: 27px;
+  border: 2px solid #bcb194;
+  border-radius: 50%;
+  position: absolute;
+  left: 46px;
+  top: 0;
+}
+.watch-face {
+  border: 2px solid #c4b796;
+  background: #eeead9;
+  border-radius: 50%;
+  width: 118px;
+  height: 123px;
+  position: absolute;
+  bottom: 0;
+  box-shadow:
+    inset 0 0 0 5px #dbd2b576,
+    inset 0 0 0 6px #b4a88850,
+    3px 6px 12px #81734c0e;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.watch-face > span {
+  position: absolute;
+  top: 11px;
+  font: 12px Georgia;
+  color: #bbb092;
+}
+.watch-face b {
+  font: 34px "Caveat";
+  color: #9b9475;
+  margin-top: 14px;
+}
+.watch-face small {
+  font: 13px "Caveat";
+  color: #b5aa90;
+}
+.watch-face i {
+  position: absolute;
+  left: 58px;
+  top: 28px;
+  height: 23px;
+  border-left: 1px solid #b5a887;
+  transform: rotate(25deg);
+  transform-origin: 50% 100%;
+}
+.time-copy {
+  flex: 1;
+}
+.time-copy h2,
+.seed-invitation h2 {
+  font: 26px/1.5 "Ma Shan Zheng";
+  letter-spacing: 1px;
+  color: #839171;
+  margin: 12px 0 9px;
+}
+.time-copy p {
+  font: 12px serif;
+  color: #a6a188;
+  margin: 0 0 15px;
+}
+.year-control {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: #9aa58a;
+}
+.year-control input {
+  accent-color: #a8b492;
+  width: 140px;
+  height: 2px;
+  cursor: pointer;
+  min-width: 60px;
+  flex: 1;
+}
+.year-control button {
+  display: flex;
+  padding: 4px;
+}
+.year-control button:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+.year-control select {
+  background: transparent;
+  border: 0;
+  font: 22px "Caveat";
+  color: #929c7e;
+  padding: 0 2px;
+  max-width: 70px;
+}
+.season-picker {
+  display: flex;
+  gap: 15px;
+  margin: 14px 0 0;
+  font: 12px "Ma Shan Zheng";
+  color: #b4ae98;
+}
+.season-picker button[aria-pressed="true"] {
+  color: #86966e;
+  border-bottom: 1px solid #c7ccaf;
+}
+.seed-invitation {
+  position: relative;
+  padding-left: 33px;
+  border-left: 1px solid #d4d4bd88;
+}
+.seed-invitation h2 {
+  margin-top: 12px;
+}
+.seed-invitation p {
+  font: 12px/1.9 serif;
+  color: #aaa38c;
+  margin: 0 0 19px;
+}
+.invitation-star {
+  font: 41px Georgia;
+  color: #c1c5aa;
+  position: absolute;
+  right: 45px;
+  top: 27px;
+  transform: rotate(10deg);
+}
+.garden-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  padding: 12px 20px;
+  border: 1px solid #b6bea169;
+  color: #7f8e6b;
+  background: #e6ead66b;
+  border-radius: 48% 43% 45% 47%/9% 11% 12% 8%;
+  font:
+    17px "Ma Shan Zheng",
+    serif;
+  transform: rotate(-1deg);
+  box-shadow: 2px 3px 0 #8e986513;
+  transition: 0.2s;
+}
+.garden-button:hover {
+  background: #dce3cbbb;
+  color: #697c50;
+  transform: rotate(0);
+}
+.garden-button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+.garden-closing {
+  text-align: center;
+  font: 25px "Caveat";
+  color: #ada78e;
+  margin: 38px 20px 44px;
+}
+.garden-closing > span {
+  display: block;
+  font: 11px serif;
+  letter-spacing: 1.5px;
+  color: #bcb39f;
+  margin-top: 10px;
+}
+.book-footer {
+  max-width: 1300px;
+  margin: auto;
+  border-top: 1px solid #dbd8c677;
+  background: transparent;
+  padding: 25px 55px 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  color: #b5af99;
+  font: 10px serif;
+  letter-spacing: 0.5px;
+}
+.book-footer > span:first-child {
+  font: 22px "Caveat";
+  color: #a1a88c;
+}
+.book-footer p {
+  font: 17px/1.2 "Caveat";
+  text-align: center;
+  color: #b6b097;
+  margin: 0;
+}
+.book-footer > span:last-child {
+  font: 10px serif;
+}
+.gentle-rain {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 6;
+  opacity: 0.5;
+}
+.gentle-rain i {
+  position: absolute;
+  top: -20px;
+  width: 1px;
+  height: 19px;
+  background: #99a9ac77;
+  animation: gentle-rain 3.5s linear infinite;
+}
+.garden-starlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.garden-starlight span {
+  position: absolute;
+  color: #bfb185;
+  font: 21px Georgia;
+  animation: twinkle 4s ease-in-out infinite;
+}
+.inside-page {
+  max-width: 1100px;
+  margin: auto;
+  padding: 45px 45px 70px;
+  min-height: 70vh;
+}
+.inside-page h1 {
+  font:
+    72px/1.2 "Caveat",
+    "Ma Shan Zheng";
+  letter-spacing: -1px;
+  color: #788568;
+  margin: 20px 0 12px;
+}
+.inside-page h1 em {
+  font-family: "Caveat", "Ma Shan Zheng";
+  color: #98a482;
+  font-weight: 400;
+}
+.inside-page h1 em:after {
+  display: none;
+}
+.page-subtitle {
+  font: 17px/1.8 "Ma Shan Zheng";
+  color: #a5a38a;
+  letter-spacing: 0.8px;
+  margin: 0 0 33px;
+}
+.time-tree-list {
+  position: relative;
+  max-width: 710px;
+  margin: 48px 0 40px;
+}
+.time-tree-list:before {
+  content: "";
+  position: absolute;
+  left: 121px;
+  top: 15px;
+  bottom: 10px;
+  width: 2px;
+  background: linear-gradient(#d0d8ba, #a8b595aa, #d0d8ba);
+  transform: rotate(-0.3deg);
+}
+.time-branch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  text-align: left;
+  padding: 22px 0;
+  color: #a0aa8b;
+}
+.branch-year {
+  font: 45px "Caveat";
+  width: 83px;
+  flex-shrink: 0;
+  color: #8e9a78;
+}
+.branch-leaf {
+  font: 27px Georgia;
+  transform: rotate(-30deg);
+  color: #acb58f;
+  background: var(--garden-paper);
+}
+.branch-story {
+  font: 17px "Ma Shan Zheng";
+  color: #a9a68f;
+  flex: 1;
+}
+.time-branch:hover .branch-year {
+  color: #687c50;
+}
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 14px "Ma Shan Zheng";
+  color: #a4aa91;
+  margin-bottom: 27px;
+}
+.back-link:hover {
+  color: #6d8154;
+}
+.memory-meadow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px 65px;
+  margin: 38px 0 48px;
+  align-items: flex-start;
+}
+.memory-meadow button {
+  text-align: center;
+  width: 210px;
+  padding: 15px 5px;
+  color: #9aa185;
+  transition: transform 0.3s;
+}
+.memory-meadow button:hover {
+  transform: translateY(-6px);
+  color: #718354;
+}
+.memory-meadow svg {
+  width: 105px;
+  height: 136px;
+  display: block;
+  margin: auto;
+}
+.memory-meadow h3 {
+  font: 25px "Ma Shan Zheng";
+  margin: 17px 0 9px;
+  color: #8a9776;
+}
+.memory-meadow span {
+  font: 10px monospace;
+  color: #b6b099;
+}
+.memory-meadow p {
+  font: 13px/1.8 serif;
+  color: #afa892;
+  margin: 15px 0;
+}
+.memory-meadow small {
+  font:
+    16px "Caveat",
+    "Ma Shan Zheng";
+  color: #95a37c;
+}
+.empty-year {
+  text-align: center;
+  max-width: 650px;
+  padding: 40px 0 45px;
+}
+.empty-year svg {
+  width: 125px;
+  height: 160px;
+  margin: auto;
+}
+.empty-year h2,
+.empty-keepsake h2 {
+  font: 27px "Ma Shan Zheng";
+  color: #a0a788;
+  margin: 20px 0 15px;
+}
+.empty-year p,
+.empty-keepsake p {
+  font: 13px/1.9 serif;
+  color: #b0a791;
+}
+.inside-page h1.memory-title {
+  font-family: "Ma Shan Zheng";
+  font-size: 45px;
+  line-height: 1.5;
+  letter-spacing: 1px;
+  margin-top: 25px;
+}
+.memory-dateline {
+  font: 11px monospace;
+  color: #b0a890;
+  margin: 13px 0 40px;
+}
+.memory-dateline span {
+  font: 13px "Ma Shan Zheng";
+  margin-left: 15px;
+  color: #9da987;
+}
+.story-spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 65px;
+  align-items: start;
+  margin: 30px 0;
+}
+.story-photographs {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+.story-photographs figure {
+  padding: 12px 12px 22px;
+  background: #fffdf5;
+  box-shadow: 4px 7px 14px #5b533011;
+  margin: 0;
+  position: relative;
+}
+.story-photographs figure:before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 40%;
+  width: 80px;
+  height: 28px;
+  background: #bfc6a771;
+  transform: rotate(5deg);
+}
+.story-photographs img {
+  width: 100%;
+  max-height: 420px;
+  object-fit: contain;
+  filter: saturate(0.85);
+}
+.story-photographs figcaption {
+  font: 21px "Caveat";
+  color: #b0aa90;
+  margin-top: 14px;
+  text-align: center;
+}
+.story-writing {
+  padding: 10px 0 0;
+}
+.story-flower {
+  color: #b3bd99;
+  font: 45px Georgia;
+}
+.story-writing > p {
+  font: 24px/2 "Ma Shan Zheng";
+  color: #8e937b;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 18px 0 23px;
+}
+.story-signature {
+  font: 25px "Caveat";
+  color: #b5ae91;
+  display: block;
+  text-align: right;
+  transform: rotate(-3deg);
+}
+.story-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 36px;
+}
+.story-actions button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 13px "Ma Shan Zheng";
+  color: #acb197;
+}
+.story-actions button:hover {
+  color: #81916a;
+}
+.story-plant svg {
+  width: 180px;
+  height: 220px;
+  margin: 30px auto;
+  display: block;
+}
+.story-plant span {
+  display: block;
+  text-align: center;
+  font: 22px "Caveat";
+  color: #b4ad91;
+}
+.room-music {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 35px 0 0;
+  padding: 16px 0;
+  border-top: 1px solid #d5d9c499;
+  border-bottom: 1px solid #d5d9c499;
+  color: #9aa584;
+  font:
+    17px "Caveat",
+    "Ma Shan Zheng";
+}
+.room-music span {
+  flex: 1;
+  max-width: 280px;
+  overflow-wrap: anywhere;
+}
+.room-music small {
+  display: block;
+  font: 7px monospace;
+  color: #b1ab96;
+  letter-spacing: 1.5px;
+  margin-bottom: 5px;
+}
+.planting-page {
+  max-width: 930px;
+}
+.planting-page > h1 {
+  font-size: 69px;
+}
+.plant-form {
+  max-width: 680px;
+  margin: 32px auto 0;
+  padding: 35px 38px 38px;
+  background: #fcf8edc9;
+  box-shadow: 2px 7px 28px #7b715113;
+  position: relative;
+  border-radius: 1% 1% 0.8% 0.8%;
+  border: 1px solid #e6e0cd88;
+}
+.plant-form:before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 44%;
+  width: 90px;
+  height: 28px;
+  background: #d0ceb472;
+  transform: rotate(-3deg);
+}
+.plant-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 30px;
+  font: 14px "Ma Shan Zheng";
+  color: #c3bda5;
+}
+.plant-progress span {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+.plant-progress b {
+  font: 18px "Caveat";
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d5d5ba;
+  border-radius: 50%;
+  font-weight: 400;
+}
+.plant-progress .active {
+  color: #91a078;
+}
+.plant-progress .active b {
+  background: #e6ead6;
+  color: #8b9972;
+  border-color: #c4ceae;
+}
+.form-label {
+  display: block;
+  font: 16px "Ma Shan Zheng";
+  color: #969e83;
+  margin-bottom: 23px;
+  line-height: 1.8;
+}
+.form-label input,
+.form-label textarea,
+.form-label select {
+  display: block;
+  background: #f9f6eb;
+  border: 0;
+  border-bottom: 1px solid #cbcbb3a3;
+  outline: 0;
+  color: #878e74;
+  width: 100%;
+  padding: 12px 3px;
+  font:
+    16px/1.7 "Ma Shan Zheng",
+    serif;
+  margin-top: 5px;
+  border-radius: 0;
+}
+.form-label input:focus,
+.form-label textarea:focus,
+.form-label select:focus {
+  border-color: #94a477;
+}
+.form-label input::placeholder,
+.form-label textarea::placeholder {
+  color: #beb69e;
+}
+.form-label textarea {
+  height: 151px;
+  resize: vertical;
+  line-height: 2;
+  background:
+    repeating-linear-gradient(transparent 0 31px, #cac3a633 32px), #f9f6eb;
+  padding: 7px 3px;
+}
+.photo-seed-upload {
+  border: 1px dashed #c6cbaf;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 25px;
+  cursor: pointer;
+  color: #a5b08d;
+  margin-bottom: 26px;
+}
+.photo-seed-upload span {
+  font: 18px "Ma Shan Zheng";
+}
+.photo-seed-upload small {
+  font: 10px serif;
+  color: #b4ad96;
+}
+.photo-seed-upload input,
+.music-seed-upload input {
+  display: none;
+}
+.seed-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0 25px;
+}
+.seed-photos > div {
+  width: 92px;
+  height: 100px;
+  position: relative;
+  background: #fffdf6;
+  padding: 5px 5px 15px;
+  rotate: -3deg;
+  box-shadow: 2px 3px 6px #756c4314;
+}
+.seed-photos img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.seed-photos button {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #f4efdc;
+  padding: 3px;
+  border-radius: 50%;
+  color: #aca389;
+}
+.form-two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.mood-choices {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: -7px 0 26px;
+}
+.mood-choices button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding: 16px 5px;
+  color: #b1b094;
+  border: 1px solid transparent;
+  position: relative;
+}
+.mood-choices strong,
+.plant-kind-choices strong {
+  font: 17px "Ma Shan Zheng";
+  font-weight: 400;
+}
+.mood-choices small {
+  font: 8px serif;
+  color: #b9b099;
+}
+.mood-choices button[aria-pressed="true"] {
+  border: 1px solid #bfc8a477;
+  background: #e8ebd865;
+  border-radius: 10% 10% 8% 8%;
+  color: #909f75;
+}
+.plant-kind-choices {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: -13px 0 24px;
+}
+.plant-kind-choices button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid transparent;
+  padding: 12px 5px 18px;
+  color: #a4aa8e;
+}
+.plant-kind-choices svg {
+  width: 66px;
+  height: 88px;
+}
+.plant-kind-choices small {
+  font: 9px serif;
+  color: #b6ae95;
+  margin-top: 8px;
+}
+.plant-kind-choices button[aria-pressed="true"] {
+  background: #e8ebd856;
+  border: 1px dashed #b2bf9477;
+  border-radius: 50% 50% 4% 4%;
+}
+.music-seed-upload {
+  font: 13px "Ma Shan Zheng";
+  color: #a9af93;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 12px 0;
+  margin-bottom: 14px;
+  overflow-wrap: anywhere;
+}
+.quiet-action {
+  font: 11px serif;
+  color: #b5aa92;
+}
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+.form-actions .back-link {
+  margin: 0;
+}
+.seed-preview {
+  text-align: center;
+  padding: 12px 12px 20px;
+}
+.seed-preview svg {
+  width: 115px;
+  height: 147px;
+  margin: auto;
+}
+.seed-preview h2 {
+  font: 28px "Ma Shan Zheng";
+  color: #8c9b74;
+  margin: 20px 0 12px;
+}
+.seed-preview > span {
+  font: 10px monospace;
+  color: #b0a892;
+}
+.seed-preview p {
+  white-space: pre-wrap;
+  font: 18px/1.9 "Ma Shan Zheng";
+  color: #a2a08a;
+  text-align: left;
+  margin: 23px 0;
+  max-height: 250px;
+  overflow: auto;
+  overflow-wrap: anywhere;
+}
+.seed-preview small {
+  font: 11px serif;
+  color: #b5ad96;
+}
+.private-note {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  justify-content: center;
+  font: 10px/1.9 serif;
+  color: #b8b199;
+  margin: 28px auto 0;
+  max-width: 640px;
+}
+.growth-ceremony {
+  text-align: center;
+  padding: 70px 20px;
+  min-height: 450px;
+}
+.growth-ceremony svg {
+  width: 180px;
+  height: 220px;
+  margin: auto;
+}
+.growth-ceremony h2 {
+  font: 27px "Ma Shan Zheng";
+  color: #8da174;
+  margin: 24px 0 15px;
+}
+.growth-ceremony p {
+  font: 16px "Ma Shan Zheng";
+  color: #b1b499;
+}
+.keepsake-shelf {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 38px;
+  margin: 60px 0 40px;
+}
+.keepsake {
+  position: relative;
+  width: 240px;
+  padding: 25px 25px 30px;
+  background: #faf5e7;
+  box-shadow: 4px 7px 12px #71624116;
+  border-bottom: 2px solid #ded3b874;
+}
+.keepsake img {
+  max-height: 180px;
+  width: 100%;
+  object-fit: cover;
+  margin-bottom: 18px;
+}
+.keepsake-icon {
+  font:
+    70px "Caveat",
+    Georgia;
+  color: #bab491;
+  display: block;
+  text-align: center;
+  margin-bottom: 15px;
+}
+.keepsake-kind {
+  font: 11px "Ma Shan Zheng";
+  color: #bbb095;
+}
+.keepsake h3 {
+  font: 24px "Ma Shan Zheng";
+  color: #969c7d;
+  margin: 14px 0;
+}
+.keepsake p {
+  font: 14px/1.9 serif;
+  color: #b0a489;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.keepsake > button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #b7ae94;
+}
+.empty-keepsake {
+  padding: 48px 20px;
+  text-align: center;
+}
+.empty-keepsake svg {
+  width: 200px;
+  height: 150px;
+  display: block;
+  margin: auto;
+}
+.empty-keepsake h2 {
+  font-size: 25px;
+}
+.story-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #6564463d;
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.secret-story {
+  position: relative;
+  width: 460px;
+  max-width: 100%;
+  padding: 40px 40px 38px;
+  background: #faf6e9;
+  box-shadow: 4px 15px 60px #4c462d26;
+  text-align: center;
+  border: 1px solid #d7d0b755;
+}
+.secret-story:before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 42%;
+  width: 77px;
+  height: 28px;
+  rotate: 5deg;
+  background: #c9cbb173;
+}
+.modal-close {
+  position: absolute;
+  right: 13px;
+  top: 13px;
+  color: #b6ae97;
+  padding: 5px;
+}
+.secret-illustration {
+  display: block;
+  font:
+    50px "Caveat",
+    Georgia;
+  color: #b4bb96;
+  margin: 12px 0 20px;
+}
+.secret-story h2 {
+  font: 30px "Ma Shan Zheng";
+  color: #929d78;
+  margin: 22px 0 20px;
+}
+.secret-story p {
+  font: 19px/2 "Ma Shan Zheng";
+  color: #a4a189;
+  text-align: left;
+  margin-bottom: 27px;
+}
+.collection-form {
+  text-align: left;
+  padding-top: 25px;
+}
+.collection-form h2 {
+  font-size: 26px;
+  margin-top: 10px;
+}
+.collection-form .form-label {
+  margin-bottom: 16px;
+}
+.collection-form textarea {
+  height: 95px;
+}
+.garden-toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 25px;
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 22px;
+  background: #e9eddcf0;
+  border: 1px solid #bfc9a687;
+  box-shadow: 3px 6px 22px #4f593118;
+  color: #87966d;
+  font: 15px/1.7 "Ma Shan Zheng";
+  max-width: 90%;
+  backdrop-filter: blur(8px);
+}
+.garden-editor {
+  max-width: 1440px;
+  margin: auto;
+}
+.storybook button:focus-visible {
+  outline: 1px dashed #8e9e74;
+  outline-offset: 5px;
+}
+.storybook button:hover {
+  color: #718454;
+}
+.garden-editor .editor-heading input {
+  font-family: "Ma Shan Zheng";
+  font-size: 29px;
+}
+.garden-editor .editor-heading button {
+  font-family: "Ma Shan Zheng";
+  font-size: 13px;
+}
+@keyframes leaf-sway {
+  0%,
+  100% {
+    transform: rotate(-0.4deg);
+  }
+  50% {
+    transform: rotate(0.5deg);
+  }
+}
+@keyframes butterfly-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-12deg);
+  }
+  50% {
+    transform: translate(16px, -10px) rotate(5deg);
+  }
+}
+@keyframes birdsong {
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(-7px);
+  }
+}
+@keyframes gentle-rain {
+  to {
+    transform: translate(-40px, 700px);
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+    scale: 0.7;
+  }
+  50% {
+    opacity: 0.9;
+    scale: 1.1;
+  }
+}
+@media (min-width: 1500px) {
+  .garden-intro {
+    padding-top: 32px;
+  }
+  .garden-intro h1 {
+    font-size: 88px;
+  }
+  .garden-world {
+    margin-top: -30px;
+  }
+  .garden-scene {
+    max-width: 1380px;
+    margin: auto;
+  }
+}
+@media (max-width: 1100px) {
+  .book-header {
+    padding: 0 40px;
+  }
+  .garden-intro h1 {
+    font-size: 75px;
+  }
+  .garden-world {
+    margin-top: -9px;
+  }
+  .garden-marginalia {
+    left: 6%;
+  }
+  .garden-marginalia > span {
+    font-size: 19px;
+  }
+  .garden-marginalia small {
+    font-size: 9px;
+    max-width: 140px;
+  }
+  .year-fruit {
+    width: 46px;
+    height: 46px;
+    font-size: 20px;
+  }
+  .fruit-stem {
+    left: 22px;
+  }
+  .time-and-seed {
+    margin: 10px 45px 0;
+    gap: 35px;
+  }
+  .time-device {
+    gap: 20px;
+  }
+  .time-copy h2,
+  .seed-invitation h2 {
+    font-size: 23px;
+  }
+  .pocket-watch {
+    scale: 0.85;
+    margin-left: -6px;
+    margin-right: -7px;
+  }
+  .garden-caption {
+    margin-top: -16px;
+    font-size: 12px;
+  }
+  .seed-invitation {
+    padding-left: 24px;
+  }
+  .inside-page {
+    padding: 40px;
+  }
+  .storybook .inside-page h1 {
+    font-size: 61px;
+  }
+  .story-spread {
+    gap: 40px;
+  }
+}
+@media (max-width: 800px) {
+  .book-header {
+    height: 100px;
+    padding: 0 28px;
+  }
+  .garden-brand {
+    font-size: 31px;
+  }
+  .book-header nav {
+    gap: 23px;
+    font-size: 15px;
+  }
+  .garden-brand small {
+    font-size: 11px;
+  }
+  .garden-brand > span:first-child {
+    font-size: 31px;
+  }
+  .book-header nav .nav-plant {
+    padding: 9px 11px;
+  }
+  .garden-intro h1 {
+    font-size: 67px;
+  }
+  .garden-intro p {
+    font-size: 16px;
+  }
+  .garden-marginalia {
+    left: 6%;
+    top: 28%;
+  }
+  .garden-marginalia small {
+    display: none;
+  }
+  .year-fruit {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+  .fruit-stem {
+    left: 17px;
+    height: 14px;
+    top: -13px;
+  }
+  .garden-animal.bird {
+    width: 45px;
+    height: 35px;
+  }
+  .garden-animal.rabbit {
+    width: 48px;
+    height: 58px;
+  }
+  .garden-animal.butterfly {
+    width: 45px;
+    height: 36px;
+  }
+  .garden-animal.dog {
+    width: 48px;
+    height: 48px;
+  }
+  .garden-caption {
+    margin: 0 35px 0;
+    padding-bottom: 26px;
+    font-size: 11px;
+  }
+  .garden-caption button {
+    font-size: 18px;
+    margin-left: 10px;
+  }
+  .time-and-seed {
+    gap: 25px;
+    margin: 10px 35px 0;
+    padding: 28px 0 32px;
+  }
+  .time-device {
+    gap: 9px;
+  }
+  .pocket-watch {
+    scale: 0.7;
+    width: 100px;
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  .time-copy h2 {
+    font-size: 20px;
+  }
+  .chapter-label {
+    font-size: 7px;
+    letter-spacing: 1.6px;
+  }
+  .year-control {
+    gap: 0;
+  }
+  .year-control select {
+    font-size: 19px;
+    max-width: 59px;
+  }
+  .time-copy p {
+    font-size: 10px;
+  }
+  .seed-invitation h2 {
+    font-size: 23px;
+  }
+  .seed-invitation .chapter-label {
+    max-width: 180px;
+  }
+  .seed-invitation p {
+    font-size: 11px;
+  }
+  .invitation-star {
+    right: 12px;
+    font-size: 31px;
+  }
+  .garden-button {
+    font-size: 15px;
+    padding: 11px 16px;
+  }
+  .book-footer {
+    padding: 25px 35px;
+  }
+  .book-footer > span:last-child {
+    font-size: 8px;
+  }
+  .inside-page {
+    padding: 30px 30px 55px;
+  }
+  .storybook .inside-page h1 {
+    font-size: 57px;
+  }
+  .storybook .inside-page h1.memory-title {
+    font-size: 37px;
+  }
+  .story-spread {
+    gap: 30px;
+  }
+  .story-writing > p {
+    font-size: 21px;
+  }
+  .branch-story {
+    font-size: 16px;
+  }
+  .planted-memory {
+    width: 42px;
+    height: 65px;
+  }
+}
+@media (max-width: 600px) {
+  .book-header {
+    height: 126px;
+    padding: 20px 24px 16px;
+    display: block;
+  }
+  .garden-brand {
+    font-size: 31px;
+    gap: 9px;
+  }
+  .garden-brand > span:first-child {
+    font-size: 30px;
+  }
+  .garden-brand small {
+    font-size: 12px;
+  }
+  .book-header nav {
+    margin-top: 19px;
+    justify-content: space-between;
+    gap: 13px;
+    font-size: 14px;
+  }
+  .book-header nav .nav-plant {
+    padding: 6px 10px;
+  }
+  .book-header nav button[aria-current="page"]:after {
+    bottom: -8px;
+  }
+  .garden-intro {
+    padding: 30px 18px 0;
+  }
+  .chapter-label {
+    font-size: 6px;
+    letter-spacing: 1.5px;
+  }
+  .garden-intro h1 {
+    font-size: 52px;
+    line-height: 1.03;
+    margin: 20px 0 14px;
+    letter-spacing: -1px;
+  }
+  .garden-intro p {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+  .intro-handwriting {
+    font-size: 14px;
+  }
+  .ink-star {
+    font-size: 25px;
+    margin-left: 7px;
+  }
+  .garden-world {
+    margin-top: 12px;
+  }
+  .garden-scene {
+    width: 145%;
+    max-width: none;
+    margin-left: -22.5%;
+    aspect-ratio: 1200/680;
+  }
+  .garden-landscape {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+  .year-fruit {
+    width: 32px;
+    height: 32px;
+    font-size: 17px;
+  }
+  .fruit-stem {
+    left: 15px;
+    height: 10px;
+    top: -9px;
+  }
+  .fruit-stem:after {
+    width: 7px;
+    height: 4px;
+    top: 1px;
+  }
+  .year-fruit.selected {
+    outline-offset: 3px;
+  }
+  .garden-marginalia {
+    left: 5%;
+    top: auto;
+    bottom: 49px;
+    max-width: 83px;
+    z-index: 1;
+    transform: rotate(-8deg);
+  }
+  .garden-marginalia > span {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+  .garden-caption {
+    margin: 13px 24px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    font-size: 12px;
+    line-height: 1.8;
+    text-align: center;
+    padding-bottom: 20px;
+    justify-content: center;
+  }
+  .garden-caption button {
+    font-size: 19px;
+    flex-basis: 100%;
+    justify-content: center;
+    border: 0;
+    margin: 7px 0 0;
+  }
+  .garden-animal.rabbit {
+    left: 71%;
+    top: 73%;
+    width: 40px;
+    height: 49px;
+  }
+  .garden-animal.dog {
+    left: 26%;
+    top: 78%;
+    width: 43px;
+    height: 45px;
+  }
+  .garden-animal.butterfly {
+    left: 24%;
+    top: 49%;
+    width: 36px;
+    height: 29px;
+  }
+  .garden-animal.bird {
+    left: 67%;
+    top: 18%;
+    width: 38px;
+    height: 27px;
+  }
+  .planted-memory {
+    width: 33px;
+    height: 51px;
+  }
+  .time-and-seed {
+    margin: 16px 25px 0;
+    display: block;
+    padding: 28px 0 34px;
+  }
+  .time-device {
+    gap: 20px;
+    justify-content: center;
+    max-width: 365px;
+    margin: auto;
+  }
+  .pocket-watch {
+    scale: 0.8;
+    width: 102px;
+    margin-left: 0;
+    margin-right: -5px;
+  }
+  .time-copy {
+    max-width: 220px;
+  }
+  .time-copy .chapter-label {
+    font-size: 6px;
+  }
+  .time-copy h2 {
+    font-size: 21px;
+    letter-spacing: 0;
+  }
+  .time-copy p {
+    font-size: 10px;
+    line-height: 1.7;
+    max-width: 220px;
+  }
+  .year-control {
+    gap: 1px;
+  }
+  .year-control input {
+    max-width: 100px;
+    width: 90px;
+  }
+  .season-picker {
+    font-size: 12px;
+    margin-top: 13px;
+  }
+  .seed-invitation {
+    margin-top: 30px;
+    padding: 29px 0 0;
+    text-align: center;
+    border: 0;
+    border-top: 1px solid #d4d4bd88;
+  }
+  .seed-invitation .chapter-label {
+    max-width: none;
+    font-size: 6px;
+  }
+  .seed-invitation h2 {
+    font-size: 27px;
+    margin-top: 15px;
+  }
+  .seed-invitation p {
+    font-size: 12px;
+    line-height: 2;
+  }
+  .invitation-star {
+    right: 24px;
+    top: 72px;
+    font-size: 30px;
+  }
+  .garden-button {
+    font-size: 16px;
+  }
+  .garden-closing {
+    font-size: 20px;
+    margin: 30px 15px;
+  }
+  .garden-closing > span {
+    font-size: 9px;
+  }
+  .book-footer {
+    padding: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 13px;
+  }
+  .book-footer > span:first-child {
+    font-size: 20px;
+  }
+  .book-footer > span:last-child {
+    flex-basis: 100%;
+    text-align: center;
+    font-size: 8px;
+  }
+  .book-footer p {
+    font-size: 14px;
+  }
+  .inside-page {
+    padding: 25px 24px 50px;
+  }
+  .storybook .inside-page h1 {
+    font-size: 48px;
+    line-height: 1.2;
+    margin: 18px 0 15px;
+  }
+  .page-subtitle {
+    font-size: 15px;
+    margin-bottom: 27px;
+  }
+  .storybook .inside-page h1.memory-title {
+    font-size: 31px;
+    letter-spacing: 0.5px;
+  }
+  .time-tree-list {
+    margin-top: 31px;
+  }
+  .time-branch {
+    gap: 15px;
+    padding: 19px 0;
+  }
+  .branch-year {
+    font-size: 35px;
+    width: 59px;
+  }
+  .time-tree-list:before {
+    left: 86px;
+  }
+  .branch-leaf {
+    font-size: 23px;
+  }
+  .branch-story {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .time-branch > svg {
+    width: 14px;
+  }
+  .memory-meadow {
+    gap: 25px 20px;
+    justify-content: center;
+    margin: 20px 0 35px;
+  }
+  .memory-meadow button {
+    width: calc(50% - 10px);
+  }
+  .memory-meadow svg {
+    width: 85px;
+    height: 112px;
+  }
+  .memory-meadow h3 {
+    font-size: 20px;
+    line-height: 1.5;
+  }
+  .memory-meadow p {
+    font-size: 11px;
+  }
+  .empty-year {
+    padding: 26px 0 35px;
+  }
+  .empty-year h2 {
+    font-size: 24px;
+  }
+  .empty-year p {
+    font-size: 12px;
+  }
+  .story-spread {
+    display: block;
+    margin: 20px 0;
+  }
+  .story-photographs {
+    gap: 30px;
+  }
+  .story-writing {
+    padding-top: 28px;
+  }
+  .story-writing > p {
+    font-size: 22px;
+    line-height: 1.9;
+  }
+  .story-photographs figcaption {
+    font-size: 21px;
+  }
+  .story-signature {
+    font-size: 23px;
+  }
+  .room-music small {
+    font-size: 6px;
+  }
+  .memory-dateline {
+    font-size: 10px;
+    line-height: 2;
+    margin-bottom: 25px;
+  }
+  .planting-page > .page-subtitle {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .plant-form {
+    padding: 27px 21px 29px;
+    margin-top: 26px;
+  }
+  .plant-progress {
+    font-size: 12px;
+    gap: 5px;
+    margin-bottom: 24px;
+  }
+  .plant-progress span {
+    gap: 5px;
+  }
+  .plant-progress b {
+    width: 21px;
+    height: 21px;
+    font-size: 15px;
+  }
+  .form-label {
+    font-size: 15px;
+    margin-bottom: 21px;
+  }
+  .form-label input,
+  .form-label textarea,
+  .form-label select {
+    font-size: 15px;
+  }
+  .form-two-columns {
+    gap: 15px;
+  }
+  .mood-choices {
+    gap: 2px;
+  }
+  .mood-choices button {
+    padding: 13px 2px;
+  }
+  .mood-choices small {
+    font-size: 7px;
+  }
+  .mood-choices strong {
+    font-size: 15px;
+  }
+  .mood-choices svg {
+    width: 18px;
+  }
+  .plant-kind-choices {
+    gap: 7px;
+  }
+  .plant-kind-choices svg {
+    width: 56px;
+    height: 75px;
+  }
+  .plant-kind-choices strong {
+    font-size: 15px;
+  }
+  .plant-kind-choices small {
+    font-size: 7px;
+    text-align: center;
+    line-height: 1.6;
+    max-width: 70px;
+  }
+  .music-seed-upload {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .form-actions {
+    gap: 5px;
+  }
+  .form-actions .garden-button {
+    padding: 10px 12px;
+    font-size: 15px;
+  }
+  .form-actions .back-link {
+    font-size: 12px;
+  }
+  .private-note {
+    font-size: 8px;
+    line-height: 2;
+    align-items: flex-start;
+  }
+  .private-note svg {
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .seed-preview {
+    padding: 10px 0 15px;
+  }
+  .seed-preview h2 {
+    font-size: 25px;
+  }
+  .seed-preview p {
+    font-size: 17px;
+  }
+  .seed-preview small {
+    font-size: 9px;
+  }
+  .growth-ceremony {
+    padding: 40px 0;
+    min-height: 350px;
+  }
+  .growth-ceremony h2 {
+    font-size: 25px;
+  }
+  .collection-page > .garden-button {
+    font-size: 15px;
+  }
+  .keepsake-shelf {
+    gap: 25px 18px;
+    margin-top: 40px;
+  }
+  .keepsake {
+    width: calc(50% - 9px);
+    padding: 20px 15px;
+  }
+  .keepsake h3 {
+    font-size: 21px;
+    line-height: 1.4;
+  }
+  .keepsake p {
+    font-size: 11px;
+  }
+  .keepsake-icon {
+    font-size: 60px;
+  }
+  .keepsake img {
+    max-height: 140px;
+  }
+  .secret-story {
+    padding: 31px 27px;
+  }
+  .secret-story h2 {
+    font-size: 27px;
+  }
+  .secret-story p {
+    font-size: 18px;
+  }
+  .garden-toast {
+    width: max-content;
+    max-width: 90%;
+    font-size: 14px;
+    padding: 12px 16px;
+    bottom: 18px;
+  }
+  .garden-editor .editor-heading input {
+    font-size: 26px;
+  }
+  .garden-editor .editor-heading button {
+    font-size: 12px;
+  }
+  .garden-editor .editor-shell {
+    padding: 0 16px;
+  }
+  .garden-editor .editor-tools .eyebrow {
+    font-size: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .storybook * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+.book-header nav {
+  color: #93957d;
+}
+.garden-marginalia small {
+  color: #a19b84;
+}
+.chapter-label {
+  color: #96947e;
+}
+.garden-caption {
+  color: #96977b;
+}
+.page-subtitle {
+  color: #95977d;
+}
+.form-label {
+  color: #859176;
+}
+.form-label input::placeholder,
+.form-label textarea::placeholder {
+  color: #a6a187;
+}
+.secret-story p {
+  color: #90957c;
+}
+.seed-preview p {
+  color: #8f957c;
+}
+.branch-story {
+  color: #979d80;
+}
+.private-note {
+  color: #a29f87;
+}
