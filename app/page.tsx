@@ -22,6 +22,7 @@ import {
   Check,
   Trash2,
 } from "lucide-react";
+import PrintedDog from "../components/PrintedDog";
 import GardenScene, {
   LittlePlant,
   type Season,
@@ -36,7 +37,14 @@ import {
 } from "../lib/storage";
 import type { Memory } from "../components/Editor";
 const Editor = dynamic(() => import("../components/Editor"), { ssr: false });
-type View = "garden" | "timeline" | "room" | "plant" | "collection" | "editor";
+type View =
+  | "garden"
+  | "timeline"
+  | "room"
+  | "plant"
+  | "collection"
+  | "editor"
+  | "about";
 type Mood = "joy" | "nostalgia" | "growth" | "special";
 const moods: {
   id: Mood;
@@ -172,7 +180,12 @@ export default function Home() {
       image: "",
     }),
     [collectionForm, setCollectionForm] = useState(false),
-    [playing, setPlaying] = useState(false);
+    [playing, setPlaying] = useState(false),
+    [bio, setBio] = useState(
+      "这里收藏着我去过的地方、喜欢的声音，还有一些舍不得忘记的小事。",
+    ),
+    [editingBio, setEditingBio] = useState(false),
+    [collectionScope, setCollectionScope] = useState("音乐");
   const audio = useRef<HTMLAudioElement>(null),
     growthTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
@@ -180,6 +193,8 @@ export default function Home() {
       .then(([m, c]) => {
         setMemories(m);
         setCollection(c);
+        const profile = c.find((k) => k.id === "garden-about");
+        if (profile) setBio(profile.note);
         setStorageReady(true);
       })
       .catch(() =>
@@ -402,23 +417,36 @@ export default function Home() {
   return (
     <main className={"storybook weather-" + weather}>
       <div className="paper-texture" />
+      <svg className="print-filters" aria-hidden="true">
+        <defs>
+          <filter id="vintage-ink" colorInterpolationFilters="sRGB">
+            <feColorMatrix type="saturate" values="0" />
+            <feComponentTransfer>
+              <feFuncR type="discrete" tableValues=".17 .24 .42 .63 .76 .83" />
+              <feFuncG type="discrete" tableValues=".17 .23 .39 .59 .72 .78" />
+              <feFuncB type="discrete" tableValues=".16 .20 .27 .37 .56 .65" />
+            </feComponentTransfer>
+          </filter>
+        </defs>
+      </svg>
       <header className="book-header">
         <button
           className="garden-brand"
           onClick={() => go("garden")}
           aria-label="返回记忆花园"
         >
-          <span>✳</span>
+          <span>✦</span>
           <span>
-            memory garden<small>a little life, gently growing</small>
+            生活剪贴簿<small>a few things about me.</small>
           </span>
         </button>
         <nav aria-label="主要导航">
           {(
             [
-              { v: "garden", label: "花园" },
-              { v: "timeline", label: "时间树" },
-              { v: "collection", label: "收藏匣" },
+              { v: "garden", label: "去过的地方" },
+              { v: "timeline", label: "我的故事" },
+              { v: "collection", label: "喜欢的音乐" },
+              { v: "about", label: "关于我" },
             ] as { v: View; label: string }[]
           ).map((n) => (
             <button
@@ -446,21 +474,53 @@ export default function Home() {
         >
           {view === "garden" && (
             <>
-              <section className="garden-intro">
-                <span className="chapter-label">
-                  CHAPTER ONE · A PLACE TO RETURN TO
-                </span>
-                <h1>
-                  Every memory deserves
-                  <br />
-                  <em>a little garden.</em>
-                  <span className="ink-star">✧</span>
-                </h1>
-                <p>每个人的心里，都有一座慢慢生长的花园。</p>
-                <span className="intro-handwriting">
-                  Come in. Something lovely has been waiting for you.
-                </span>
+              <section className="printed-poster">
+                <div className="poster-copy">
+                  <span className="poster-prelude">take a step:</span>
+                  <h1>
+                    OUTSIDE<span>去过的地方</span>
+                  </h1>
+                  <p>
+                    路过一些风景，
+                    <br />
+                    也把一些风景，留在了心里。
+                  </p>
+                  <button onClick={startPlant} className="poster-oval">
+                    留下一段旅行 <ArrowRight size={18} />
+                  </button>
+                  <span className="poster-edition">
+                    PERSONAL JOURNAL / VOL. 01
+                  </span>
+                </div>
+                <div className="poster-collage">
+                  <div className="print-landscape">
+                    <img src={asset("/sky.jpg")} alt="收藏的一片山林风景" />
+                    <span>somewhere I felt alive.</span>
+                  </div>
+                  <PrintedDog
+                    className="print-dog dog-a"
+                    kind="corgi"
+                    label="复古印刷小狗剪贴"
+                  />
+                  <PrintedDog
+                    className="print-dog dog-b"
+                    kind="shepherd"
+                    label="牧羊犬剪贴"
+                  />
+                  <PrintedDog
+                    className="print-dog dog-c"
+                    kind="samoyed"
+                    label="白色小狗剪贴"
+                  />
+                  <span className="poster-scribble">it's nice out there.</span>
+                  <span className="poster-doodle">✦</span>
+                </div>
               </section>
+              <div className="places-heading">
+                <span>01 / THE PLACES I KEEP</span>
+                <h2>去过的地方，留下的故事。</h2>
+                <p>点击年份，翻开那一年的记忆。</p>
+              </div>
               <section className="garden-world" aria-label="互动记忆花园">
                 <GardenScene
                   season={season}
@@ -492,7 +552,7 @@ export default function Home() {
                   </small>
                 </div>
                 <div className="garden-caption">
-                  <span className="tiny-flower">✳</span>
+                  <span className="tiny-flower">✦</span>
                   <span>
                     {loading
                       ? "正在翻开你的故事书…"
@@ -601,7 +661,7 @@ export default function Home() {
                 CHAPTER TWO · THE TREE OF TIME
               </span>
               <h1>
-                Once upon <em>a lifetime.</em>
+                我的故事 <em> / MY STORY</em>
               </h1>
               <p className="page-subtitle">沿着枝叶，回到那些曾经的自己。</p>
               <div className="time-tree-list">
@@ -1107,60 +1167,111 @@ export default function Home() {
                 THE KEEPSAKE BOX · SMALL THINGS, BIG FEELINGS
               </span>
               <h1>
-                The things <em>we love.</em>
+                喜欢的音乐 <em> / ON REPEAT</em>
               </h1>
-              <p className="page-subtitle">
-                一本书，一首歌，一个舍不得丢掉的小东西。
-              </p>
+              <p className="page-subtitle">有些歌一响起，就回到了某个下午。</p>
               <button
                 className="garden-button"
-                onClick={() => setCollectionForm(true)}
+                onClick={() => {
+                  setKeepsake((k) => ({
+                    ...k,
+                    kind: collectionScope === "音乐" ? "音乐" : k.kind,
+                  }));
+                  setCollectionForm(true);
+                }}
               >
-                放进一件小收藏 <Plus size={15} />
+                收藏一首歌或小物 <Plus size={15} />
               </button>
-              {collection.length ? (
+              <div className="music-page-tabs">
+                <button
+                  aria-pressed={collectionScope === "音乐"}
+                  onClick={() => setCollectionScope("音乐")}
+                >
+                  喜欢的音乐
+                </button>
+                <button
+                  aria-pressed={collectionScope === "全部"}
+                  onClick={() => setCollectionScope("全部")}
+                >
+                  其他小收藏
+                </button>
+              </div>
+              {collectionScope === "音乐" && memories.some((m) => m.song) && (
+                <div className="memory-song-list">
+                  {memories
+                    .filter((m) => m.song)
+                    .map((m) => (
+                      <article key={m.id}>
+                        <span className="song-index">♫</span>
+                        <div>
+                          <h3>{m.song!.name}</h3>
+                          <button onClick={() => openMemory(m)}>
+                            来自「{m.title}」的声音 →
+                          </button>
+                        </div>
+                        <audio
+                          controls
+                          preload="none"
+                          src={m.song!.src}
+                          aria-label={`播放 ${m.song!.name}`}
+                        />
+                      </article>
+                    ))}
+                </div>
+              )}
+              {collection.filter(
+                (k) =>
+                  k.id !== "garden-about" &&
+                  (collectionScope === "全部" || k.kind === "音乐"),
+              ).length ? (
                 <div className="keepsake-shelf">
-                  {collection.map((k, i) => (
-                    <article
-                      key={k.id}
-                      className="keepsake"
-                      style={{ rotate: (i % 2 ? 2 : -2) + "deg" }}
-                    >
-                      {k.image ? (
-                        <img src={k.image} alt={k.title} />
-                      ) : (
-                        <span className="keepsake-icon">
-                          {k.kind === "书"
-                            ? "❧"
-                            : k.kind === "音乐"
-                              ? "♫"
-                              : k.kind === "电影"
-                                ? "✧"
-                                : "✿"}
-                        </span>
-                      )}
-                      <span className="keepsake-kind">{k.kind}</span>
-                      <h3>{k.title}</h3>
-                      <p>{k.note}</p>
-                      <button
-                        aria-label={`移走收藏：${k.title}`}
-                        onClick={async () => {
-                          if (!confirm("要移走这件收藏吗？")) return;
-                          try {
-                            const next = collection.filter(
-                              (x) => x.id !== k.id,
-                            );
-                            await storeCollection(next);
-                            setCollection(next);
-                          } catch {
-                            setMessage("暂时无法移走这件收藏。");
-                          }
-                        }}
+                  {collection
+                    .filter(
+                      (k) =>
+                        k.id !== "garden-about" &&
+                        (collectionScope === "全部" || k.kind === "音乐"),
+                    )
+                    .map((k, i) => (
+                      <article
+                        key={k.id}
+                        className="keepsake"
+                        style={{ rotate: (i % 2 ? 2 : -2) + "deg" }}
                       >
-                        <X size={13} />
-                      </button>
-                    </article>
-                  ))}
+                        {k.image ? (
+                          <img src={k.image} alt={k.title} />
+                        ) : (
+                          <span className="keepsake-icon">
+                            {k.kind === "书"
+                              ? "❧"
+                              : k.kind === "音乐"
+                                ? "♫"
+                                : k.kind === "电影"
+                                  ? "✧"
+                                  : "✿"}
+                          </span>
+                        )}
+                        <span className="keepsake-kind">{k.kind}</span>
+                        <h3>{k.title}</h3>
+                        <p>{k.note}</p>
+                        <button
+                          aria-label={`移走收藏：${k.title}`}
+                          onClick={async () => {
+                            if (!confirm("要移走这件收藏吗？")) return;
+                            try {
+                              const next = collection.filter(
+                                (x) => x.id !== k.id,
+                              );
+                              await storeCollection(next);
+                              setCollection(next);
+                            } catch {
+                              setMessage("暂时无法移走这件收藏。");
+                            }
+                          }}
+                        >
+                          <X size={13} />
+                        </button>
+                      </article>
+                    ))}
                 </div>
               ) : (
                 <div className="empty-keepsake">
@@ -1187,10 +1298,75 @@ export default function Home() {
                       stroke="#c2b28c"
                     />
                   </svg>
-                  <h2>收藏匣里，还留着许多空位。</h2>
-                  <p>从一件让你心动的小东西开始吧。</p>
+                  <h2>留一个位置，给下一首喜欢的歌。</h2>
+                  <p>收藏歌名和回忆；记忆里上传的音乐，也会出现在这里。</p>
                 </div>
               )}
+            </section>
+          )}
+          {view === "about" && (
+            <section className="inside-page about-page">
+              <span className="chapter-label">03 / A FEW THINGS ABOUT ME</span>
+              <h1>
+                关于我 <em> / HELLO, YOU.</em>
+              </h1>
+              <div className="about-spread">
+                <div className="about-print">
+                  <PrintedDog kind="samoyed" label="一张复古印刷小狗剪贴" />
+                  <span>still figuring it all out.</span>
+                </div>
+                <div className="about-writing">
+                  <span className="about-handwriting">a work in progress.</span>
+                  {editingBio ? (
+                    <label className="form-label">
+                      写一点关于自己的话
+                      <textarea
+                        aria-label="关于我的介绍"
+                        value={bio}
+                        maxLength={4000}
+                        onChange={(e) => setBio(e.target.value)}
+                      />
+                    </label>
+                  ) : (
+                    <p>{bio}</p>
+                  )}
+                  <button
+                    className="garden-button"
+                    disabled={!storageReady}
+                    onClick={async () => {
+                      if (!editingBio) {
+                        setEditingBio(true);
+                        return;
+                      }
+                      try {
+                        const next = [
+                          ...collection.filter((k) => k.id !== "garden-about"),
+                          {
+                            id: "garden-about",
+                            title: "关于我",
+                            kind: "关于我",
+                            note: bio,
+                          },
+                        ];
+                        await storeCollection(next);
+                        setCollection(next);
+                        setEditingBio(false);
+                        setMessage("关于你的这一页，已保存。");
+                      } catch {
+                        setMessage("暂时没能保存介绍，请稍后再试。");
+                      }
+                    }}
+                  >
+                    {editingBio ? "保存这一页" : "写一点关于我"}{" "}
+                    <BookOpen size={15} />
+                  </button>
+                  <p className="about-footnote">
+                    不用把自己介绍得很完整。
+                    <br />
+                    去过的地方、喜欢的歌，已经在说话了。
+                  </p>
+                </div>
+              </div>
             </section>
           )}
           {view === "editor" && selected && (
@@ -1205,13 +1381,13 @@ export default function Home() {
         </motion.div>
       </AnimatePresence>
       <footer className="book-footer">
-        <span>❧ memory garden</span>
+        <span>❧ 我的生活剪贴簿</span>
         <p>
           Some things are too small to explain.
           <br />
           Too important to forget.
         </p>
-        <span>一本会生长的私人故事书 · 本地保存</span>
+        <span>PLACES · MUSIC · LITTLE THINGS / 本地保存</span>
       </footer>
       <AnimatePresence>
         {animal && (

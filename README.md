@@ -23,3 +23,6 @@ Memory and collection data are stored in browser IndexedDB, using the original `
 
 ## GitHub Pages
 `.github/workflows/pages.yml` deploys the static export from `main`. Select **GitHub Actions** in repository Settings → Pages. Locally, `BUILD_TARGET=pages npm run build` exports to `out/` with `/AAAA` as the base path. After deployment, the website is served at https://xuz8999-bit.github.io/AAAA/. Ordinary `npm run build` continues to support Node hosting.
+
+## Printed scrapbook theme
+The current visual direction uses charcoal ink, aged paper, faded mustard and a distressed Anton headline. Navigation is **去过的地方 / 我的故事 / 喜欢的音乐 / 关于我**. Music includes songs attached to saved memories and manually collected favorites. Other keepsakes remain accessible via the second tab. About text is editable and stored as a hidden profile entry in the existing collection store. Photo material sources: `pytorch/hub/images/dog.jpg` and `pytorch/vision/gallery/assets/dog1.jpg`, `dog2.jpg`; original local vector clipping shapes and SVG print filters are applied in the browser. Anton is bundled with its SIL Open Font License.

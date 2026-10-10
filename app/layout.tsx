@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./scrapbook.css";
 import "./garden.css";
+import "./print.css";
 export const metadata: Metadata = {
-  title: "Memory Garden — 一本会生长的私人故事书",
+  title: "我的生活剪贴簿 — 去过的地方，喜欢的音乐，关于我",
   description:
     "种下一段记忆，探索属于自己的花园。A gentle interactive storybook of your life.",
   icons: {
