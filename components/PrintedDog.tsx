@@ -48,6 +48,7 @@ export default function PrintedDog({
         height={d.height}
         clipPath={`url(#${id})`}
       />
+      <path d={d.path} fill="url(#ink-dots)" pointerEvents="none" />
     </svg>
   );
 }

@@ -49,6 +49,7 @@ export type Keepsake = {
   kind: string;
   note: string;
   image?: string;
+  audio?: string;
 };
 export async function loadCollection(): Promise<Keepsake[]> {
   const db = await database();

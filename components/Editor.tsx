@@ -9,6 +9,8 @@ import {
   Rect,
 } from "react-konva";
 import Konva from "konva";
+import { motion } from "framer-motion";
+import { developPrint, printFinishes, type PrintFinish } from "../lib/print";
 import { asset } from "../lib/assets";
 import { artMaterials } from "../lib/art";
 export type Piece = {
@@ -38,6 +40,7 @@ export type Memory = {
   createdAt: string;
   category?: string;
   complexity?: string;
+  printFinish?: PrintFinish;
   story?: string;
   mood?: "joy" | "nostalgia" | "growth" | "special";
   plantKind?: "flower" | "tree" | "star";
@@ -109,7 +112,10 @@ export default function Editor({
     [location, setLocation] = useState(memory?.location || ""),
     [category, setCategory] = useState(memory?.category || "RANDOM FRAGMENTS"),
     [message, setMessage] = useState(""),
-    [scale, setScale] = useState(0.8);
+    [scale, setScale] = useState(0.8),
+    [finish, setFinish] = useState<PrintFinish>(memory?.printFinish || "film"),
+    [printed, setPrinted] = useState(""),
+    [developing, setDeveloping] = useState(false);
   const stage = useRef<Konva.Stage>(null),
     transformer = useRef<Konva.Transformer>(null),
     container = useRef<HTMLDivElement>(null);
@@ -211,6 +217,34 @@ export default function Editor({
     ]);
     setSelected(id);
   };
+  useEffect(() => {
+    if (!printed) return;
+    const previous = document.activeElement as HTMLElement | null;
+    const keydown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPrinted("");
+      if (e.key === "Tab") {
+        const nodes = Array.from(
+          document.querySelectorAll<HTMLElement>(
+            ".print-booth button, .print-booth a",
+          ),
+        );
+        const first = nodes[0],
+          last = nodes[nodes.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
+      }
+    };
+    document.addEventListener("keydown", keydown);
+    return () => {
+      document.removeEventListener("keydown", keydown);
+      previous?.focus();
+    };
+  }, [printed]);
   const generate = () => {
     setSelected("");
     setPieces((a) => {
@@ -288,10 +322,15 @@ export default function Editor({
   const snapshot = () => {
     setSelected("");
     transformer.current?.nodes([]);
-    return stage.current!.toDataURL({ pixelRatio: 2 / scale });
+    return developPrint(
+      stage.current!.toCanvas({ pixelRatio: 2 / scale }),
+      finish,
+    ).toDataURL("image/png");
   };
   const save = async () => {
     try {
+      setSelected("");
+      transformer.current?.nodes([]);
       await onSave({
         id: memory?.id || crypto.randomUUID(),
         ...memory,
@@ -302,13 +341,11 @@ export default function Editor({
         category,
         complexity,
         pieces,
-        cover:
-          (snapshot(),
-          stage.current!.toDataURL({
-            pixelRatio: 0.5 / scale,
-            mimeType: "image/jpeg",
-            quality: 0.8,
-          })),
+        printFinish: finish,
+        cover: developPrint(
+          stage.current!.toCanvas({ pixelRatio: 0.5 / scale }),
+          finish,
+        ).toDataURL("image/jpeg", 0.8),
         createdAt: memory?.createdAt || new Date().toISOString(),
       });
       setMessage("Saved to your personal archive.");
@@ -330,7 +367,7 @@ export default function Editor({
           />
         </div>
         <div className="flex gap-2">
-          <button onClick={onClose}>← Scrapbook</button>
+          <button onClick={onClose}>← 返回剪贴簿</button>
           <button
             onClick={() => {
               try {
@@ -343,10 +380,26 @@ export default function Editor({
               }
             }}
           >
-            ↓ Export PNG
+            ↓ 下载 PNG
+          </button>
+          <button
+            onClick={() => {
+              if (!pieces.some((p) => p.type === "image" && !p.decorative)) {
+                setMessage("先放入一张照片，再开始冲印。");
+                return;
+              }
+              try {
+                setPrinted(snapshot());
+                setDeveloping(true);
+              } catch {
+                setMessage("冲印暂时失败，请再试一次。");
+              }
+            }}
+          >
+            相机冲印 ✦
           </button>
           <button className="primary" onClick={save}>
-            Save memory ↗
+            保存拼贴 ↗
           </button>
         </div>
       </div>
@@ -391,6 +444,21 @@ export default function Editor({
               </button>
             ))}
           </div>
+          <span className="eyebrow">冲印色调 / PRINT FINISH</span>
+          <select
+            aria-label="冲印风格"
+            value={finish}
+            onChange={(e) => setFinish(e.target.value as PrintFinish)}
+          >
+            {printFinishes.map((f) => (
+              <option key={f.id} value={f.id}>
+                {f.name}
+              </option>
+            ))}
+          </select>
+          <p className="print-help">
+            选择色调，自动拼贴或自由摆放，再用相机冲印。滤镜和网点会一起保存在下载图片里。
+          </p>
           <span className="eyebrow">MEMORY STYLE</span>
           <select
             aria-label="Memory style"
@@ -539,7 +607,12 @@ export default function Editor({
               </button>
             </span>
           </div>
-          <div className="canvas-scroll">
+          <div
+            className="canvas-scroll"
+            style={{
+              filter: printFinishes.find((f) => f.id === finish)?.filter,
+            }}
+          >
             <Stage
               width={1000 * scale}
               height={750 * scale}
@@ -667,6 +740,62 @@ export default function Editor({
           )}
         </div>
       </div>
+      {printed && (
+        <div
+          className="print-booth"
+          role="dialog"
+          aria-modal="true"
+          aria-label="相机冲印成品"
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setPrinted("");
+          }}
+        >
+          <button
+            autoFocus
+            className="print-close"
+            onClick={() => setPrinted("")}
+          >
+            关闭 ×
+          </button>
+          <h2>{developing ? "正在冲印这一刻…" : "你的记忆，已经显影。"}</h2>
+          <div className="ccd-machine" aria-hidden="true">
+            <span className="ccd-lens" />
+            <b>MEMORY CAM</b>
+            <i />
+            <div className="ccd-slot" />
+          </div>
+          <div className="print-output-window">
+            <motion.figure
+              className="developed-paper"
+              initial={{ y: "-105%", rotate: -2, opacity: 0.3 }}
+              animate={{ y: 0, rotate: 2, opacity: 1 }}
+              transition={{ duration: 2.8, ease: "easeInOut" }}
+              onAnimationComplete={() => setDeveloping(false)}
+            >
+              <img src={printed} alt={`${title}的复古拼贴冲印成品`} />
+              <figcaption>
+                {title} · {date}
+              </figcaption>
+            </motion.figure>
+          </div>
+          <p role="status">
+            {developing
+              ? "相纸慢慢吐出，旧时光慢慢回来。"
+              : "2000 × 1500 · 把这一页带走吧。"}
+          </p>
+          <a
+            className="print-download"
+            href={printed}
+            download={`${title}.png`}
+            aria-disabled={developing}
+            onClick={(e) => {
+              if (developing) e.preventDefault();
+            }}
+          >
+            下载冲印照片 ↓
+          </a>
+        </div>
+      )}
     </div>
   );
 }

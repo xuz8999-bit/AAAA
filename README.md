@@ -26,3 +26,9 @@ Memory and collection data are stored in browser IndexedDB, using the original `
 
 ## Printed scrapbook theme
 The current visual direction uses charcoal ink, aged paper, faded mustard and a distressed Anton headline. Navigation is **去过的地方 / 我的故事 / 喜欢的音乐 / 关于我**. Music includes songs attached to saved memories and manually collected favorites. Other keepsakes remain accessible via the second tab. About text is editable and stored as a hidden profile entry in the existing collection store. Photo material sources: `pytorch/hub/images/dog.jpg` and `pytorch/vision/gallery/assets/dog1.jpg`, `dog2.jpg`; original local vector clipping shapes and SVG print filters are applied in the browser. Anton is bundled with its SIL Open Font License.
+
+### 拾光剪贴簿更新
+
+导航为首页、去过的地方、我的故事、喜欢的事物、关于我。首页及动物剪贴使用低饱和褪色油墨、纸纹和网点；「喜欢的事物」可上传图片和 10MB 以内的音乐，音乐可直接播放，收藏仍保存在原 IndexedDB 中。
+
+首页「制作复古拼贴 · 相机冲印」可直接进入编辑器，上传照片并自动拼贴或手动调整。冲印支持褪色胶片、Old School 网点版画、古早 CCD 和原色，生成过程显示相机吐出相纸动画，下载 PNG 为 2000 × 1500。滤镜、颗粒和网点实际写入导出像素，保存作品时保留原始照片、布局及冲印风格，便于重新编辑。

@@ -39,6 +39,7 @@ import type { Memory } from "../components/Editor";
 const Editor = dynamic(() => import("../components/Editor"), { ssr: false });
 type View =
   | "garden"
+  | "places"
   | "timeline"
   | "room"
   | "plant"
@@ -178,6 +179,7 @@ export default function Home() {
       kind: "书",
       note: "",
       image: "",
+      audio: "",
     }),
     [collectionForm, setCollectionForm] = useState(false),
     [playing, setPlaying] = useState(false),
@@ -185,7 +187,7 @@ export default function Home() {
       "这里收藏着我去过的地方、喜欢的声音，还有一些舍不得忘记的小事。",
     ),
     [editingBio, setEditingBio] = useState(false),
-    [collectionScope, setCollectionScope] = useState("音乐");
+    [collectionScope, setCollectionScope] = useState("全部");
   const audio = useRef<HTMLAudioElement>(null),
     growthTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
@@ -398,7 +400,7 @@ export default function Home() {
       await storeCollection(next);
       setCollection(next);
       setCollectionForm(false);
-      setKeepsake({ title: "", kind: "书", note: "", image: "" });
+      setKeepsake({ title: "", kind: "书", note: "", image: "", audio: "" });
       setMessage("你喜欢的小东西，已放进收藏匣。");
     } catch {
       setMessage("收藏暂时没能保存，请检查浏览器存储。");
@@ -419,13 +421,31 @@ export default function Home() {
       <div className="paper-texture" />
       <svg className="print-filters" aria-hidden="true">
         <defs>
+          <pattern
+            id="ink-dots"
+            width="4"
+            height="4"
+            patternUnits="userSpaceOnUse"
+          >
+            <circle cx="1" cy="1" r="0.65" fill="#514837" opacity=".45" />
+          </pattern>
           <filter id="vintage-ink" colorInterpolationFilters="sRGB">
             <feColorMatrix type="saturate" values="0" />
-            <feComponentTransfer>
+            <feComponentTransfer result="toned">
               <feFuncR type="discrete" tableValues=".17 .24 .42 .63 .76 .83" />
               <feFuncG type="discrete" tableValues=".17 .23 .39 .59 .72 .78" />
               <feFuncB type="discrete" tableValues=".16 .20 .27 .37 .56 .65" />
             </feComponentTransfer>
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency=".68"
+              numOctaves="3"
+              seed="8"
+              result="grain"
+            />
+            <feColorMatrix in="grain" type="saturate" values="0" />
+            <feBlend in2="toned" mode="soft-light" result="worn" />
+            <feComposite in="worn" in2="SourceAlpha" operator="in" />
           </filter>
         </defs>
       </svg>
@@ -437,15 +457,16 @@ export default function Home() {
         >
           <span>✦</span>
           <span>
-            生活剪贴簿<small>a few things about me.</small>
+            拾光剪贴簿<small>a few things about me.</small>
           </span>
         </button>
         <nav aria-label="主要导航">
           {(
             [
-              { v: "garden", label: "去过的地方" },
+              { v: "garden", label: "首页" },
+              { v: "places", label: "去过的地方" },
               { v: "timeline", label: "我的故事" },
-              { v: "collection", label: "喜欢的音乐" },
+              { v: "collection", label: "喜欢的事物" },
               { v: "about", label: "关于我" },
             ] as { v: View; label: string }[]
           ).map((n) => (
@@ -472,50 +493,65 @@ export default function Home() {
           exit={{ opacity: 0, rotateY: 4, x: -12 }}
           transition={{ duration: 0.4 }}
         >
-          {view === "garden" && (
+          {(view === "garden" || view === "places") && (
             <>
-              <section className="printed-poster">
-                <div className="poster-copy">
-                  <span className="poster-prelude">take a step:</span>
-                  <h1>
-                    OUTSIDE<span>去过的地方</span>
-                  </h1>
-                  <p>
-                    路过一些风景，
-                    <br />
-                    也把一些风景，留在了心里。
-                  </p>
-                  <button onClick={startPlant} className="poster-oval">
-                    留下一段旅行 <ArrowRight size={18} />
-                  </button>
-                  <span className="poster-edition">
-                    PERSONAL JOURNAL / VOL. 01
-                  </span>
-                </div>
-                <div className="poster-collage">
-                  <div className="print-landscape">
-                    <img src={asset("/sky.jpg")} alt="收藏的一片山林风景" />
-                    <span>somewhere I felt alive.</span>
+              {view === "garden" && (
+                <section className="printed-poster">
+                  <div className="poster-copy">
+                    <span className="poster-prelude">
+                      a little time capsule:
+                    </span>
+                    <h1>
+                      MEMORIES<span>拾光剪贴簿</span>
+                    </h1>
+                    <p>
+                      路过一些风景，
+                      <br />
+                      也把一些风景，留在了心里。
+                    </p>
+                    <button onClick={startPlant} className="poster-oval">
+                      留下一段记忆 <ArrowRight size={18} />
+                    </button>
+                    <button
+                      className="poster-print-link"
+                      onClick={() => {
+                        setSelected(undefined);
+                        go("editor");
+                      }}
+                    >
+                      制作复古拼贴 · 相机冲印 ↗
+                    </button>
+                    <span className="poster-edition">
+                      PERSONAL JOURNAL / VOL. 01
+                    </span>
                   </div>
-                  <PrintedDog
-                    className="print-dog dog-a"
-                    kind="corgi"
-                    label="复古印刷小狗剪贴"
-                  />
-                  <PrintedDog
-                    className="print-dog dog-b"
-                    kind="shepherd"
-                    label="牧羊犬剪贴"
-                  />
-                  <PrintedDog
-                    className="print-dog dog-c"
-                    kind="samoyed"
-                    label="白色小狗剪贴"
-                  />
-                  <span className="poster-scribble">it's nice out there.</span>
-                  <span className="poster-doodle">✦</span>
-                </div>
-              </section>
+                  <div className="poster-collage">
+                    <div className="print-landscape">
+                      <img src={asset("/sky.jpg")} alt="收藏的一片山林风景" />
+                      <span>somewhere I felt alive.</span>
+                    </div>
+                    <PrintedDog
+                      className="print-dog dog-a"
+                      kind="corgi"
+                      label="复古印刷小狗剪贴"
+                    />
+                    <PrintedDog
+                      className="print-dog dog-b"
+                      kind="shepherd"
+                      label="牧羊犬剪贴"
+                    />
+                    <PrintedDog
+                      className="print-dog dog-c"
+                      kind="samoyed"
+                      label="白色小狗剪贴"
+                    />
+                    <span className="poster-scribble">
+                      it's nice out there.
+                    </span>
+                    <span className="poster-doodle">✦</span>
+                  </div>
+                </section>
+              )}
               <div className="places-heading">
                 <span>01 / THE PLACES I KEEP</span>
                 <h2>去过的地方，留下的故事。</h2>
@@ -795,7 +831,7 @@ export default function Home() {
                       <div className="story-actions">
                         <button onClick={() => go("editor")}>
                           <BookOpen size={15} />
-                          自由拼贴与 PNG 导出
+                          复古拼贴与相机冲印
                         </button>
                         <button onClick={() => void deleteMemory(selected)}>
                           <Trash2 size={13} />
@@ -1167,9 +1203,11 @@ export default function Home() {
                 THE KEEPSAKE BOX · SMALL THINGS, BIG FEELINGS
               </span>
               <h1>
-                喜欢的音乐 <em> / ON REPEAT</em>
+                喜欢的事物 <em> / LITTLE TREASURES</em>
               </h1>
-              <p className="page-subtitle">有些歌一响起，就回到了某个下午。</p>
+              <p className="page-subtitle">
+                照片、音乐和心爱的小东西，都值得留一个位置。
+              </p>
               <button
                 className="garden-button"
                 onClick={() => {
@@ -1180,7 +1218,7 @@ export default function Home() {
                   setCollectionForm(true);
                 }}
               >
-                收藏一首歌或小物 <Plus size={15} />
+                收藏喜欢的事物 <Plus size={15} />
               </button>
               <div className="music-page-tabs">
                 <button
@@ -1193,10 +1231,10 @@ export default function Home() {
                   aria-pressed={collectionScope === "全部"}
                   onClick={() => setCollectionScope("全部")}
                 >
-                  其他小收藏
+                  全部事物
                 </button>
               </div>
-              {collectionScope === "音乐" && memories.some((m) => m.song) && (
+              {memories.some((m) => m.song) && (
                 <div className="memory-song-list">
                   {memories
                     .filter((m) => m.song)
@@ -1253,6 +1291,14 @@ export default function Home() {
                         <span className="keepsake-kind">{k.kind}</span>
                         <h3>{k.title}</h3>
                         <p>{k.note}</p>
+                        {k.audio && (
+                          <audio
+                            controls
+                            preload="none"
+                            src={k.audio}
+                            aria-label={`播放收藏：${k.title}`}
+                          />
+                        )}
                         <button
                           aria-label={`移走收藏：${k.title}`}
                           onClick={async () => {
@@ -1298,8 +1344,8 @@ export default function Home() {
                       stroke="#c2b28c"
                     />
                   </svg>
-                  <h2>留一个位置，给下一首喜欢的歌。</h2>
-                  <p>收藏歌名和回忆；记忆里上传的音乐，也会出现在这里。</p>
+                  <h2>留一个位置，给心动的小事物。</h2>
+                  <p>上传照片或音乐，把喜欢的事物收进这本剪贴簿。</p>
                 </div>
               )}
             </section>
@@ -1369,25 +1415,25 @@ export default function Home() {
               </div>
             </section>
           )}
-          {view === "editor" && selected && (
+          {view === "editor" && (
             <div className="garden-editor">
               <Editor
                 memory={selected}
                 onSave={saveBoard}
-                onClose={() => go("room")}
+                onClose={() => go(selected ? "room" : "garden")}
               />
             </div>
           )}
         </motion.div>
       </AnimatePresence>
       <footer className="book-footer">
-        <span>❧ 我的生活剪贴簿</span>
+        <span>❧ 拾光剪贴簿</span>
         <p>
           Some things are too small to explain.
           <br />
           Too important to forget.
         </p>
-        <span>PLACES · MUSIC · LITTLE THINGS / 本地保存</span>
+        <span>PLACES · TREASURES · LITTLE THINGS / 本地保存</span>
       </footer>
       <AnimatePresence>
         {animal && (
@@ -1505,6 +1551,41 @@ export default function Home() {
                 }}
               />
             </label>
+            <label className="music-seed-upload">
+              <Music size={15} />
+              {keepsake.audio
+                ? "已放入音乐 · 可重新选择"
+                : "可选：上传一首音乐"}
+              <input
+                type="file"
+                accept="audio/*"
+                aria-label="收藏音乐"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  if (file.size > 10 * 1024 * 1024) {
+                    setMessage("请选择 10MB 以内的音乐。");
+                    return;
+                  }
+                  const reader = new FileReader();
+                  reader.onload = () =>
+                    setKeepsake((k) => ({
+                      ...k,
+                      audio: String(reader.result),
+                      kind: "音乐",
+                      title: k.title || file.name.replace(/\.[^.]+$/, ""),
+                    }));
+                  reader.onerror = () =>
+                    setMessage("音乐没能读取，请再试一次。");
+                  reader.readAsDataURL(file);
+                }}
+              />
+            </label>
+            {keepsake.audio && (
+              <button onClick={() => setKeepsake((k) => ({ ...k, audio: "" }))}>
+                移除音乐
+              </button>
+            )}
             <button
               className="garden-button"
               disabled={!storageReady}
