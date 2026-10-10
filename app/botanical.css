@@ -1092,3 +1092,37 @@ body {
     gap: 15px;
   }
 }
+/* Ivory cover, with the archive's blue botanical collage kept intact. */
+.storybook.ivory-cover {background:#f0eadc;color:#303c58}
+.ivory-cover .paper-texture {mix-blend-mode:multiply;opacity:.22;animation:none}
+.ivory-cover .book-header {border-color:#aeb6c566}
+.ivory-cover .garden-brand {color:#2e405f}
+.ivory-cover .garden-brand small {color:#8792a3}
+.ivory-cover .book-header nav {color:#7b8698}
+.ivory-cover .book-header nav button[aria-current="page"] {color:#34476d}
+.ivory-cover .book-header nav .nav-plant {background:#c5cede;color:#445b80;border-color:#9caecb}
+.ivory-cover .poster-copy h1 {color:#35476c;text-shadow:3px 0 #8a9eca66;background-image:none}
+.ivory-cover .poster-copy h1 span,.ivory-cover .poster-prelude {color:#8998ae}
+.ivory-cover .poster-copy p {color:#77869a}
+.ivory-cover .poster-oval {background:#e0e4e9;color:#607393;border-color:#a4b1c6;box-shadow:4px 4px 0 #b8c5d5}
+.ivory-cover .poster-print-link {color:#7288a7}
+.ivory-cover .poster-edition {color:#98a0a8}
+.ivory-cover .print-landscape span,.ivory-cover .poster-scribble {color:#7c91ac}
+.ivory-cover .hero-silver-flower,.ivory-cover .index-flower {mix-blend-mode:normal}
+.ivory-cover .blue-registration,.ivory-cover .poster-doodle {color:#8098c8}
+.ivory-cover .poster-collage::before {opacity:.65}
+.ivory-cover .places-heading {border-color:#adb9cb88}
+.ivory-cover .places-heading h2 {color:#6f85a0}
+.ivory-cover .places-heading > span,.ivory-cover .places-heading p {color:#98a4b3}
+.ivory-cover .specimen-paper {background:#e0e4eb}
+.ivory-cover .specimen-tag {background:#b5c2d9;color:#354e71;border-color:#96a9c8;box-shadow:4px 5px 0 #98aac533}
+.ivory-cover .specimen-tag small,.ivory-cover .specimen-tag em {color:#6c84a5}
+.ivory-cover .specimen-tag:hover {background:#cbd4e2;color:#344e70!important}
+.ivory-cover .tag-2,.ivory-cover .tag-5 {background:#dfdfd6;color:#687994}
+.ivory-cover .garden-caption,.ivory-cover .garden-caption button {color:#8a9aae}
+.ivory-cover .garden-closing {color:#899cb3}
+.ivory-cover .garden-closing > span {color:#a0abb9}
+.ivory-cover .book-footer {border-color:#afb9c966}
+.ivory-cover .book-footer > span:first-child {color:#6b819d}
+.ivory-cover .book-footer p,.ivory-cover .book-footer {color:#9ba6b4}
+.ivory-cover button:hover {color:#526c91}

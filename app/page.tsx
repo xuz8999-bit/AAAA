@@ -504,7 +504,7 @@ export default function Home() {
     }
   };
   return (
-    <main className={"storybook weather-" + weather}>
+    <main className={"storybook weather-" + weather + (view === "garden" ? " ivory-cover" : "")}>
       <div className="paper-texture" />
       <svg className="print-filters" aria-hidden="true">
         <defs>
