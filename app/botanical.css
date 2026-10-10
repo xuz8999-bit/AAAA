@@ -1093,36 +1093,333 @@ body {
   }
 }
 /* Ivory cover, with the archive's blue botanical collage kept intact. */
-.storybook.ivory-cover {background:#f0eadc;color:#303c58}
-.ivory-cover .paper-texture {mix-blend-mode:multiply;opacity:.22;animation:none}
-.ivory-cover .book-header {border-color:#aeb6c566}
-.ivory-cover .garden-brand {color:#2e405f}
-.ivory-cover .garden-brand small {color:#8792a3}
-.ivory-cover .book-header nav {color:#7b8698}
-.ivory-cover .book-header nav button[aria-current="page"] {color:#34476d}
-.ivory-cover .book-header nav .nav-plant {background:#c5cede;color:#445b80;border-color:#9caecb}
-.ivory-cover .poster-copy h1 {color:#35476c;text-shadow:3px 0 #8a9eca66;background-image:none}
-.ivory-cover .poster-copy h1 span,.ivory-cover .poster-prelude {color:#8998ae}
-.ivory-cover .poster-copy p {color:#77869a}
-.ivory-cover .poster-oval {background:#e0e4e9;color:#607393;border-color:#a4b1c6;box-shadow:4px 4px 0 #b8c5d5}
-.ivory-cover .poster-print-link {color:#7288a7}
-.ivory-cover .poster-edition {color:#98a0a8}
-.ivory-cover .print-landscape span,.ivory-cover .poster-scribble {color:#7c91ac}
-.ivory-cover .hero-silver-flower,.ivory-cover .index-flower {mix-blend-mode:normal}
-.ivory-cover .blue-registration,.ivory-cover .poster-doodle {color:#8098c8}
-.ivory-cover .poster-collage::before {opacity:.65}
-.ivory-cover .places-heading {border-color:#adb9cb88}
-.ivory-cover .places-heading h2 {color:#6f85a0}
-.ivory-cover .places-heading > span,.ivory-cover .places-heading p {color:#98a4b3}
-.ivory-cover .specimen-paper {background:#e0e4eb}
-.ivory-cover .specimen-tag {background:#b5c2d9;color:#354e71;border-color:#96a9c8;box-shadow:4px 5px 0 #98aac533}
-.ivory-cover .specimen-tag small,.ivory-cover .specimen-tag em {color:#6c84a5}
-.ivory-cover .specimen-tag:hover {background:#cbd4e2;color:#344e70!important}
-.ivory-cover .tag-2,.ivory-cover .tag-5 {background:#dfdfd6;color:#687994}
-.ivory-cover .garden-caption,.ivory-cover .garden-caption button {color:#8a9aae}
-.ivory-cover .garden-closing {color:#899cb3}
-.ivory-cover .garden-closing > span {color:#a0abb9}
-.ivory-cover .book-footer {border-color:#afb9c966}
-.ivory-cover .book-footer > span:first-child {color:#6b819d}
-.ivory-cover .book-footer p,.ivory-cover .book-footer {color:#9ba6b4}
-.ivory-cover button:hover {color:#526c91}
+.storybook.ivory-cover {
+  background: #f0eadc;
+  color: #303c58;
+}
+.ivory-cover .paper-texture {
+  mix-blend-mode: multiply;
+  opacity: 0.22;
+  animation: none;
+}
+.ivory-cover .book-header {
+  border-color: #aeb6c566;
+}
+.ivory-cover .garden-brand {
+  color: #2e405f;
+}
+.ivory-cover .garden-brand small {
+  color: #8792a3;
+}
+.ivory-cover .book-header nav {
+  color: #7b8698;
+}
+.ivory-cover .book-header nav button[aria-current="page"] {
+  color: #34476d;
+}
+.ivory-cover .book-header nav .nav-plant {
+  background: #c5cede;
+  color: #445b80;
+  border-color: #9caecb;
+}
+.ivory-cover .poster-copy h1 {
+  color: #35476c;
+  text-shadow: 3px 0 #8a9eca66;
+  background-image: none;
+}
+.ivory-cover .poster-copy h1 span,
+.ivory-cover .poster-prelude {
+  color: #8998ae;
+}
+.ivory-cover .poster-copy p {
+  color: #77869a;
+}
+.ivory-cover .poster-oval {
+  background: #e0e4e9;
+  color: #607393;
+  border-color: #a4b1c6;
+  box-shadow: 4px 4px 0 #b8c5d5;
+}
+.ivory-cover .poster-print-link {
+  color: #7288a7;
+}
+.ivory-cover .poster-edition {
+  color: #98a0a8;
+}
+.ivory-cover .print-landscape span,
+.ivory-cover .poster-scribble {
+  color: #7c91ac;
+}
+.ivory-cover .hero-silver-flower,
+.ivory-cover .index-flower {
+  mix-blend-mode: normal;
+}
+.ivory-cover .blue-registration,
+.ivory-cover .poster-doodle {
+  color: #8098c8;
+}
+.ivory-cover .poster-collage::before {
+  opacity: 0.65;
+}
+.ivory-cover .places-heading {
+  border-color: #adb9cb88;
+}
+.ivory-cover .places-heading h2 {
+  color: #6f85a0;
+}
+.ivory-cover .places-heading > span,
+.ivory-cover .places-heading p {
+  color: #98a4b3;
+}
+.ivory-cover .specimen-paper {
+  background: #e0e4eb;
+}
+.ivory-cover .specimen-tag {
+  background: #b5c2d9;
+  color: #354e71;
+  border-color: #96a9c8;
+  box-shadow: 4px 5px 0 #98aac533;
+}
+.ivory-cover .specimen-tag small,
+.ivory-cover .specimen-tag em {
+  color: #6c84a5;
+}
+.ivory-cover .specimen-tag:hover {
+  background: #cbd4e2;
+  color: #344e70 !important;
+}
+.ivory-cover .tag-2,
+.ivory-cover .tag-5 {
+  background: #dfdfd6;
+  color: #687994;
+}
+.ivory-cover .garden-caption,
+.ivory-cover .garden-caption button {
+  color: #8a9aae;
+}
+.ivory-cover .garden-closing {
+  color: #899cb3;
+}
+.ivory-cover .garden-closing > span {
+  color: #a0abb9;
+}
+.ivory-cover .book-footer {
+  border-color: #afb9c966;
+}
+.ivory-cover .book-footer > span:first-child {
+  color: #6b819d;
+}
+.ivory-cover .book-footer p,
+.ivory-cover .book-footer {
+  color: #9ba6b4;
+}
+.ivory-cover button:hover {
+  color: #526c91;
+}
+/* Carry the cover's ivory paper and blue ink through every archive chapter. */
+.ivory-cover .inside-page {
+  color: #506480;
+}
+.ivory-cover .inside-page h1,
+.storybook.ivory-cover .inside-page h1 {
+  color: #35476c;
+}
+.ivory-cover .inside-page h1 em {
+  color: #8294b0;
+}
+.ivory-cover .chapter-label,
+.ivory-cover .page-subtitle {
+  color: #7c8da5;
+}
+.ivory-cover .garden-button {
+  background: #e0e4e9;
+  color: #526a8e;
+  border-color: #a4b1c6;
+  box-shadow: 3px 3px 0 #bac6d6;
+}
+.ivory-cover .garden-button:hover {
+  background: #d0d9e5;
+  color: #334e78;
+}
+.ivory-cover .time-and-seed,
+.ivory-cover .time-branch {
+  border-color: #b7c2d280;
+}
+.ivory-cover .time-copy h2,
+.ivory-cover .seed-invitation h2 {
+  color: #607692;
+}
+.ivory-cover .time-copy p,
+.ivory-cover .seed-invitation p,
+.ivory-cover .branch-story {
+  color: #8393a7;
+}
+.ivory-cover .branch-year {
+  color: #5f789c;
+}
+.ivory-cover .watch-face {
+  background: #e0e2dc;
+  border-color: #a3aec0;
+  color: #8293ac;
+}
+.ivory-cover .watch-loop {
+  border-color: #a3aec0;
+}
+.ivory-cover .watch-face b,
+.ivory-cover .year-control select {
+  color: #5d779a;
+}
+.ivory-cover .watch-face small,
+.ivory-cover .watch-face > span {
+  color: #8d9bb0;
+}
+.ivory-cover .add-garden-year,
+.ivory-cover .remove-garden-year {
+  color: #7186a2;
+}
+.ivory-cover .add-garden-year input {
+  background: #e4e7e8;
+  color: #567092;
+  border-color: #aab8cd;
+}
+.ivory-cover .memory-meadow > button {
+  border-color: #bac6d5;
+}
+.ivory-cover .memory-meadow h3 {
+  color: #597497;
+}
+.ivory-cover .memory-meadow p,
+.ivory-cover .memory-meadow span {
+  color: #8798ae;
+}
+.ivory-cover .memory-meadow small,
+.ivory-cover .memory-dateline,
+.ivory-cover .back-link {
+  color: #7388a3;
+}
+.ivory-cover .memory-specimen-cover {
+  filter: saturate(0.65) sepia(0.08);
+}
+.ivory-cover .story-writing > p {
+  color: #607591;
+}
+.ivory-cover .story-photographs figure {
+  background: #e9e5db;
+  box-shadow: 4px 5px 0 #b8c4d2;
+}
+.ivory-cover .story-photographs img {
+  filter: saturate(0.65) contrast(0.96);
+}
+.ivory-cover .plant-form,
+.ivory-cover .secret-story {
+  background: #ece7dd;
+  border: 1px solid #c0c7d0;
+  box-shadow: 3px 5px 0 #b5bfd02b;
+}
+.ivory-cover .form-label {
+  color: #6b819f;
+}
+.ivory-cover .form-label input,
+.ivory-cover .form-label textarea,
+.ivory-cover .form-label select {
+  background: #f3eee4;
+  color: #506987;
+  border-color: #b1bfd0;
+}
+.ivory-cover .form-label input::placeholder,
+.ivory-cover .form-label textarea::placeholder {
+  color: #98a5b7;
+}
+.ivory-cover .mood-choices button,
+.ivory-cover .plant-kind-choices button {
+  color: #7b90ab;
+}
+.ivory-cover .mood-choices button[aria-pressed="true"],
+.ivory-cover .plant-kind-choices button[aria-pressed="true"] {
+  color: #4a658e;
+  background: #d3ddea;
+  border-color: #9aafcd;
+}
+.ivory-cover .photo-seed-upload,
+.ivory-cover .music-seed-upload {
+  color: #758aa7;
+  border-color: #a6b7d0;
+}
+.ivory-cover .private-note {
+  color: #8798ae;
+}
+.ivory-cover .garden-toast {
+  background: #e0e5ebf5;
+  color: #607898;
+  border-color: #a4b8cf;
+}
+.ivory-cover .secret-story h2,
+.ivory-cover .secret-story p {
+  color: #657d9e;
+}
+.ivory-cover .empty-year h2,
+.ivory-cover .empty-keepsake h2,
+.ivory-cover .seed-preview h2,
+.ivory-cover .growth-ceremony h2 {
+  color: #687f9e;
+}
+.ivory-cover .empty-year p,
+.ivory-cover .empty-keepsake p,
+.ivory-cover .seed-preview p,
+.ivory-cover .growth-ceremony p {
+  color: #8b9bb0;
+}
+.ivory-cover .music-page-tabs {
+  color: #8296b1;
+  border-color: #b2bfd2;
+}
+.ivory-cover .music-page-tabs button[aria-pressed="true"] {
+  color: #5877a0;
+  border-color: #91a8c9;
+}
+.ivory-cover .memory-song-list article,
+.ivory-cover .keepsake {
+  border-color: #bec8d7;
+}
+.ivory-cover .memory-song-list h3,
+.ivory-cover .keepsake h3 {
+  color: #647d9f;
+}
+.ivory-cover .memory-song-list article button,
+.ivory-cover .keepsake p {
+  color: #8a9bb1;
+}
+.ivory-cover .keepsake img {
+  filter: saturate(0.7) contrast(0.97);
+}
+.ivory-cover .keepsake-kind,
+.ivory-cover .keepsake-icon,
+.ivory-cover .song-index {
+  color: #8ca1c0;
+}
+.ivory-cover .about-print img {
+  mix-blend-mode: normal;
+}
+.ivory-cover .about-print span,
+.ivory-cover .about-writing > p {
+  color: #748ba8;
+}
+.ivory-cover .about-handwriting {
+  color: #829ac0;
+}
+.ivory-cover .about-writing .about-footnote {
+  color: #95a3b5;
+}
+.ivory-cover .print-booth {
+  background: #f0eadcf7;
+}
+.ivory-cover .print-booth h2,
+.ivory-cover .print-booth > p,
+.ivory-cover .print-close {
+  color: #748aa5;
+}
+.ivory-cover .print-download {
+  background: #dce3eb;
+  color: #5d779a;
+  border-color: #a0b4cd;
+}
