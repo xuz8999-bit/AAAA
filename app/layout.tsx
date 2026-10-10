@@ -4,8 +4,9 @@ import "./scrapbook.css";
 import "./garden.css";
 import "./print.css";
 import "./botanical.css";
+import "./timecapsule.css";
 export const metadata: Metadata = {
-  title: "MEMORY GARDEN — Digital Botanical Archive",
+  title: "Memory Garden — A Forgotten Personal Archive",
   description:
     "Forgotten memories preserved as blue botanical specimens. 照片、声音与情绪构成的私人植物档案。",
   icons: {

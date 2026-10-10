@@ -1,13 +1,16 @@
 "use client";
 import { botanicalCategories, botanicalCategory } from "../lib/botanical";
+import { motion } from "framer-motion";
 import { asset } from "../lib/assets";
 import type { Memory } from "./Editor";
 export default function BotanicalArchive({
   memories,
   onCategory,
+  onMemory,
 }: {
   memories: Memory[];
   onCategory: (id: string) => void;
+  onMemory: (memory: Memory) => void;
 }) {
   return (
     <div className="botanical-index">
@@ -43,7 +46,7 @@ export default function BotanicalArchive({
                     transform={`rotate(${j * 72})`}
                   />
                 ))}
-                <circle r="7" fill="#1428ff" />
+                <circle r="7" fill="#73879b" />
               </g>
             ))}
             <path d="M239 640h115M303 636l-35 23m35-23l28 26" />
@@ -58,6 +61,45 @@ export default function BotanicalArchive({
         src={asset("/prints/blue-lilies.png")}
         alt="银蓝色花瓣标本"
       />
+      <div className="memory-objects">
+        {memories.slice(0, 8).map((m, i) => (
+          <motion.button
+            key={m.id}
+            aria-label={`打开记忆物件：${m.title}`}
+            className={
+              "archive-object " +
+              (m.song
+                ? "music-object"
+                : m.pieces.some((p) => p.type === "image" && !p.decorative)
+                  ? "flower-object"
+                  : "note-object")
+            }
+            style={{
+              left: 35 + (i % 3) * 13 + "%",
+              top: 15 + Math.floor(i / 3) * 23 + "%",
+            }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: i * 0.07 }}
+            onClick={() => onMemory(m)}
+          >
+            {m.song ? (
+              <span>♫</span>
+            ) : m.pieces.some((p) => p.type === "image" && !p.decorative) ? (
+              <img
+                src={asset(
+                  m.pieces.find((p) => p.type === "image" && !p.decorative)!
+                    .src!,
+                )}
+                alt=""
+              />
+            ) : (
+              <span>▤</span>
+            )}
+            <small>{m.title}</small>
+          </motion.button>
+        ))}
+      </div>
       <div className="specimen-tags">
         {botanicalCategories.map((c, i) => (
           <button

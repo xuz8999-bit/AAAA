@@ -42,3 +42,9 @@ The current visual direction uses charcoal ink, aged paper, faded mustard and a 
 首页植物索引使用六个情绪分类：Things I Remember、Places I Kept、People I Met、Dreams I Had、Things I Loved、Little Moments。新记忆可选择 `botanicalCategory`；旧记忆根据原有 `category` 映射显示，原始数据不被改写。年份不再作为植物标签；年份新增、删除和日期索引保留在「去过的地方」区域，「我的故事」仍可按年查看。
 
 照片、音乐收藏、个人介绍、本地存储、拼贴编辑与相机冲印继续可用。新拼贴默认蓝色网点印刷，下载时将冷色油墨、网点与颗粒写入 PNG；旧作品保存的冲印风格继续保留。
+
+### 旧电脑中的私人记忆档案
+
+新版首页为低饱和纸纹桌面，采用灰色旧浏览器窗口、像素文件夹、地址栏、状态栏及细微 CRT 纹理。蓝色百合主视觉、手写文字和植物标本继续保留，与暖纸档案结合；文件夹入口为 Memory Garden、Photo Archive、Little Stories、Things I Love、Diary。
+
+照片档案可展开为旧照片查看器（Escape 关闭）。Diary.exe 支持独立日记保存、刷新恢复与删除，复用原 IndexedDB 收藏存储，日记与普通收藏分开展示。记忆花园以五个情绪分类为索引，旧 `remember` 分类只在显示时归入 Little Moments，不改写已有数据。最新照片、文字或音乐记忆会显示为可打开的叶片、纸条或音乐物件。日期管理仍可从「我的故事 → 管理日期索引」进入。拼贴和高清冲印导出继续可用。

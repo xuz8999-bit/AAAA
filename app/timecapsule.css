@@ -1,0 +1,1027 @@
+:root {
+  --garden-paper: #e2ded0;
+  --garden-ink: #423e38;
+  --garden-muted: #857e70;
+  --garden-green: #758273;
+  --garden-border: #a19e8f;
+}
+body,
+.storybook,
+.storybook.weather-rain,
+.storybook.weather-stars {
+  background: #e2ded0;
+  color: #423e38;
+}
+.paper-texture {
+  opacity: 0.3;
+  mix-blend-mode: multiply;
+  animation: none;
+}
+.book-header {
+  border-color: #a8a69866;
+}
+.garden-brand {
+  color: #474b49;
+  font-size: 19px;
+}
+.garden-brand small {
+  color: #797c71;
+}
+.book-header nav {
+  color: #726f67;
+  font-size: 12px;
+  gap: 19px;
+}
+.book-header nav button[aria-current="page"] {
+  color: #424b4a;
+}
+.book-header nav button[aria-current="page"]:after {
+  background: #6f7d82;
+}
+.book-header nav .nav-plant {
+  color: #464c4e;
+  background: #c7c9c1;
+  border: 2px outset #eeeee8;
+  box-shadow: none;
+  transform: none;
+}
+.memory-desktop {
+  position: relative;
+  max-width: 1320px;
+  margin: 25px auto 45px;
+  min-height: 780px;
+  background: #acb9b3;
+  background-image: linear-gradient(110deg, #c2c6b477, #8b9f9c44);
+  border: 1px solid #969c90;
+  padding: 35px 30px 60px;
+  isolation: isolate;
+}
+.memory-desktop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+  background: repeating-linear-gradient(transparent 0 3px, #35463c0b 3px 4px);
+  opacity: 0.7;
+}
+.desktop-meta {
+  display: flex;
+  justify-content: space-between;
+  color: #536760;
+  font: 8px monospace;
+  letter-spacing: 1.5px;
+}
+.desktop-meta span:last-child {
+  font: 20px "Caveat";
+  letter-spacing: 0;
+  color: #e6e6d9;
+}
+.desktop-folders {
+  position: absolute;
+  top: 105px;
+  left: 25px;
+  display: grid;
+  gap: 22px;
+  width: 100px;
+  text-align: center;
+}
+.desktop-folders button {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font: 12px Georgia;
+  color: #3a4744;
+  gap: 4px;
+}
+.desktop-folders svg {
+  width: 47px;
+  height: 39px;
+}
+.desktop-folders small {
+  font: 7px monospace;
+  color: #6c7870;
+}
+.desktop-folders button:hover {
+  color: #25383a;
+  background: #d0d9cf44;
+}
+.desktop-folders button:focus-visible {
+  outline: 1px dotted #364a4b;
+}
+.desktop-browser {
+  position: relative;
+  margin: 42px 110px 0 130px;
+  background: #c3c4bf;
+  padding: 4px;
+  border: 2px outset #ededdf;
+  box-shadow: 7px 9px 0 #45575022;
+  rotate: -1deg;
+}
+.retro-titlebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 25px;
+  padding: 4px 7px;
+  background: linear-gradient(90deg, #59677d, #8895ac);
+  color: #faf9ed;
+  font: bold 11px Arial;
+  letter-spacing: 0.1px;
+  border: 0;
+}
+.retro-titlebar button {
+  background: #c4c5c0;
+  color: #343b45;
+  border: 2px outset #f1eee4;
+  min-width: 21px;
+  height: 19px;
+  padding: 0 3px;
+  font: 13px/13px Arial;
+}
+.browser-menu {
+  padding: 7px 10px;
+  font: 10px Arial;
+  color: #494c4a;
+  border-bottom: 1px solid #999d95;
+}
+.browser-menu span {
+  float: right;
+  color: #757b71;
+  font: 8px monospace;
+}
+.browser-address {
+  display: flex;
+  gap: 12px;
+  padding: 6px 8px;
+  font: 10px Arial;
+  color: #5b605a;
+}
+.browser-address span:last-child {
+  flex: 1;
+  background: #ecece2;
+  border: 2px inset #dddcd1;
+  color: #626760;
+  padding: 2px 8px;
+  font: 9px monospace;
+}
+.desktop-paper {
+  position: relative;
+  background: #eee7d6;
+  min-height: 520px;
+  overflow: hidden;
+  padding: 40px 36px 35px;
+  color: #46443b;
+}
+.desktop-edition {
+  font: 7px monospace;
+  letter-spacing: 1.5px;
+  color: #8b8371;
+}
+.desktop-paper h1 {
+  position: relative;
+  z-index: 2;
+  font: 68px/0.95 Anton;
+  color: #545951;
+  letter-spacing: -1px;
+  margin: 33px 0 24px;
+  max-width: 60%;
+}
+.desktop-paper h1 em {
+  font: 72px "Caveat";
+  color: #607985;
+}
+.desktop-paper > p {
+  position: relative;
+  z-index: 2;
+  font: 20px/1.7 "Ma Shan Zheng";
+  color: #817d69;
+  max-width: 50%;
+}
+.desktop-enter {
+  position: relative;
+  z-index: 3;
+  background: #cfd4c7;
+  border: 2px outset #faf2db;
+  font: 15px "Ma Shan Zheng";
+  padding: 9px 14px;
+  margin: 12px 0 0;
+  color: #566559;
+}
+.desktop-note {
+  position: absolute;
+  bottom: 25px;
+  left: 40px;
+  font: 23px "Caveat";
+  color: #78857b;
+  rotate: -3deg;
+}
+.desktop-botanical-page {
+  position: absolute;
+  right: 13%;
+  top: 31px;
+  width: 31%;
+  height: 280px;
+  object-fit: cover;
+  rotate: 9deg;
+  opacity: 0.7;
+  box-shadow: 4px 5px 0 #8a7e5c22;
+}
+.desktop-flower-photo {
+  position: absolute;
+  right: 4%;
+  top: 198px;
+  width: 35%;
+  height: 295px;
+  object-fit: cover;
+  rotate: -5deg;
+  filter: saturate(0.65);
+  border: 8px solid #e9e6d8;
+  box-shadow: 3px 6px 12px #4d533433;
+}
+.browser-status {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px;
+  font: 8px monospace;
+  color: #636960;
+  border: 1px inset #e6e6db;
+  margin-top: 3px;
+}
+.desktop-note-file {
+  position: absolute;
+  right: 25px;
+  bottom: 118px;
+  width: 163px;
+  padding: 20px 15px 17px;
+  rotate: 6deg;
+  background: #e5dcbf;
+  color: #767358;
+  box-shadow: 3px 5px 0 #58625333;
+  text-align: left;
+}
+.desktop-note-file > span {
+  font: 25px monospace;
+  color: #8e9678;
+  display: block;
+}
+.desktop-note-file strong {
+  font: 10px monospace;
+  color: #6a7868;
+}
+.desktop-note-file p {
+  font: 18px/1.5 "Ma Shan Zheng";
+  margin: 13px 0 0;
+}
+.desktop-taskbar {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #c7c9c2;
+  border-top: 2px solid #e2e5d8;
+  padding: 9px 15px;
+  font: 9px monospace;
+  color: #626a62;
+}
+.desktop-taskbar > span:first-child {
+  font: bold 10px Arial;
+}
+.desktop-taskbar button {
+  border: 2px outset #e8ebdf;
+  background: #c1c5ba;
+  font: 10px Arial;
+  padding: 5px 9px;
+  color: #586253;
+}
+.desktop-taskbar > span:last-child {
+  margin-left: auto;
+  font-size: 7px;
+}
+.places-heading {
+  border: 2px outset #efefe6;
+  background: #bfc3bc;
+  color: #3e463e;
+  padding: 7px 11px;
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  max-width: 1180px;
+}
+.places-heading h2 {
+  font: 12px Arial;
+  color: #4b5751;
+}
+.places-heading > span {
+  font: bold 10px Arial;
+  color: #47586f;
+}
+.places-heading p {
+  color: #6f766a;
+  font-size: 10px;
+}
+.garden-world {
+  background: #e6e0d0;
+  border: 1px solid #b0b5a7;
+  max-width: 1180px;
+  padding: 20px 0;
+  margin: 0 auto;
+}
+.specimen-paper {
+  background: #ebe9dc;
+}
+.index-flower {
+  filter: saturate(0.55);
+  mix-blend-mode: normal;
+  border: 7px solid #e6e1d2;
+}
+.specimen-tag {
+  background: #aebaca;
+  color: #374858;
+  border: 1px solid #8597a9;
+  box-shadow: 3px 4px 0 #7e8f912c;
+}
+.specimen-tag strong {
+  font: 23px "Caveat";
+  font-weight: bold;
+}
+.specimen-tag small,
+.specimen-tag em {
+  color: #687f91;
+}
+.tag-2,
+.tag-5 {
+  background: #d5d4ba;
+  color: #51584b;
+  border-color: #a6ab91;
+}
+.tag-2 small,
+.tag-5 small,
+.tag-2 em,
+.tag-5 em {
+  color: #78816c;
+}
+.specimen-tag:hover {
+  background: #cad0cd;
+  color: #455a67 !important;
+}
+.tag-2:hover,
+.tag-5:hover {
+  background: #e4e2cc;
+  color: #515b4b !important;
+}
+.garden-caption {
+  color: #81896e;
+}
+.garden-caption button {
+  color: #748886;
+}
+.garden-closing,
+.garden-closing > span {
+  color: #858a79;
+}
+.book-footer {
+  border-color: #b0b3a4;
+  color: #808876;
+}
+.book-footer > span:first-child {
+  color: #56685d;
+}
+.book-footer p {
+  color: #828c79;
+}
+.storybook .inside-page h1 {
+  color: #536259;
+  font:
+    44px/1.35 "Ma Shan Zheng",
+    "Caveat";
+}
+.inside-page h1 em {
+  color: #83909e;
+}
+.chapter-label,
+.page-subtitle {
+  color: #8a8b7b;
+}
+.storybook button:hover {
+  color: #4e645a;
+}
+.garden-button {
+  background: #ced3c6;
+  color: #586b5b;
+  border: 2px outset #f5f0df;
+  box-shadow: none;
+}
+.garden-button:hover {
+  background: #dae0d2;
+  color: #495e4d;
+}
+.plant-form,
+.secret-story {
+  background: #eae5d5;
+  color: #646b56;
+  border: 1px solid #b9bba7;
+  box-shadow: 3px 5px 0 #87967c22;
+}
+.form-label {
+  color: #728267;
+}
+.form-label input,
+.form-label textarea,
+.form-label select {
+  background: #eeeadd;
+  color: #626c57;
+  border-color: #acb498;
+}
+.form-label input::placeholder,
+.form-label textarea::placeholder {
+  color: #a0a38b;
+}
+.mood-choices button {
+  color: #858e78;
+}
+.mood-choices button[aria-pressed="true"] {
+  background: #d4dbca;
+  color: #60735c;
+  border-color: #98a78c;
+}
+.photo-seed-upload,
+.music-seed-upload {
+  color: #829072;
+  border-color: #a6b090;
+}
+.garden-toast {
+  background: #ced5c6ee;
+  color: #63765a;
+  border: 2px outset #ecefdb;
+}
+.private-note {
+  color: #9aa089;
+}
+.time-and-seed {
+  border-color: #a7af99;
+}
+.time-copy h2,
+.seed-invitation h2 {
+  color: #6a7f68;
+}
+.time-copy p,
+.seed-invitation p {
+  color: #899178;
+}
+.branch-year {
+  color: #6c8671;
+}
+.branch-story {
+  color: #8f9982;
+}
+.time-branch {
+  border-color: #b7c1aa;
+}
+.memory-meadow h3 {
+  color: #657b6c;
+}
+.memory-meadow p,
+.memory-meadow span {
+  color: #939b83;
+}
+.memory-meadow > button {
+  border-color: #b7c1aa;
+}
+.memory-specimen-cover {
+  filter: saturate(0.6) sepia(0.2);
+}
+.story-writing > p {
+  color: #768870;
+}
+.story-photographs figure {
+  background: #e7e1cd;
+  box-shadow: 4px 5px 0 #b0b8a0;
+}
+.story-photographs img {
+  filter: saturate(0.7) sepia(0.15);
+}
+.keepsake h3 {
+  color: #7c8c70;
+}
+.keepsake p {
+  color: #969e82;
+}
+.keepsake {
+  border-color: #b9c2aa;
+}
+.keepsake img {
+  filter: saturate(0.6) sepia(0.15);
+}
+.music-page-tabs {
+  color: #859579;
+  border-color: #b1bda2;
+}
+.music-page-tabs button[aria-pressed="true"] {
+  color: #617a5e;
+}
+.memory-song-list h3 {
+  color: #76936e;
+}
+.memory-song-list article button {
+  color: #94a085;
+}
+.about-writing > p,
+.about-print span {
+  color: #809673;
+}
+.about-handwriting {
+  color: #7e98a1;
+}
+.about-writing .about-footnote {
+  color: #9da68d;
+}
+.about-print img {
+  mix-blend-mode: normal;
+  filter: saturate(0.55);
+  border: 8px solid #e9e6d7;
+}
+.photo-contact-sheet {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 35px;
+  margin: 40px 0;
+}
+.photo-contact-sheet button {
+  background: #eee9d9;
+  border: 6px solid #eee9d9;
+  padding-bottom: 15px;
+  rotate: -2deg;
+  text-align: left;
+  box-shadow: 3px 4px 10px #56625325;
+}
+.photo-contact-sheet button:nth-child(2n) {
+  rotate: 3deg;
+}
+.photo-contact-sheet img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  filter: sepia(0.16) saturate(0.65);
+}
+.photo-contact-sheet span {
+  display: block;
+  font:
+    20px "Caveat",
+    "Ma Shan Zheng";
+  padding: 10px 7px;
+  color: #7b866b;
+}
+.photo-contact-sheet small {
+  font: 7px monospace;
+  color: #aaa68e;
+  padding: 0 7px;
+}
+.photo-archive-page > .retro-titlebar,
+.diary-page > .retro-titlebar {
+  margin-bottom: 30px;
+}
+.archive-empty {
+  font: 21px "Ma Shan Zheng";
+  color: #9b9c86;
+  margin: 50px 0;
+}
+.diary-spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 45px;
+  margin: 30px 0;
+}
+.diary-paper {
+  background: #eee8d5;
+  padding: 30px;
+  box-shadow: 4px 6px 0 #8a967c22;
+  rotate: -1deg;
+  border: 1px solid #d0ccb5;
+}
+.diary-paper textarea {
+  height: 240px;
+  line-height: 2.2;
+  background: repeating-linear-gradient(
+    transparent 0 30px,
+    #a6b19b33 30px 31px
+  );
+}
+.diary-paper small {
+  font: 8px monospace;
+  letter-spacing: 1px;
+  color: #a7a087;
+}
+.diary-paper h2 {
+  font: 28px "Ma Shan Zheng";
+  color: #7d8f6f;
+  margin: 20px 0;
+}
+.diary-paper p {
+  font: 22px/2 "Ma Shan Zheng";
+  color: #8d977e;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.diary-pages article {
+  margin-bottom: 35px;
+  rotate: 2deg;
+}
+.diary-paper > button {
+  font: 14px "Ma Shan Zheng";
+  color: #a09c7e;
+}
+.photo-viewer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: #43584d88;
+  z-index: 1000;
+  padding: 45px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.old-photo-viewer {
+  border: 3px outset #e8e8dc;
+  padding: 4px;
+  background: #c6c8bf;
+  max-width: 850px;
+  width: 100%;
+}
+.old-photo-viewer > img {
+  width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
+  background: #edebdd;
+  margin-top: 5px;
+}
+.storybook .editor-shell {
+  background: #e2e0d1;
+  color: #7a856c;
+}
+.editor-tools,
+.canvas-status,
+.editor-heading {
+  background: #d1d4c7;
+  color: #7b856b;
+  border-color: #a7b198;
+}
+.editor-heading input {
+  color: #7c8c73;
+}
+.editor-tools select,
+.editor-tools input {
+  background: #e0e2d1;
+  color: #808e74;
+}
+.canvas-scroll {
+  background: #c6cebb;
+}
+.print-booth {
+  background: #e6e4d5f7;
+}
+.print-booth h2,
+.print-booth > p,
+.print-close {
+  color: #819573;
+}
+.print-download {
+  background: #d4dbc8;
+  color: #819573;
+  border: 2px outset #eff0dd;
+}
+.print-help {
+  color: #a1a78c;
+}
+@media (max-width: 1000px) {
+  .memory-desktop {
+    margin: 20px 25px 35px;
+  }
+  .desktop-browser {
+    margin-right: 25px;
+    margin-left: 105px;
+  }
+  .desktop-note-file {
+    bottom: 78px;
+    right: 20px;
+    width: 140px;
+  }
+  .desktop-paper {
+    padding: 35px 25px;
+  }
+  .desktop-paper h1 {
+    font-size: 58px;
+  }
+  .desktop-paper h1 em {
+    font-size: 64px;
+  }
+  .desktop-meta span:last-child {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .book-header {
+    height: auto;
+    min-height: 145px;
+    padding: 23px 24px;
+  }
+  .garden-brand {
+    font-size: 21px;
+  }
+  .book-header nav {
+    font-size: 11px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .book-header nav .nav-plant {
+    font-size: 10px;
+    right: 22px;
+    top: 26px;
+    max-width: 105px;
+    padding: 4px;
+  }
+  .memory-desktop {
+    margin: 18px 15px 30px;
+    padding: 20px 12px 50px;
+    min-height: 970px;
+  }
+  .desktop-meta {
+    font-size: 6px;
+    letter-spacing: 1px;
+  }
+  .desktop-folders {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 17px 6px;
+    margin: 25px 0;
+  }
+  .desktop-folders button {
+    font-size: 10px;
+  }
+  .desktop-folders svg {
+    width: 38px;
+    height: 32px;
+  }
+  .desktop-browser {
+    margin: 20px 0 0;
+    rotate: 0deg;
+  }
+  .browser-menu {
+    font-size: 8px;
+    padding: 6px;
+  }
+  .browser-menu span {
+    display: none;
+  }
+  .browser-address {
+    font-size: 8px;
+    gap: 6px;
+    padding: 5px;
+  }
+  .browser-address span:last-child {
+    font-size: 7px;
+  }
+  .retro-titlebar {
+    font-size: 9px;
+  }
+  .desktop-paper {
+    min-height: 535px;
+    padding: 23px 18px;
+  }
+  .desktop-edition {
+    font-size: 5px;
+    letter-spacing: 1px;
+  }
+  .desktop-paper h1 {
+    font-size: 56px;
+    max-width: 100%;
+    margin-top: 22px;
+  }
+  .desktop-paper h1 em {
+    font-size: 64px;
+  }
+  .desktop-paper > p {
+    font-size: 16px;
+    max-width: 65%;
+  }
+  .desktop-botanical-page {
+    width: 36%;
+    height: 145px;
+    right: 3%;
+    top: 150px;
+    opacity: 0.45;
+  }
+  .desktop-flower-photo {
+    top: 315px;
+    right: 6%;
+    width: 51%;
+    height: 180px;
+    border-width: 6px;
+  }
+  .desktop-enter {
+    font-size: 13px;
+    padding: 8px;
+    margin-top: 10px;
+  }
+  .desktop-note {
+    font-size: 18px;
+    left: 20px;
+    bottom: 24px;
+    max-width: 100px;
+  }
+  .desktop-note-file {
+    display: none;
+  }
+  .desktop-taskbar {
+    gap: 12px;
+    padding: 8px;
+    font-size: 7px;
+  }
+  .desktop-taskbar > span:first-child {
+    font-size: 7px;
+  }
+  .desktop-taskbar > span:last-child {
+    display: none;
+  }
+  .desktop-taskbar button {
+    font-size: 8px;
+    padding: 5px;
+  }
+  .browser-status {
+    font-size: 6px;
+  }
+  .places-heading {
+    margin: 25px 15px 0;
+    gap: 8px;
+    padding: 8px;
+    flex-wrap: wrap;
+  }
+  .places-heading > span {
+    font-size: 8px;
+  }
+  .places-heading h2 {
+    font-size: 11px;
+    margin: 0;
+  }
+  .garden-world {
+    margin: 0 15px;
+    padding-top: 15px;
+  }
+  .botanical-index {
+    margin: 0 12px;
+  }
+  .specimen-tag {
+    width: 190px;
+  }
+  .specimen-tag strong {
+    font-size: 22px;
+  }
+  .photo-contact-sheet {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  .photo-contact-sheet img {
+    height: 135px;
+  }
+  .photo-contact-sheet span {
+    font-size: 15px;
+  }
+  .photo-contact-sheet small {
+    font-size: 6px;
+  }
+  .diary-spread {
+    display: block;
+  }
+  .diary-paper {
+    padding: 20px;
+  }
+  .diary-pages {
+    margin-top: 35px;
+  }
+  .diary-paper p {
+    font-size: 20px;
+  }
+  .storybook .inside-page h1 {
+    font-size: 33px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .memory-desktop::after {
+    display: none;
+  }
+}
+.memory-objects {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.archive-object {
+  position: absolute;
+  pointer-events: auto;
+  width: 65px;
+  text-align: center;
+  rotate: -6deg;
+}
+.archive-object img {
+  width: 50px;
+  height: 58px;
+  object-fit: cover;
+  clip-path: polygon(50% 0, 95% 23%, 85% 80%, 50% 100%, 5% 75%, 8% 23%);
+  filter: saturate(0.6);
+  border: 2px solid #9cae9a;
+}
+.archive-object > span {
+  display: block;
+  background: #d1d5c3;
+  border: 1px solid #a4b5a0;
+  padding: 12px;
+  font: 26px Georgia;
+  color: #748577;
+  box-shadow: 2px 3px 0 #94a69044;
+}
+.archive-object small {
+  display: block;
+  font: 11px "Ma Shan Zheng";
+  color: #758a7a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: #ece8d5cc;
+  padding: 3px;
+}
+.specimen-tags {
+  pointer-events: none;
+  z-index: 3;
+}
+.specimen-tag {
+  pointer-events: auto;
+}
+@media (max-width: 600px) {
+  .archive-object {
+    width: 49px;
+  }
+  .archive-object img {
+    width: 38px;
+    height: 45px;
+  }
+  .archive-object > span {
+    padding: 8px;
+    font-size: 21px;
+  }
+  .archive-object small {
+    font-size: 9px;
+  }
+  .memory-objects {
+    top: 65px;
+    height: 600px;
+  }
+}
+@keyframes crt-breathe {
+  0%,
+  97%,
+  100% {
+    opacity: 0.7;
+  }
+  98% {
+    opacity: 0.35;
+  }
+  99% {
+    opacity: 0.65;
+  }
+}
+.memory-desktop::after {
+  animation: crt-breathe 11s steps(1) infinite;
+}
+@media (max-width: 600px) {
+  .botanical-index {
+    height: 830px;
+  }
+}
+.pixel-trail {
+  background: #8d9c99;
+  border: 1px solid #ccd1bf;
+  box-shadow: none;
+  opacity: 0.4;
+}
+.garden-window-close {
+  order: 4;
+  margin-left: auto;
+  background: #c5c8bf;
+  color: #65766b;
+  border: 2px outset #ebecdd;
+  width: 20px;
+  height: 19px;
+  font: 13px Arial;
+}
+@media (prefers-reduced-motion: reduce) {
+  .memory-desktop::after {
+    animation: none;
+  }
+}
