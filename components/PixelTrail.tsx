@@ -1,0 +1,3 @@
+'use client';
+import {useEffect} from 'react';
+export default function PixelTrail(){useEffect(()=>{if(matchMedia('(prefers-reduced-motion: reduce), (pointer: coarse)').matches)return;let last=0;const trail=(e:PointerEvent)=>{const now=performance.now();if(now-last<65)return;last=now;const dot=document.createElement('span');dot.className='pixel-trail';dot.style.left=e.clientX+'px';dot.style.top=e.clientY+'px';document.body.appendChild(dot);setTimeout(()=>dot.remove(),550)};window.addEventListener('pointermove',trail);return()=>{window.removeEventListener('pointermove',trail);document.querySelectorAll('.pixel-trail').forEach(n=>n.remove())}},[]);return null}
