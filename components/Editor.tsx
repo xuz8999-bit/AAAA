@@ -12,7 +12,12 @@ import Konva from "konva";
 import SubjectCutout from "./SubjectCutout";
 import { loadCustomArt, storeCustomArt, type CustomArt } from "../lib/storage";
 import { motion } from "framer-motion";
-import { developPrint, printFinishes, type PrintFinish } from "../lib/print";
+import {
+  developPrint,
+  developReceipt,
+  printFinishes,
+  type PrintFinish,
+} from "../lib/print";
 import { asset } from "../lib/assets";
 import { artMaterials } from "../lib/art";
 export type Piece = {
@@ -453,14 +458,22 @@ export default function Editor({
                 return;
               }
               try {
-                setPrinted(snapshot());
+                setSelected("");
+                transformer.current?.nodes([]);
+                setPrinted(
+                  developReceipt(
+                    stage.current!.toCanvas({ pixelRatio: 2 / scale }),
+                    title,
+                    date,
+                  ).toDataURL("image/png"),
+                );
                 setDeveloping(true);
               } catch {
                 setMessage("冲印暂时失败，请再试一次。");
               }
             }}
           >
-            相机冲印 ✦
+            小票冲印 ✦
           </button>
           <button className="primary" onClick={save}>
             保存拼贴 ↗
@@ -535,7 +548,7 @@ export default function Editor({
             ))}
           </select>
           <p className="print-help">
-            选择色调，自动拼贴或自由摆放，再用相机冲印。滤镜和网点会一起保存在下载图片里。
+            选择色调，自动拼贴或自由摆放。下载 PNG 保留所选色调；小票冲印会生成黑白网点的长条记忆小票。
           </p>
           <span className="eyebrow">MEMORY STYLE</span>
           <select
@@ -845,7 +858,7 @@ export default function Editor({
           className="print-booth"
           role="dialog"
           aria-modal="true"
-          aria-label="相机冲印成品"
+          aria-label="记忆小票冲印成品"
           onKeyDown={(e) => {
             if (e.key === "Escape") setPrinted("");
           }}
@@ -857,42 +870,39 @@ export default function Editor({
           >
             关闭 ×
           </button>
-          <h2>{developing ? "正在冲印这一刻…" : "你的记忆，已经显影。"}</h2>
-          <div className="ccd-machine" aria-hidden="true">
-            <span className="ccd-lens" />
-            <b>MEMORY CAM</b>
+          <h2>{developing ? "正在打印这一刻…" : "你的记忆小票，打印好了。"}</h2>
+          <div className="ccd-machine receipt-printer" aria-hidden="true">
+            <span className="printer-indicator" />
+            <b>MEMORY PRINT</b>
             <i />
             <div className="ccd-slot" />
           </div>
           <div className="print-output-window">
             <motion.figure
-              className="developed-paper"
-              initial={{ y: "-105%", rotate: -2, opacity: 0.3 }}
-              animate={{ y: 0, rotate: 2, opacity: 1 }}
+              className="developed-paper receipt-paper"
+              initial={{ y: "-105%", rotate: 0, opacity: 0.3 }}
+              animate={{ y: 0, rotate: 0, opacity: 1 }}
               transition={{ duration: 2.8, ease: "easeInOut" }}
               onAnimationComplete={() => setDeveloping(false)}
             >
-              <img src={printed} alt={`${title}的复古拼贴冲印成品`} />
-              <figcaption>
-                {title} · {date}
-              </figcaption>
+              <img src={printed} alt={`${title}的黑白网点记忆小票`} />
             </motion.figure>
           </div>
           <p role="status">
             {developing
-              ? "相纸慢慢吐出，旧时光慢慢回来。"
-              : "2000 × 1500 · 把这一页带走吧。"}
+              ? "小票慢慢吐出，旧时光慢慢回来。"
+              : "900 × 1500 · 把这一段时光收进口袋。"}
           </p>
           <a
             className="print-download"
             href={printed}
-            download={`${title}.png`}
+            download={`${title}-记忆小票.png`}
             aria-disabled={developing}
             onClick={(e) => {
               if (developing) e.preventDefault();
             }}
           >
-            下载冲印照片 ↓
+            下载记忆小票 ↓
           </a>
         </div>
       )}

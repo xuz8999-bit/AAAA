@@ -1,9 +1,5 @@
 export type PrintFinish =
-  | "blueprint"
-  | "film"
-  | "halftone"
-  | "ccd"
-  | "original";
+  "blueprint" | "film" | "halftone" | "ccd" | "original";
 export const printFinishes: {
   id: PrintFinish;
   name: string;
@@ -101,4 +97,94 @@ export function developPrint(
   ctx.fillStyle = vignette;
   ctx.fillRect(0, 0, output.width, output.height);
   return output;
+}
+
+// The receipt is the actual exported image, including its printed metadata.
+export function developReceipt(
+  source: HTMLCanvasElement,
+  title: string,
+  date: string,
+): HTMLCanvasElement {
+  const paper = document.createElement("canvas");
+  paper.width = 900;
+  paper.height = 1500;
+  const ctx = paper.getContext("2d")!;
+  ctx.fillStyle = "#f5f1e7";
+  ctx.fillRect(0, 0, 900, 1500);
+  ctx.fillStyle = "#383631";
+  ctx.textAlign = "center";
+  ctx.font = "bold 48px monospace";
+  ctx.fillText("MEMORY GARDEN", 450, 125);
+  ctx.font = "24px monospace";
+  ctx.fillText("A LITTLE RECEIPT OF MY LIFE", 450, 172);
+  const rule = (y: number) => {
+    ctx.setLineDash([12, 10]);
+    ctx.strokeStyle = "#77736b";
+    ctx.beginPath();
+    ctx.moveTo(65, y);
+    ctx.lineTo(835, y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  };
+  rule(210);
+  ctx.font = "30px monospace";
+  // Wrap long titles so personal text stays inside the narrow paper.
+  const lines: string[] = [];
+  let line = "";
+  for (const character of title || "UNTITLED FRAGMENTS") {
+    if (ctx.measureText(line + character).width > 750) {
+      lines.push(line);
+      line = "";
+    }
+    line += character;
+  }
+  lines.push(line);
+  lines.slice(0, 3).forEach((text, i) => ctx.fillText(text, 450, 270 + i * 40));
+  ctx.font = "24px monospace";
+  ctx.fillText(date, 450, 400);
+  const photo = document.createElement("canvas");
+  photo.width = 750;
+  photo.height = Math.round((750 * source.height) / source.width);
+  const pc = photo.getContext("2d")!;
+  pc.fillStyle = "white";
+  pc.fillRect(0, 0, photo.width, photo.height);
+  pc.drawImage(source, 0, 0, photo.width, photo.height);
+  const pixels = pc.getImageData(0, 0, photo.width, photo.height);
+  ctx.fillStyle = "#f5f1e7";
+  ctx.fillRect(75, 450, photo.width, photo.height);
+  ctx.fillStyle = "#34332f";
+  for (let y = 2; y < photo.height; y += 4)
+    for (let x = 2; x < photo.width; x += 4) {
+      const i = (y * photo.width + x) * 4;
+      const darkness =
+        1 -
+        (pixels.data[i] * 0.2126 +
+          pixels.data[i + 1] * 0.7152 +
+          pixels.data[i + 2] * 0.0722) /
+          255;
+      ctx.beginPath();
+      ctx.arc(75 + x, 450 + y, Math.sqrt(darkness) * 2.7, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  rule(1080);
+  ctx.font = "26px monospace";
+  ctx.fillText("1 MEMORY / PRICELESS", 450, 1140);
+  ctx.font = "24px monospace";
+  ctx.fillText("KEEP THIS MOMENT.", 450, 1195);
+  ctx.fillText("THANK YOU FOR REMEMBERING", 450, 1235);
+  for (let x = 160; x < 740; x += 7) {
+    ctx.fillRect(x, 1300, (x % 3) + 2, 75);
+  }
+  ctx.font = "20px monospace";
+  ctx.fillText("FRAGMENTS OF ME", 450, 1420);
+  // A small perforated edge is part of the PNG, rather than a CSS-only effect.
+  ctx.globalCompositeOperation = "destination-out";
+  for (let x = 0; x < 900; x += 24) {
+    ctx.beginPath();
+    ctx.moveTo(x, 1500);
+    ctx.lineTo(x + 12, 1486);
+    ctx.lineTo(x + 24, 1500);
+    ctx.fill();
+  }
+  return paper;
 }

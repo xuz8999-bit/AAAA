@@ -619,7 +619,7 @@ export default function Home() {
                         go("editor");
                       }}
                     >
-                      制作复古拼贴 · 相机冲印 ↗
+                      制作复古拼贴 · 小票冲印 ↗
                     </button>
                     <span className="poster-edition">
                       ISSUE 002 · BLUE SPECIMENS · PRIVATE ARCHIVE
@@ -927,7 +927,7 @@ export default function Home() {
                       <div className="story-actions">
                         <button onClick={() => go("editor")}>
                           <BookOpen size={15} />
-                          复古拼贴与相机冲印
+                          复古拼贴与小票冲印
                         </button>
                         <button onClick={() => void deleteMemory(selected)}>
                           <Trash2 size={13} />

@@ -1569,3 +1569,49 @@ body {
     font-size: 13px;
   }
 }
+/* Thermal receipt emerging from a quiet desktop printer. */
+.receipt-printer {
+  width: 310px;
+  height: 105px;
+  flex-shrink: 0;
+  border-radius: 12px 12px 6px 6px;
+  background: linear-gradient(160deg, #c7cbd0, #e1e2de 55%, #b9bfbd);
+  border-color: #89929a;
+  box-shadow:
+    3px 5px 0 #8493a22a,
+    inset 0 0 0 5px #d6d9d9;
+}
+.receipt-printer b {
+  top: 25px;
+  right: 62px;
+  font: 14px monospace;
+  color: #66717d;
+}
+.receipt-printer i {
+  display: none;
+}
+.printer-indicator {
+  position: absolute;
+  top: 29px;
+  left: 28px;
+  width: 7px;
+  height: 7px;
+  background: #94a68c;
+  border-radius: 50%;
+  box-shadow: 0 0 5px #94a68c77;
+}
+.print-output-window {
+  width: 280px;
+  max-width: 85vw;
+  padding: 0 10px 15px;
+  margin-top: -12px;
+  flex-shrink: 0;
+}
+.receipt-paper {
+  padding: 0;
+  background: transparent;
+  box-shadow: 2px 5px 12px #52535726;
+}
+.receipt-paper img {
+  width: 100%;
+}
