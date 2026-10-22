@@ -1175,4 +1175,40 @@ article h3 {
   margin-left: 8px;
   font-size: 9px;
 }
-.pages-notice{padding:12px 16px;margin-bottom:24px;border:1px solid #dce3ce;background:#edf0e3;border-radius:9px;font-size:11px;line-height:1.8;color:#748163}
+.pages-notice {
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  border: 1px solid #dce3ce;
+  background: #edf0e3;
+  border-radius: 9px;
+  font-size: 11px;
+  line-height: 1.8;
+  color: #748163;
+}
+.file-import {
+  margin: 14px 0;
+}
+.file-import p {
+  font-size: 12px;
+  color: #758364;
+}
+.file-import details {
+  margin: 12px 0;
+  font-size: 11px;
+  color: #879277;
+}
+.file-import summary {
+  cursor: pointer;
+}
+.file-import pre {
+  white-space: pre-wrap;
+  max-height: 220px;
+  overflow: auto;
+  padding: 14px;
+  background: #f3f4e9;
+  border-radius: 8px;
+}
+.file-disabled {
+  opacity: 0.6;
+  cursor: wait;
+}

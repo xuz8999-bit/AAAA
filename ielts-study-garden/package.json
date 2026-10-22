@@ -7,15 +7,24 @@
     "dev": "concurrently -k \"node --env-file-if-exists=.env server/index.mjs\" \"vite --host 0.0.0.0\"",
     "build": "tsc --noEmit && vite build",
     "start": "node --env-file-if-exists=.env server/index.mjs",
-    "test": "node --test server/*.test.mjs",
+    "test": "node --experimental-strip-types --test server/*.test.mjs tests/import-text.test.mjs",
     "test:browser": "node tests/local-flow.mjs && node tests/reading-writing.mjs",
-    "build:pages": "tsc --noEmit && vite build --mode pages"
+    "build:pages": "tsc --noEmit && vite build --mode pages",
+    "postinstall": "node scripts/prepare-ocr.mjs",
+    "predev": "node scripts/prepare-ocr.mjs",
+    "prebuild": "node scripts/prepare-ocr.mjs",
+    "prebuild:pages": "node scripts/prepare-ocr.mjs",
+    "test:files": "npm run build:pages && node tests/file-import.mjs"
   },
   "dependencies": {
+    "@tesseract.js-data/chi_sim": "^1.0.0",
+    "@tesseract.js-data/eng": "^1.0.0",
     "express": "^5.1.0",
     "lucide-react": "^0.468.0",
+    "mammoth": "^1.13.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "tesseract.js": "^7.0.0",
     "zod": "^3.24.0"
   },
   "devDependencies": {

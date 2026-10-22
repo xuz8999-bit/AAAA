@@ -1,3 +1,5 @@
+import { VocabularyFileImport } from "./components/VocabularyFileImport";
+import { vocabularyText } from "./import-text";
 import { Stat } from "./components/Stat";
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
@@ -62,6 +64,7 @@ function App() {
   const [tab, setTab] = useState("practice");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [fileBusy, setFileBusy] = useState(false);
   const [input, setInput] = useState("");
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
@@ -103,7 +106,12 @@ function App() {
     setSearch("");
   }
   async function ai(kind: string, text: string, context = "") {
-    if (staticMode) {setError("GitHub Pages 版不运行 AI 服务端。请使用本地词汇练习和材料保存；AI 分析需要单独部署 Node.js 服务。密钥不能填写在网页中。");return null;}
+    if (staticMode) {
+      setError(
+        "GitHub Pages 版不运行 AI 服务端。请使用本地词汇练习和材料保存；AI 分析需要单独部署 Node.js 服务。密钥不能填写在网页中。",
+      );
+      return null;
+    }
     if (!text.trim()) {
       setError("请先输入学习材料或回答。");
       return null;
@@ -137,7 +145,10 @@ function App() {
     u.rate = speed;
     u.voice =
       speechSynthesis.getVoices().find((v) => v.lang === "en-GB") || null;
-    u.onerror = () => setError("发音播放失败，请检查设备语音设置。");
+    u.onerror = (event) => {
+      if (!["canceled", "interrupted"].includes(event.error))
+        setError("发音播放失败，请检查设备语音设置。");
+    };
     speechSynthesis.speak(u);
   }
   const words = state.words.filter((w) => w.skill === page);
@@ -149,7 +160,7 @@ function App() {
         : true,
   );
   const word = words.find((w) => w.id === current) || pool[0];
-  const scoredEvents = state.events.filter(e => e.kind !== "material");
+  const scoredEvents = state.events.filter((e) => e.kind !== "material");
   const total = scoredEvents.length;
   const accuracy = total
     ? Math.round((scoredEvents.filter((e) => e.correct).length / total) * 100)
@@ -208,7 +219,10 @@ function App() {
           created: Date.now(),
         })),
       ],
-      events: [...s.events, { skill, at: Date.now(), correct: true, kind: "material" }],
+      events: [
+        ...s.events,
+        { skill, at: Date.now(), correct: true, kind: "material" },
+      ],
     }));
   }
   async function check(value = answer) {
@@ -244,9 +258,11 @@ function App() {
   }
   function next() {
     const i = pool.findIndex((w) => w.id === word?.id);
-    setCurrent(pool[(i + 1) % pool.length]?.id || "");
+    const following = pool[(i + 1) % pool.length];
+    setCurrent(following?.id || "");
     setAnswer("");
     setFeedback("");
+    if (page === "Listening" && following) speak(following.word);
   }
   function download(raw?: string) {
     const url = URL.createObjectURL(
@@ -324,12 +340,21 @@ function App() {
           </span>
           <div>
             <span className="status-dot" />{" "}
-            {staticMode ? "GitHub Pages · 本地练习" : configured ? "AI connected" : "Local learning mode"}
+            {staticMode
+              ? "GitHub Pages · 本地练习"
+              : configured
+                ? "AI connected"
+                : "Local learning mode"}
             <span className="avatar">Y</span>
           </div>
         </header>
         <div className="content">
-          {staticMode && <div className="pages-notice">GitHub Pages 学习版 · 听写、词汇、素材保存和备份可用；AI 分析需要独立服务端。学习数据仅保存在当前浏览器，请定期导出。</div>}
+          {staticMode && (
+            <div className="pages-notice">
+              GitHub Pages 学习版 · 听写、词汇、素材保存和备份可用；AI
+              分析需要独立服务端。学习数据仅保存在当前浏览器，请定期导出。
+            </div>
+          )}
           {fatal && (
             <div className="alert">
               {fatal}
@@ -595,42 +620,38 @@ function App() {
                 Plant new words <Sprout size={21} />
               </h2>
               <p>
-                每行一个单词；释义格式：word | 中文。支持 UTF-8 TXT / CSV / TSV
-                文件，CSV 请使用两列 word,meaning。
+                支持 Word（.docx）、JPG / PNG
+                图片和文本词汇表。自动提取英文与中文，先核对下方结果再保存。图片只在浏览器识别，不上传；旧版
+                .doc 请另存为 .docx。
               </p>
+              <VocabularyFileImport
+                onExtract={(text) => {
+                  setInput(text);
+                  setFeedback("");
+                }}
+                onError={setError}
+                disabled={busy}
+                onWorkingChange={setFileBusy}
+              />
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                disabled={fileBusy}
                 placeholder={
                   "accommodation | 住宿\nsustainable | 可持续的\nextraordinary"
                 }
               />
-              <label className="file-button">
-                <Upload size={16} /> 导入文本文件
-                <input
-                  type="file"
-                  accept=".txt,.csv,.tsv"
-                  onChange={async (e) => {
-                    const f = e.target.files?.[0];
-                    if (f) {
-                      const t = await f.text();
-                      setInput(
-                        f.name.endsWith(".csv")
-                          ? t
-                              .split("\n")
-                              .map((l) => l.replace(",", " | "))
-                              .join("\n")
-                          : t,
-                      );
-                    }
-                  }}
-                />
-              </label>
               <button
                 className="primary"
+                disabled={fileBusy}
                 onClick={() => {
                   if (!input.trim()) return setError("请先输入单词");
-                  addWords(parseWords(input, page as Word["skill"]));
+                  const extracted = vocabularyText(input);
+                  if (!extracted.entries.length)
+                    return setError(
+                      "没有识别到英文单词，请检查导入内容。只有英文的词条也可以保存。",
+                    );
+                  addWords(parseWords(extracted.text, page as Word["skill"]));
                   setInput("");
                   setFeedback("已导入，重复单词已跳过。");
                 }}
@@ -639,7 +660,7 @@ function App() {
               </button>
               {page === "Reading" && (
                 <button
-                  disabled={busy}
+                  disabled={busy || fileBusy}
                   onClick={async () => {
                     const r = await ai("vocabulary", input);
                     if (r) {
@@ -729,7 +750,7 @@ function App() {
                   )}
                   <p>
                     {page === "Listening"
-                      ? "点击播放，听到后输入英文拼写。"
+                      ? "只播报英文，拼写正确即可；点击下一题会自动播报。"
                       : "认真想一想，再写下你的答案。"}
                   </p>
                   {mode === "同义替换" && page === "Reading" ? (

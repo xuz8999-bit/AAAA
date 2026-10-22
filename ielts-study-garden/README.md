@@ -48,3 +48,11 @@ npm run dev
 仓库 Actions 工作流保留原站，并将本应用发布在 `https://xuz8999-bit.github.io/AAAA/ielts/`。仓库 Settings → Pages 的 Source 需为 GitHub Actions。推送 main 后由工作流构建、发布。
 
 `npm run build:pages` 使用 `/AAAA/ielts/` 资源路径和明确的静态模式：不向 GitHub Pages 请求 AI API，也不包含密钥。词汇、听写、素材手动保存和 JSON 备份可用；AI 分析仍需要 Node 服务端。此网址是发布目标；工作流成功及线上响应检查后才可确认上线。
+
+## Word / 图片词汇导入与自动播报
+
+听力和阅读的“导入词汇”支持 `.docx`、`.jpg/.jpeg`、PNG、WebP，以及原有文本格式。Word 表格按单词与释义配对；图片使用 Tesseract.js 在浏览器中识别中英文，不调用 AI、不上传文档或图片。结果放入可编辑文本框，核对后保存；可展开提取原文检查未配对内容。支持20MB以内文件，旧版 `.doc` 请先在 Word 中另存为 `.docx`。复杂排版、模糊照片、手写体可能识别或配对错误，请先裁剪为清晰词汇表并核对，不会自动生成缺失释义。
+
+听力只播报英文列，中文仅作保存后的释义和答题反馈。点击“下一题”会立即播放下一词；拼写判分忽略大小写和首尾空格。
+
+`npm ci` 的 postinstall 与构建前置脚本自动准备 `public/ocr` 的 worker、WASM 和中英文模型，来自锁定的 npm 包；这些生成文件不提交 Git。Pages 构建将它们与站点一起发布，无需外部 OCR CDN，首次识别约需下载10MB的模型与运行库。入口代码、Word 解析器和 OCR 依赖按需加载，不在首页加载识别模型。
