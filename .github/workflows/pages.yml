@@ -24,15 +24,15 @@ jobs:
             ielts-study-garden/package-lock.json
       - run: npm ci
       - uses: actions/configure-pages@v5
-      - run: npm run build
-        env:
-          BUILD_TARGET: pages
       - name: Build IELTS Study Garden
         working-directory: ielts-study-garden
         run: |
           npm ci
           npm test
           npm run build:pages
+      - run: npm run build
+        env:
+          BUILD_TARGET: pages
       - name: Add IELTS site without replacing the existing scrapbook
         run: |
           mkdir -p out/ielts
