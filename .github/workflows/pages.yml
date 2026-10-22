@@ -19,11 +19,24 @@ jobs:
         with:
           node-version: '22'
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            ielts-study-garden/package-lock.json
       - run: npm ci
       - uses: actions/configure-pages@v5
       - run: npm run build
         env:
           BUILD_TARGET: pages
+      - name: Build IELTS Study Garden
+        working-directory: ielts-study-garden
+        run: |
+          npm ci
+          npm test
+          npm run build:pages
+      - name: Add IELTS site without replacing the existing scrapbook
+        run: |
+          mkdir -p out/ielts
+          cp -R ielts-study-garden/dist/. out/ielts/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out
